@@ -13,7 +13,7 @@ WARNINGS=-Wall -Wextra -Wno-char-subscripts \
 		 -pedantic -DUSE_PDQSORT -Wunused-variable -Wno-attributes -Wno-cast-align \
         -Wno-ignored-attributes -Wno-missing-braces
 EXTRA?=
-INCPLUS?=
+INCLUDE+=-I. -Isketch/include -Isketch -Isketch/vec/blaze
 EXTRA_LD?=
 DBG?=-DNDEBUG
 OS:=$(shell uname)
@@ -23,7 +23,7 @@ OPT_MINUS_OPENMP= -O3 -funroll-loops\
 	  -pipe -fno-strict-aliasing -march=native -mpclmul $(FLAGS) $(EXTRA)
 OPT=$(OPT_MINUS_OPENMP) -fopenmp
 XXFLAGS=-fno-rtti
-CXXFLAGS=$(OPT) $(XXFLAGS) -std=c++14 $(WARNINGS) -DBONSAI_VERSION=\"$(GIT_VERSION)\"
+CXXFLAGS=$(OPT) $(XXFLAGS) -std=c++14 $(WARNINGS) -DBONSAI_VERSION=\"$(GIT_VERSION)\" $(INCLUDE)
 CXXFLAGS_MINUS_OPENMP=$(OPT_MINUS_OPENMP) $(XXFLAGS) -std=c++1z $(WARNINGS) -Wno-cast-align -Wno-gnu-zero-variadic-macro-arguments -DBONSAI_VERSION=\"$(GIT_VERSION)\"
 CCFLAGS=$(OPT) $(CFLAGS) -std=c11 $(WARNINGS) -DBONSAI_VERSION=\"$(GIT_VERSION)\"
 LIB=-lz
@@ -64,7 +64,7 @@ clhash.o: bin/clhash.c
 %.o: %.cpp $(wildcard include/bonsai/*.h) $(wildcard hll/include/sketch/*.h)
 	$(CXX) $(CXXFLAGS) $(DBG) $(INCLUDE) $(LD) -DNDEBUG -c $< -o $@ $(LIB)
 
-%: %.o clhash.o
+%: bin/%.o clhash.o
 	$(CXX) $< clhash.o -o $@ $(CXXFLAGS)
 
 clean:
