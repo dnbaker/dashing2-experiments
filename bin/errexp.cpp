@@ -100,6 +100,16 @@ int main(int argc, char **argv) {
                     double jac8 = std::max(0., double(1. - a8 - b8));
                     std::fprintf(stdout, "CSSu8\t%zu\t%zu\t%0.12g\t%0.12g\t%0.12g\n", sz, setsize, jac8, exact_j, exact_j - jac8);
                 }
+                {
+                    auto lhs = chit->to_setsketch<uint8_t>(M_E, 5e-4);
+                    auto rhs = fchit->to_setsketch<uint8_t>(M_E, 5e-4);
+                    auto abmu8 = lhs.alpha_beta_mu(rhs, lhc, rhc);
+                    auto a8 = std::get<0>(abmu8);
+                    auto b8 = std::get<1>(abmu8);
+                    //auto mu8 = std::get<2>(abmu8);
+                    double jac8 = std::max(0., double(1. - a8 - b8));
+                    std::fprintf(stdout, "CSSu4\t%zu\t%zu\t%0.12g\t%0.12g\t%0.12g\n", sz, setsize, jac8, exact_j, exact_j - jac8);
+                }
                 ++hit, ++chit, ++fhit, ++fchit;
             }
         }
