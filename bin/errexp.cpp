@@ -13,13 +13,14 @@ void usage()  {
 
 int main(int argc, char **argv) {
     const std::vector<size_t> skz {{8, 9, 10, 11, 12, 14}}; // sketch sizes
-    std::vector<size_t> ssz {{16, 20, 22, 24, 28}}; // set sizes
+    std::vector<size_t> ssz {{20, 22, 24, 28}}; // set sizes
     double linspace = .1;
     size_t nreps = 1;
     for(int c;(c = getopt(argc, argv, "n:l:h?")) >= 0;) {
         switch(c) {
             default: case '?': case 'h': usage(); std::exit(1); break;
             case 'l': linspace = std::atof(optarg); if(linspace > 1. || linspace < 0.) throw std::invalid_argument("linspace must be > 0 and < 1");
+            break;
             case 'n': nreps = std::strtoull(optarg, nullptr, 10); break;
         }
     }
