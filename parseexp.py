@@ -3,9 +3,16 @@ from collections import defaultdict
 import numpy as np
 
 if __name__ == "__main__":
-    lines = list(open(sys.argv[1]))
+    lines = list(filter(lambda x: not x.isspace(), open(sys.argv[1])))
     hlls, ssd, ssh, ssb, ssn = lines[::5], lines[1::5], lines[2::5], lines[3::5], lines[4::5]
-    hest = np.array([float(x.split('\t')[3]) for x in hlls])
+    hest = []
+    for x in hlls:
+        try:
+            hest.append(float(x.split('\t')[3]))
+        except:
+            print(x)
+            raise
+    hest = np.array(hest)
     csde = np.array([float(x.split('\t')[3]) for x in ssd])
     cshe = np.array([float(x.split('\t')[3]) for x in ssh])
     csbe = np.array([float(x.split('\t')[3]) for x in ssb])
