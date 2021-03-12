@@ -7,7 +7,8 @@ def lines2np(x):
     return np.array(list(map(float, map(lambda x: x.split('\t')[3], x))))
 
 if __name__ == "__main__":
-    lines = list(filter(lambda x: not x.isspace(), open(sys.argv[1])))
+    inpath = "/dev/stdin" if ((not sys.argv[1:]) or sys.argv[1] == '-') else sys.argv[1]
+    lines = list(filter(lambda x: not x.isspace(), open(inpath)))
     hlls, ssd, ssh, ssb, ssn = lines[::5], lines[1::5], lines[2::5], lines[3::5], lines[4::5]
     hest = []
     for x in hlls:
