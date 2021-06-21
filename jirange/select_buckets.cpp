@@ -1,10 +1,16 @@
 #include <cstdio>
 #include <memory>
+#include <cmath>
 #include <vector>
+#include <sys/stat.h>
 
 int main(int argc, char **argv) {
     std::FILE *ifp = std::fopen(argv[1], "rb");
-    size_t bufsz = 1 << 18, nelem = bufsz / 4;
+    struct stat st;
+    ::stat(argv[1], &st);
+    const size_t nelem = std::ceil(std::sqrt(st.st_size / 4));
+    const size_t npairs = st.st_size / 4;
+    std::fprintf(stderr, "Pairwise distances between %zu items\n", nelem);
     size_t nperbucket = 64, nbuckets = 256;
     if(argc > 2) {
         nperbucket = std::strtoull(argv[2], 0, 10);
@@ -14,35 +20,37 @@ int main(int argc, char **argv) {
     }
     std::fprintf(stderr, "Bucket: %zu/%zu\n", nperbucket, nbuckets);
     const float mul = float(nbuckets);
-    std::unique_ptr<char[]> buf(new char[bufsz]);
-    float *ptr = (float *)buf.get();
-    std::vector<std::vector<uint64_t>> vals;
+    std::vector<std::vector<std::pair<uint32_t, uint32_t>>> vals;
     vals.resize(nbuckets + 1);
     size_t idx = 0;
     size_t nbuckets_unfilled = vals.size();
     float v;
-    for(;;) {
-        if(std::fread(&v, sizeof(float), 1, ifp) != 1) break;
-        auto bktid = v == 1.f ? int32_t(vals.size() - 1): static_cast<int32_t>(v * mul);
-        auto &vbkt = vals[bktid];
-        if(vbkt.size() < nperbucket) {
-            vbkt.push_back(idx);
-            if(vbkt.size() == nperbucket) {
-                if(--nbuckets_unfilled == 0) {
-                    std::fprintf(stderr, "All buckets are full, early stopping\n");
+    for(size_t i = 0; i < nelem; ++i) {
+        for(size_t j = i + 1; j < nelem; ++j, ++idx) {
+            std::fread(&v, sizeof(float), 1, ifp);
+            auto bktid = v == 1.f ? int32_t(vals.size() - 1): static_cast<int32_t>(v * mul);
+            auto &vbkt = vals[bktid];
+            if(vbkt.size() < nperbucket) {
+                vbkt.push_back({i, j});
+                if(vbkt.size() == nperbucket) {
+                    if(--nbuckets_unfilled == 0) {
+                        std::fprintf(stderr, "All buckets are full, early stopping\n");
+                        goto end;
+                    }
+                    std::fprintf(stderr, "[%zu/%zu] %zu buckets left at < %zu entries\n", idx, npairs, nbuckets_unfilled, nperbucket);
                 }
-                std::fprintf(stderr, "%zu buckets left at < %zu entries\n", nbuckets_unfilled, nperbucket);
             }
         }
-        ++idx;
     }
     std::fprintf(stderr, "EOF at %zu\n", idx);
     end:
     for(size_t i = 0; i < vals.size(); ++i) {
         std::fprintf(stdout, "Bucket %zu [%g->%g]", i, i / double(nbuckets), (i + 1) / double(nbuckets));
         auto &vbkt = vals[i];
-        for(size_t j = 0; j < vbkt.size(); ++j)
-            std::fprintf(stdout, "\t%zu", size_t(vbkt[j]));
+        for(size_t j = 0; j < vbkt.size(); ++j) {
+            auto [xi, yi] = vbkt[j];
+            std::fprintf(stdout, "\t%u:%u", xi, yi);
+        }
         std::fputc('\n', stdout);
     }
     std::fclose(ifp);
