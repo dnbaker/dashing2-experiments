@@ -21,14 +21,14 @@ int main(int argc, char **argv) {
     std::fprintf(stderr, "Bucket: %zu/%zu\n", nperbucket, nbuckets);
     const float mul = float(nbuckets);
     std::vector<std::vector<std::pair<uint32_t, uint32_t>>> vals;
-    vals.resize(nbuckets + 1);
+    vals.resize(nbuckets + 2);
     size_t idx = 0;
     size_t nbuckets_unfilled = vals.size();
     float v;
     for(size_t i = 0; i < nelem; ++i) {
         for(size_t j = i + 1; j < nelem; ++j, ++idx) {
             std::fread(&v, sizeof(float), 1, ifp);
-            auto bktid = v == 1.f ? int32_t(vals.size() - 1): static_cast<int32_t>(v * mul);
+            auto bktid = v == 0.f ? 0: v == 1.f ? int32_t(vals.size() - 1): static_cast<int32_t>(v * mul) + 1;
             auto &vbkt = vals[bktid];
             if(vbkt.size() < nperbucket) {
                 vbkt.push_back({i, j});
@@ -45,7 +45,12 @@ int main(int argc, char **argv) {
     std::fprintf(stderr, "EOF at %zu\n", idx);
     end:
     for(size_t i = 0; i < vals.size(); ++i) {
-        std::fprintf(stdout, "Bucket %zu [%g->%g]", i, i / double(nbuckets), (i + 1) / double(nbuckets));
+        if(i == 0)
+            std::fprintf(stdout, "Bucket %zu [0.]", i);
+        else if(i == vals.size() - 1)
+            std::fprintf(stdout, "Bucket %zu [1.]", i);
+        else
+            std::fprintf(stdout, "Bucket %zu [%g->%g]", i, (i - 1) / double(nbuckets), i / double(nbuckets));
         auto &vbkt = vals[i];
         for(size_t j = 0; j < vbkt.size(); ++j) {
             auto [xi, yi] = vbkt[j];
