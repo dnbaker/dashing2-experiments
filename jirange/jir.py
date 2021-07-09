@@ -14,7 +14,6 @@ def parse_bf(path):
     tups = []
     for line in open(path):
         toks = line.strip().split()
-        print(toks, len(toks))
         bkts.append(int(toks[1]))
         rngs.append(list(map(float, toks[2].strip("[]").split("->"))))
         tups.append([list(map(int, x.split(":"))) for x in toks[3:]])
@@ -37,7 +36,7 @@ def parsedata(path, fn):
     bkts, rngs, tups, ids = parse_bf(path)
     genome_ids = [x.strip() for x in open(fn)]
     selected_genomes = [genome_ids[i] for i in ids.ravel()]
-    print(len(selected_genomes))
+    #print(len(selected_genomes))
     return (bkts, rngs, tups, ids, genome_ids)
 
 
@@ -50,35 +49,34 @@ def getani(l, r):
     cmd = f"fastANI --minFraction 0. -q {l} -r {r} -o /dev/stdout"
     return np.fromiter(check_output(cmd, shell=True).decode().strip().split("\t")[-3:], dtype=np.float64)
 
+def getmashji(l, r, *, k, sz=1024):
+    return float(check_output(f"jaccard_mash dist -s {sz} -k {k} -j -t {l} {r}", shell=True).decode().strip().split("\n")[1].split()[-1])
 
-def getmashji(l, r, *, k):
-    return float(check_output(f"jaccard_mash dist -k {k} -j -t {l} {r}", shell=True).decode().strip().split("\n")[1].split()[-1])
-
-
-# To add: jaccard_mash (the mash fork which has the -j CLI argument)
+def getdashingji(l, r, *, k, l2s=10):
+    return float(check_output(f"dashing dist -S{l2s} -k{k}{l} {r}", shell=True).decode().strip().split("\n")[-2].split("\t")[-1])
 
 
 def exact_wjaccard(p1, p2, k=17):
-    return float(check_output("dashing2 sketch -k{k} --countdict --exact-kmer-dist --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
+    return float(check_output(f"dashing2 sketch -k{k} --countdict --exact-kmer-dist --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 def exact_jaccard(p1, p2, k=17):
-    return float(check_output("dashing2 sketch -k{k} --set --exact-kmer-dist --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
+    return float(check_output(f"dashing2 sketch -k{k} --set --exact-kmer-dist --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
-def setsketch_jaccard(p1, p2, size, k=17, nb=8, fss=False):
+def setsketch_jaccard(p1, p2, size, k=17, nb=8, fss=False, executable="dashing2"):
     '''k is the k to use, and nb is the number of bytes to use in the setsketch-based set similarity estimation
        nb is 8 by default, which is Dashing 2's typical size, though dashing-f and dashing-ld use 4 bytes and 16 bytes
        to store float32 and long double hash registers, respectively.
     '''
-    return float(check_output("dashing2 sketch -k{k} {'--full-setsketch ' if fss else ''} -S{size} --fastcmp {nb} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
+    return float(check_output(f"{executable} sketch -k{k} {'--full-setsketch ' if fss else ''} -S{size} --fastcmp {nb} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
-def bbminhash_jaccard(p1, p2, size, k=17, bbnb=32, fss=False):
+def bbminhash_jaccard(p1, p2, size, k=17, bbnb=32, fss=False, executable="dashing2"):
     '''k is the k to use, and nb is the number of bytes to use in the setsketch-based set similarity estimation
        bbnb is 8 by default, which is Dashing 2's typical size
     '''
     nb = bbnb // 8
     assert (bbnb & (bbnb - 1)) == 0 and 4 <= bbnb <= 64, "bbnb, number of bits for bbit minhash, should be 4, 8, 16, 32, or 64"
-    return float(check_output("dashing2 sketch -k{k} {'--full-setsketch ' if fss else ''} --bbit-sigs -S{size} --fastcmp {nb} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
+    return float(check_output(f"{executable} sketch -k{k} {'--full-setsketch ' if fss else ''} --bbit-sigs -S{size} --fastcmp {nb} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
 if __name__ == "__main__":
@@ -88,7 +86,9 @@ if __name__ == "__main__":
         ap.add_argument("fnames", help="Path to a list of selected genomes")
         args = ap.parse_args()
         res = parsedata(args.table, args.fnames)
-        bkts, rngs, tups, total_ids = res
-        print(list(map(lambda x: str(x.shape), res)))
+        bkts, rngs, tups, total_ids, full_genome_ids = res
+        selected = [full_genome_ids[i] for i in total_ids]
+        print(len(selected), ", frac = %g" % (len(selected) / len(full_genome_ids)), file=sys.stderr)
     else:
+        print("Running tests, not running experiment", file=sys.stderr)
         parse_bf(sys.argv[1] if sys.argv[1:] else "selected_buckets_100.txt")
