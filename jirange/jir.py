@@ -57,6 +57,10 @@ def getani(l, r):
     return np.fromiter(check_output(cmd, shell=True).decode().strip().split("\t")[-3:], dtype=np.float64)
 
 
+def getmashji(l, r, *, k):
+    return float(check_output(f"jaccard_mash dist -k {k} -j -t {l} {r}", shell=True).decode().strip().split("\n")[1].split()[-1])
+
+
 # To add: jaccard_mash (the mash fork which has the -j CLI argument)
 
 
