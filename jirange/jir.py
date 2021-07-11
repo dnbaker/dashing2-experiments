@@ -98,13 +98,13 @@ def getall(l, r, k=17, sz=1024, executable="dashing2"):
 
 def packed(x):
     l, r, k, sz, executable = x
-    return getall(l, r, k=j, sz=sz, executable=executable)
+    return getall(l, r, k=k, sz=sz, executable=executable)
 
 def pargetall(tups, k=17, sz=1024, executable="dashing2", cpu=-1):
     import multiprocessing as mp
     if cpu < 0: cpu = mp.cpu_count()
     with mp.Pool(cpu) as p:
-        return np.vstack(p.map(packed, tups.ravel().reshape(-1, 2)))
+        return np.vstack(p.map(packed, tups))
 
 
 if __name__ == "__main__":
@@ -114,9 +114,12 @@ if __name__ == "__main__":
         ap.add_argument("fnames", help="Path to a list of selected genomes")
         ap.add_argument("-k", type=int, default=17, help="Set k for experiment. If exact representations aren't cached for this value of k, it may take a very long time to run")
         ap.add_argument("-s", type=int, default=10, help="Set start sketch size in log2.")
-        ap.add_argument("-S", type=int, default=16, help="Set start sketch size in log2.")
+        ap.add_argument("-S", type=int, default=18, help="Set start sketch size in log2.")
         ap.add_argument("-T", type=int, default=2, help="Set step size for sketch size.")
+        ap.add_argument("--cpu", type=int, default=-1)
+        ap.add_argument("--executable", '-E', default="dashing2")
         args = ap.parse_args()
+        k = args.k
         res = parsedata(args.table, args.fnames)
         bkts, rngs, tups, total_ids, full_genome_ids = res
         selected = [full_genome_ids[i] for i in total_ids]
@@ -128,12 +131,13 @@ if __name__ == "__main__":
             # print(tup.shape)
             s += ",".join("%s-%s" % (x[0], x[1]) for x in tup)
             s += '\n'
-        fullmat = np.vstack([np.vstack([getall(l, r, k=args.k, sz=sz) for l, r in map(lambda x: (full_genome_ids[x[0]], full_genome_ids[x[1]]), tups.reshape(-1, 2))]) for sz in map(lambda x: 1<< x, range(args.s, args.S, args.T))])
-        settings = [(l, r, sz) for l, r in tups.reshape(-1, 2) for sz in map(lambda x: 1<< x, range(args.s, args.S, args.T))]
+        tups = [(full_genome_ids[l], full_genome_ids[r], k, 1 << sz, args.executable) for l, r in tups.reshape(-1, 2) for sz in range(args.s, args.S, args.T)]
+        fullmat = np.vstack([pargetall(tups, k=k, sz=sz, executable=args.executable, cpu=args.cpu) for sz in range(args.s, args.S, args.T)])
         fullmat.astype(np.float32).tofile("fullmat.f32.%s" % (fullmat.shape))
         with open("settings.txt", "w") as f:
-            for st in settings:
-                print("%s:%d\t%s:d\t%d\n" % (full_genome_ids[st[0]], st[0], full_genome_ids[st[1]], st[1], st[2]), file=f)
+            for st in tups:
+                l, r, k, sz = st
+                print("%s\t%s\t\%d\t%d\n" % (l, r, k, sz), file=f)
     else:
         print("Running tests, not running experiment", file=sys.stderr)
         parse_bf(sys.argv[1] if sys.argv[1:] else "selected_buckets_100.txt")
