@@ -62,7 +62,7 @@ def getmashji(l, r, *, k, sz=1024):
 
 
 def getdashingji(l, r, *, k, l2s=10):
-    return float(check_output(f"dashing dist -S{l2s} -k{k}{l} {r}").decode().strip().split("\n")[-2].split("\t")[-1])
+    return float(check_output(f"dashing dist -S{l2s} -k{k} {l} {r}").decode().strip().split("\n")[-2].split("\t")[-1])
 
 
 def exact_wjaccard(p1, p2, k=17):
