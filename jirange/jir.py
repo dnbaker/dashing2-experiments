@@ -3,8 +3,11 @@ import scipy.sparse as sp
 import sys
 import subprocess
 import argparse
-from subprocess import check_output
 
+
+def check_output(x):
+    from subprocess import check_output as sco
+    return sco(x, shell=True)
 
 
 def parse_bf(path):
@@ -47,15 +50,15 @@ def getani(l, r):
     '''
     # return [ANI, num, denom]
     cmd = f"fastANI --minFraction 0. -q {l} -r {r} -o /dev/stdout"
-    return np.fromiter(check_output(cmd, shell=True).decode().strip().split("\t")[-3:], dtype=np.float64)
+    return np.fromiter(check_output(cmd).decode().strip().split("\t")[-3:], dtype=np.float64)
 
 
 def getmashji(l, r, *, k, sz=1024):
-    return float(check_output(f"jaccard_mash dist -s {sz} -k {k} -j -t {l} {r}", shell=True).decode().strip().split("\n")[1].split()[-1])
+    return float(check_output(f"jaccard_mash dist -s {sz} -k {k} -j -t {l} {r}").decode().strip().split("\n")[1].split()[-1])
 
 
 def getdashingji(l, r, *, k, l2s=10):
-    return float(check_output(f"dashing dist -S{l2s} -k{k}{l} {r}", shell=True).decode().strip().split("\n")[-2].split("\t")[-1])
+    return float(check_output(f"dashing dist -S{l2s} -k{k}{l} {r}").decode().strip().split("\n")[-2].split("\t")[-1])
 
 
 def exact_wjaccard(p1, p2, k=17):
@@ -114,7 +117,7 @@ if __name__ == "__main__":
         ap.add_argument("fnames", help="Path to a list of selected genomes")
         ap.add_argument("-k", type=int, default=17, help="Set k for experiment. If exact representations aren't cached for this value of k, it may take a very long time to run")
         ap.add_argument("-s", type=int, default=10, help="Set start sketch size in log2.")
-        ap.add_argument("-S", type=int, default=16, help="Set start sketch size in log2.")
+        ap.add_argument("-S", type=int, default=14, help="Set start sketch size in log2.")
         ap.add_argument("-T", type=int, default=2, help="Set step size for sketch size.")
         args = ap.parse_args()
         res = parsedata(args.table, args.fnames)
