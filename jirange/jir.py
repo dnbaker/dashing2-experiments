@@ -62,11 +62,7 @@ def getmashji(l, r, *, k, sz=1024):
 
 
 def getdashingji(l, r, *, k, l2s=10):
-<<<<<<< HEAD
-    return float(check_output(f"dashing dist -S{l2s} -k{k} {l} {r}", shell=True).decode().strip().split("\n")[-2].split("\t")[-1])
-=======
     return float(check_output(f"dashing dist -S{l2s} -k{k}{l} {r}").decode().strip().split("\n")[-2].split("\t")[-1])
->>>>>>> 9d36e89d0832cba0a13d0aa16fd3dfae3c8817ac
 
 
 def exact_wjaccard(p1, p2, k=17):
@@ -144,9 +140,9 @@ if __name__ == "__main__":
             s += '\n'
         hv = hash(",".join(sys.argv))
         rng = range(args.s, args.S, args.T)
-        sdict = {"k": k, "sz": sz, "executable": executable, "cpu": args.cpu}
+        sdict = {"k": k, "executable": args.executable, "cpu": args.cpu}
         tups = [(full_genome_ids[l], full_genome_ids[r], k, 1 << sz, args.executable) for l, r in tups.reshape(-1, 2) for sz in rng]
-        fullmat = np.stack([pargetall(tups, **sdict) for sz in rng])
+        fullmat = np.stack([pargetall(tups, sz=sz, **sdict) for sz in rng])
         fullmat.astype(np.float32).tofile("fullmat.f32.%d.%s" % (hv, fullmat.shape))
         with open("settings.%d.txt" % hv, "w") as f:
             for st in tups:
