@@ -4,9 +4,12 @@
 #include <cstring>
 #include <tuple>
 #include <string>
-#include "flat_hash_map/flat_hash_map.hpp"
-#include <stdio.h>
+#include <cstdio>
+#include <unordered_map>
 
+
+template<typename K, typename V>
+using map = std::unordered_map<K, V>;
 
 int str2ms(const char *s) {
     int ret =0;
@@ -28,6 +31,11 @@ int str2ms(const char *s) {
     return ret;
 }
 
+static inline bool matchchr(const char *s) {
+    // | 32 lower-cases the letter, allowing C and c to match
+    return (*s | char(32)) == 'c' && s[1] == 'h' && s[2] == 'r';
+}
+
 auto parse_file(std::FILE *ifp) {
     std::vector<uint32_t> contigids;
     std::vector<uint64_t> ids;
@@ -37,7 +45,7 @@ auto parse_file(std::FILE *ifp) {
     std::vector<uint16_t> counts;
     std::vector<uint64_t> indptr;
     indptr.push_back(0);
-    ska::flat_hash_map<std::string, uint32_t> contignames;
+    map<std::string, uint32_t> contignames;
     idcounter.store(0);
     char *lptr = nullptr;
     size_t linesz = 0;
@@ -52,8 +60,7 @@ auto parse_file(std::FILE *ifp) {
         assert(p);
         char *p2 = std::strchr(p + 1, '\t');
         assert(p2);
-        if((*p == 'C' || *p == 'c') && p[1] == 'h' && p[2] == 'r')
-            p += 3;
+        if(matchchr(p)) p += 3;
         cname.assign(p, p2);
         uint32_t mycid = cname.size();
         auto cnit = contignames.find(cname);
@@ -91,7 +98,7 @@ int main(int argc, char **argv) {
     auto [cids, cnames, counts, ids, indptr, nf] = parse_file(fp);
     std::fclose(fp);
 
-    ska::flat_hash_map<uint64_t, uint16_t> mapper;
+    map<uint64_t, uint16_t> mapper;
     for(const auto id: ids) {
         if(mapper.find(id) == mapper.end()) {
             auto oldsz = mapper.size();
@@ -99,7 +106,8 @@ int main(int argc, char **argv) {
         }
     }
     assert(mapper.size() < 65536);
-    std::transform(ids.begin(), ids.end(), ids.begin(), [&mapper](auto x) {return mapper[x];});
+    for(size_t i = 0; i < ids.size(); ++i)
+        ids[i] = mapper[ids[i]];
     fp = std::fopen("parsed.cts.u16", "wb");
     std::fwrite(counts.data(), 2, counts.size(), fp);
     std::fclose(fp);
