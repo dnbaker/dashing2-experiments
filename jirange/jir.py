@@ -55,7 +55,7 @@ def getmashji(l, r, *, k, sz=1024):
 
 
 def getdashingji(l, r, *, k, l2s=10):
-    return float(check_output(f"dashing dist -S{l2s} -k{k}{l} {r}", shell=True).decode().strip().split("\n")[-2].split("\t")[-1])
+    return float(check_output(f"dashing dist -S{l2s} -k{k} {l} {r}", shell=True).decode().strip().split("\n")[-2].split("\t")[-1])
 
 
 def exact_wjaccard(p1, p2, k=17):
@@ -104,7 +104,7 @@ def pargetall(tups, k=17, sz=1024, executable="dashing2", cpu=-1):
     import multiprocessing as mp
     if cpu < 0: cpu = mp.cpu_count()
     with mp.Pool(cpu) as p:
-        return np.vstack(p.map(packed, tups))
+        return p.map(packed, tups)
 
 
 if __name__ == "__main__":
@@ -131,10 +131,12 @@ if __name__ == "__main__":
             # print(tup.shape)
             s += ",".join("%s-%s" % (x[0], x[1]) for x in tup)
             s += '\n'
-        tups = [(full_genome_ids[l], full_genome_ids[r], k, 1 << sz, args.executable) for l, r in tups.reshape(-1, 2) for sz in range(args.s, args.S, args.T)]
-        fullmat = np.vstack([pargetall(tups, k=k, sz=sz, executable=args.executable, cpu=args.cpu) for sz in range(args.s, args.S, args.T)])
-        fullmat.astype(np.float32).tofile("fullmat.f32.%s" % (fullmat.shape))
-        with open("settings.txt", "w") as f:
+        rng = range(args.s, args.S, args.T)
+        tups = [(full_genome_ids[l], full_genome_ids[r], k, 1 << sz, args.executable) for l, r in tups.reshape(-1, 2) for sz in rng]
+        fullmat = np.vstack([pargetall(tups, k=k, sz=sz, executable=args.executable, cpu=args.cpu) for sz in rng])
+        hv = hash(",".join(sys.argv))
+        fullmat.astype(np.float32).tofile("fullmat.f32.%d.%s" % (hv, fullmat.shape))
+        with open("settings.%d.txt" % hv, "w") as f:
             for st in tups:
                 l, r, k, sz = st
                 print("%s\t%s\t\%d\t%d\n" % (l, r, k, sz), file=f)
