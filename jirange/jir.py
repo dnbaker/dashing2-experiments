@@ -3,8 +3,15 @@ import scipy.sparse as sp
 import sys
 import subprocess
 import argparse
-from subprocess import check_output
 
+
+def check_output(x):
+    from subprocess import check_output as sco
+    try:
+        return sco(x, shell=True)
+    except Exception as e:
+        print("Failed to subprocess call '%s', error = %s" % (x, e), file=sys.stderr)
+        raise
 
 
 def parse_bf(path):
@@ -47,15 +54,19 @@ def getani(l, r):
     '''
     # return [ANI, num, denom]
     cmd = f"fastANI --minFraction 0. -q {l} -r {r} -o /dev/stdout"
-    return np.fromiter(check_output(cmd, shell=True).decode().strip().split("\t")[-3:], dtype=np.float64)
+    return np.fromiter(check_output(cmd).decode().strip().split("\t")[-3:], dtype=np.float64)
 
 
 def getmashji(l, r, *, k, sz=1024):
-    return float(check_output(f"jaccard_mash dist -s {sz} -k {k} -j -t {l} {r}", shell=True).decode().strip().split("\n")[1].split()[-1])
+    return float(check_output(f"jaccard_mash dist -s {sz} -k {k} -j -t {l} {r}").decode().strip().split("\n")[1].split()[-1])
 
 
 def getdashingji(l, r, *, k, l2s=10):
+<<<<<<< HEAD
     return float(check_output(f"dashing dist -S{l2s} -k{k} {l} {r}", shell=True).decode().strip().split("\n")[-2].split("\t")[-1])
+=======
+    return float(check_output(f"dashing dist -S{l2s} -k{k}{l} {r}").decode().strip().split("\n")[-2].split("\t")[-1])
+>>>>>>> 9d36e89d0832cba0a13d0aa16fd3dfae3c8817ac
 
 
 def exact_wjaccard(p1, p2, k=17):
@@ -114,7 +125,7 @@ if __name__ == "__main__":
         ap.add_argument("fnames", help="Path to a list of selected genomes")
         ap.add_argument("-k", type=int, default=17, help="Set k for experiment. If exact representations aren't cached for this value of k, it may take a very long time to run")
         ap.add_argument("-s", type=int, default=10, help="Set start sketch size in log2.")
-        ap.add_argument("-S", type=int, default=18, help="Set start sketch size in log2.")
+        ap.add_argument("-S", type=int, default=14, help="Set start sketch size in log2.")
         ap.add_argument("-T", type=int, default=2, help="Set step size for sketch size.")
         ap.add_argument("--cpu", type=int, default=-1)
         ap.add_argument("--executable", '-E', default="dashing2")
@@ -131,10 +142,11 @@ if __name__ == "__main__":
             # print(tup.shape)
             s += ",".join("%s-%s" % (x[0], x[1]) for x in tup)
             s += '\n'
-        rng = range(args.s, args.S, args.T)
-        tups = [(full_genome_ids[l], full_genome_ids[r], k, 1 << sz, args.executable) for l, r in tups.reshape(-1, 2) for sz in rng]
-        fullmat = np.vstack([pargetall(tups, k=k, sz=sz, executable=args.executable, cpu=args.cpu) for sz in rng])
         hv = hash(",".join(sys.argv))
+        rng = range(args.s, args.S, args.T)
+        sdict = {"k": k, "sz": sz, "executable": executable, "cpu": args.cpu}
+        tups = [(full_genome_ids[l], full_genome_ids[r], k, 1 << sz, args.executable) for l, r in tups.reshape(-1, 2) for sz in rng]
+        fullmat = np.stack([pargetall(tups, **sdict) for sz in rng])
         fullmat.astype(np.float32).tofile("fullmat.f32.%d.%s" % (hv, fullmat.shape))
         with open("settings.%d.txt" % hv, "w") as f:
             for st in tups:
