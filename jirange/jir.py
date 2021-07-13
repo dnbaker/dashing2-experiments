@@ -115,7 +115,7 @@ def pargetall(tups, k=17, sz=1024, executable="dashing2", cpu=-1):
 
 
 if __name__ == "__main__":
-    if(sys.argv[2:]):
+    if(sys.argv[2:] or "-h" in sys.argv or "--help" in sys.argv):
         ap = argparse.ArgumentParser()
         ap.add_argument("table", help="Path to a list of selected genomes with ranged Jaccards")
         ap.add_argument("fnames", help="Path to a list of selected genomes")
