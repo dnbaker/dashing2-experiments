@@ -131,6 +131,7 @@ if __name__ == "__main__":
         ap.add_argument("-T", type=int, default=2, help="Set step size for sketch size.")
         ap.add_argument("--cpu", type=int, default=-1)
         ap.add_argument("--executable", '-E', default="dashing2")
+        ap.add_argument("--name", default="noname")
         args = ap.parse_args()
         k = args.k
         res = parsedata(args.table, args.fnames)
@@ -151,11 +152,11 @@ if __name__ == "__main__":
         print(f"Generated {len(tups)} tuples, which are being passed to pargetall", file=sys.stderr)
         fullmat = np.stack(pargetall(tups, **sdict))
         fs = str(fullmat.shape).replace(" ", "").replace(",", "-")
-        fullmat.astype(np.float32).tofile("fullmat.f32.%d.%s" % (hv, fs))
-        with open("settings.%d.txt" % hv, "w") as f:
+        fullmat.astype(np.float32).tofile("fullmat.%s.f32.%d.%s" % (args.name, hv, fs))
+        with open("settings.%s.%d.txt" % (args.name, hv), "w") as f:
             for st in tups:
                 l, r, k, size, _ = st
-                print("%s\t%s\t%d\t%d\n" % (l, r, k, size), file=f)
+                print("%s\t%s\t%d\t%d" % (l, r, k, size), file=f)
     else:
         print("Running tests, not running experiment", file=sys.stderr)
         parse_bf(sys.argv[1] if sys.argv[1:] else "selected_buckets_100.txt")
