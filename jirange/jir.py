@@ -7,11 +7,15 @@ import argparse
 
 def check_output(x):
     from subprocess import check_output as sco
-    try:
-        return sco(x, shell=True)
-    except Exception as e:
-        print("Failed to subprocess call '%s', error = %s" % (x, e), file=sys.stderr)
-        raise
+    t = 0
+    while 1:
+        try:
+            return sco(x, shell=True)
+        except Exception as e:
+            t += 1
+            if t == 3:
+                print("Failed to subprocess call '%s', error = %s" % (x, e), file=sys.stderr)
+                raise
 
 
 def parse_bf(path):
