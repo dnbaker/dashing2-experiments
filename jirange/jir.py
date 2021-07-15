@@ -4,6 +4,7 @@ import sys
 import subprocess
 import argparse
 
+header = "#LHGenome\tRHGenome\tk\tSketchsize\tMash\tDashing1\tTrueJI\tTrueWJI\tSS8Bytes\tSS2Bytes\tSS1Byte\tSSNibble\tMH8Bytes\tMH4Bytes\tMH2Bytes\tMH1Byte\tMHNibble"
 
 def check_output(x):
     from subprocess import check_output as sco
