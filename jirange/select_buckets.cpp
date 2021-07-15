@@ -1,13 +1,16 @@
 #include <cstdio>
 #include <memory>
+#include <algorithm>
 #include <cmath>
 #include <vector>
 #include <sys/stat.h>
 
 int main(int argc, char **argv) {
-    std::FILE *ifp = std::fopen(argv[1], "rb");
     struct stat st;
-    ::stat(argv[1], &st);
+    if(::stat(argv[1], &st)) {
+        std::fprintf(stderr, "input %s is empty.\n", argv[1]);
+        std::exit(1);
+    }
     const size_t nelem = std::ceil(std::sqrt(st.st_size / 4));
     const size_t npairs = st.st_size / 4;
     std::fprintf(stderr, "Pairwise distances between %zu items\n", nelem);
@@ -25,6 +28,8 @@ int main(int argc, char **argv) {
     size_t idx = 0;
     size_t nbuckets_unfilled = vals.size();
     float v;
+    std::FILE *ifp = std::fopen(argv[1], "rb");
+    ssize_t lastunfilled = -1;
     for(size_t i = 0; i < nelem; ++i) {
         for(size_t j = i + 1; j < nelem; ++j, ++idx) {
             std::fread(&v, sizeof(float), 1, ifp);
@@ -38,10 +43,17 @@ int main(int argc, char **argv) {
                         goto end;
                     }
                     std::fprintf(stderr, "[%zu/%zu] %zu buckets left at < %zu entries\n", idx, npairs, nbuckets_unfilled, nperbucket);
+                    if(nbuckets_unfilled == 1) {
+                        ssize_t ind;
+                        if(lastunfilled > 0) ind = lastunfilled;
+                        else ind = std::find_if(vals.begin(), vals.end(), [=](const auto &x) {return x.size() < nperbucket;}) - vals.begin();
+                        std::fprintf(stderr, "Bucket %zu/%g-%g, Current size %zu/%zu\n", ind, (ind - 1) / double(nbuckets), ind / double(nbuckets), vals[ind].size(), nperbucket);
+                    }
                 }
             }
         }
     }
+    std::fclose(ifp);
     std::fprintf(stderr, "EOF at %zu\n", idx);
     end:
     for(size_t i = 0; i < vals.size(); ++i) {
@@ -58,5 +70,4 @@ int main(int argc, char **argv) {
         }
         std::fputc('\n', stdout);
     }
-    std::fclose(ifp);
 }
