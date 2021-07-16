@@ -1,17 +1,19 @@
 import numpy as np
 import scipy.sparse as sp
 import sys
+from sys import stderr
 import subprocess
 import argparse
+import os
+from subprocess import PIPE, check_call
 
-header = "#LHGenome\tRHGenome\tk\tSketchsize\tMash\tDashing1\tTrueJI\tTrueWJI\tSS8Bytes\tSS2Bytes\tSS1Byte\tSSNibble\tMH8Bytes\tMH4Bytes\tMH2Bytes\tMH1Byte\tMHNibble"
 
-def check_output(x):
+def check_output(x, stderr=PIPE):
     from subprocess import check_output as sco
     t = 0
     while 1:
         try:
-            return sco(x, shell=True)
+            return sco(x, shell=True, stderr=stderr)
         except Exception as e:
             t += 1
             if t == 3:
@@ -60,7 +62,12 @@ def getani(l, r):
     '''
     # return [ANI, num, denom]
     cmd = f"fastANI --minFraction 0. -q {l} -r {r} -o /dev/stdout"
-    return np.fromiter(check_output(cmd).decode().strip().split("\t")[-3:], dtype=np.float64)
+    out = check_output(cmd)
+    try:
+        return np.fromiter(out.decode().strip().split("\t")[-3:], dtype=np.float64)
+    except Exception as se:
+        print("Exception failed: " + str(se))
+        raise
 
 
 def getmashji(l, r, *, k, size=1024):
@@ -72,11 +79,11 @@ def getdashingji(l, r, *, k, l2s=10):
 
 
 def exact_wjaccard(p1, p2, k=17):
-    return float(check_output(f"dashing2 sketch -k{k} --countdict --exact-kmer-dist --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
+    return float(check_output(f"dashing2 sketch -k{k} --countdict --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
 def exact_jaccard(p1, p2, k=17):
-    return float(check_output(f"dashing2 sketch -k{k} --set --exact-kmer-dist --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
+    return float(check_output(f"dashing2 sketch -k{k} --set --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
 def setsketch_jaccard(p1, p2, size, k=17, nb=8, fss=False, executable="dashing2"):
@@ -97,17 +104,38 @@ def bbminhash_jaccard(p1, p2, size, k=17, nb=32, fss=False, executable="dashing2
     return float(check_output(f"{executable} sketch -k{k} {'--full-setsketch ' if fss else ''} --bbit-sigs -S{size} {fcstr} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
+def bindash_jaccard(p1, p2, size, k=17, nb=8, executable="bindash"):
+    """Get bindash Jaccard, as well as caching its sketches
+    """
+    assert size % 64 == 0, "Size must be divisible by 64"
+    bb = nb * 8
+    def mc(p):
+        return os.path.basename(p + f".{k}.{bb}.{size}")
+    cp1, cp2 = map(mc, (p1, p2))
+    for cp, p in zip((cp1, cp2), (p1, p2)):
+        if not (os.path.isfile(cp + ".dat") and os.path.isfile(cp + ".txt")):
+            cmd = f"{executable} sketch --kmerlen={k} --bbits={bb} --minhashtype=2 --sketchsize64={size // 64} --outfname={cp} {p}"
+            check_call(cmd, shell=True, stderr=PIPE)
+    num, denom = map(float, check_output(f"{executable} dist {cp1} {cp2}").decode().strip().split('\t')[-1].split("/"))
+    return num / denom
+
+
+header = "#ANI\tWJI\tJI\tMash\tDash1\tBD8\tBD4\tBD2\tBD1\tBDN\tSS8\tSS2\tSS1\tSSN\tFSS8\tFSS2\tFSS1\tFSSN\tMH8\tMH4\tMH2\tMH1\tMHN"
+
+
 def getall(l, r, k=17, size=1024, executable="dashing2"):
     '''
         for values of k, size, and executable, return
         all similarity comparisons using Mash, Dashing, Dashing2, and fastANI
     '''
-    return np.array([getmashji(l, r, k=k, size=size),
-                     getdashingji(l, r, k=k, l2s=int(np.log2(size))),
+    return np.array([getani(l, r)[0],
+                     exact_wjaccard(l, r),
                      exact_jaccard(l, r),
-                     exact_wjaccard(l, r)] + 
-                     # getani(l, r) +
+                     getmashji(l, r, k=k, size=size),
+                     getdashingji(l, r, k=k, l2s=int(np.log2(size)))] +
+                     [bindash_jaccard(l, r, size=size, nb=nb) for nb in (8, 4, 2, 1, .5)] +
                      [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=False, executable=executable) for nb in (8, 2, 1, .5)] +
+                     [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=True, executable=executable) for nb in (8, 2, 1, .5)] +
                      [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=True, executable=executable) for nb in (8, 4, 2, 1, .5)], np.float32)
 
 def packed(x):
