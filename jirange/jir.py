@@ -1,20 +1,22 @@
 import numpy as np
 import scipy.sparse as sp
 import sys
+from sys import stderr
 import subprocess
 import argparse
+import os
+from subprocess import PIPE, check_call
 
-header = "#LHGenome\tRHGenome\tk\tSketchsize\tMash\tDashing1\tTrueJI\tTrueWJI\tSS8Bytes\tSS2Bytes\tSS1Byte\tSSNibble\tMH8Bytes\tMH4Bytes\tMH2Bytes\tMH1Byte\tMHNibble"
 
 def check_output(x):
     from subprocess import check_output as sco
     t = 0
     while 1:
         try:
-            return sco(x, shell=True)
+            return sco(x, shell=True, stderr=PIPE)
         except Exception as e:
             t += 1
-            if t == 3:
+            if t == 10:
                 print("Failed to subprocess call '%s', error = %s" % (x, e), file=sys.stderr)
                 raise
 
@@ -54,13 +56,17 @@ def parsedata(path, fn):
     return (bkts, rngs, tups, ids, genome_ids)
 
 
-def getani(l, r): 
+def getani(l, r):
     '''For genomes l and r, which must exist as files, estimate ANI using fastANI
        returns a numpy array with [ANI, num, denom] as values.
     '''
     # return [ANI, num, denom]
     cmd = f"fastANI --minFraction 0. -q {l} -r {r} -o /dev/stdout"
-    return np.fromiter(check_output(cmd).decode().strip().split("\t")[-3:], dtype=np.float64)
+    out = check_output(cmd).decode().strip()
+    try:
+        return np.fromiter(out.split("\t")[-3:], dtype=np.float64)[0]
+    except Exception as se:
+        return 0.
 
 
 def getmashji(l, r, *, k, size=1024):
@@ -72,11 +78,11 @@ def getdashingji(l, r, *, k, l2s=10):
 
 
 def exact_wjaccard(p1, p2, k=17):
-    return float(check_output(f"dashing2 sketch -k{k} --countdict --exact-kmer-dist --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
+    return float(check_output(f"dashing2 sketch -k{k} --countdict --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
 def exact_jaccard(p1, p2, k=17):
-    return float(check_output(f"dashing2 sketch -k{k} --set --exact-kmer-dist --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
+    return float(check_output(f"dashing2 sketch -k{k} --set --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
 def setsketch_jaccard(p1, p2, size, k=17, nb=8, fss=False, executable="dashing2"):
@@ -97,28 +103,64 @@ def bbminhash_jaccard(p1, p2, size, k=17, nb=32, fss=False, executable="dashing2
     return float(check_output(f"{executable} sketch -k{k} {'--full-setsketch ' if fss else ''} --bbit-sigs -S{size} {fcstr} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
+def bindash_jaccard(p1, p2, size, k=17, nb=8, executable="bindash"):
+    """Get bindash Jaccard, as well as caching its sketches
+    """
+    assert size % 64 == 0, "Size must be divisible by 64"
+    bb = nb * 8
+    def mc(p):
+        return "bdsh_tmp/" + os.path.basename(p + f".{k}.{bb}.{size}")
+    cp1, cp2 = map(mc, (p1, p2))
+    for cp, p in zip((cp1, cp2), (p1, p2)):
+        if not (os.path.isfile(cp + ".dat") and os.path.isfile(cp + ".txt")):
+            cmd = f"{executable} sketch --kmerlen={k} --bbits={bb} --minhashtype=2 --sketchsize64={size // 64} --outfname={cp} {p}"
+            check_call(cmd, shell=True, stderr=PIPE)
+    out = check_output(f"{executable} dist {cp1} {cp2}").decode().strip()
+    # print("Output: ", out)
+    if not out:
+        cmd = f"{executable} dist {cp1} {cp2}"
+        # print(f"bindash failed to emit a result {cmd}. Returning -1; this signals an error.", file=sys.stderr)
+        return -1
+    toks = out.split('\t')[-1].split("/")
+    # print(toks)
+    num, denom = map(float, toks)
+    # print(num, denom)
+    return num / denom
+
+
+header = "#ANI\tWJI\tJI\tMash\tDash1\tBD8\tBD4\tBD2\tBD1\tBDN\tSS8\tSS2\tSS1\tSSN\tFSS8\tFSS2\tFSS1\tFSSN\tMH8\tMH4\tMH2\tMH1\tMHN"
+
+
 def getall(l, r, k=17, size=1024, executable="dashing2"):
     '''
         for values of k, size, and executable, return
         all similarity comparisons using Mash, Dashing, Dashing2, and fastANI
     '''
-    return np.array([getmashji(l, r, k=k, size=size),
-                     getdashingji(l, r, k=k, l2s=int(np.log2(size))),
+    return np.array([getani(l, r),
+                     exact_wjaccard(l, r),
                      exact_jaccard(l, r),
-                     exact_wjaccard(l, r)] + 
-                     # getani(l, r) +
+                     getmashji(l, r, k=k, size=size),
+                     getdashingji(l, r, k=k, l2s=int(np.log2(size)))] +
+                     [bindash_jaccard(l, r, size=size, nb=nb) for nb in (8, 4, 2, 1, .5)] +
                      [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=False, executable=executable) for nb in (8, 2, 1, .5)] +
+                     [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=True, executable=executable) for nb in (8, 2, 1, .5)] +
                      [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=True, executable=executable) for nb in (8, 4, 2, 1, .5)], np.float32)
 
 def packed(x):
     l, r, k, size, executable = x
     return getall(l, r, k=k, size=size, executable=executable)
 
+def packedani(x):
+    l, r = x
+    return getani(l, r)
+
+
 def pargetall(tups, k=17, executable="dashing2", cpu=-1):
     import multiprocessing as mp
     if cpu < 0: cpu = mp.cpu_count()
     with mp.Pool(cpu) as p:
-        return p.map(packed, tups)
+        return np.stack(p.map(packed, tups))
+
 
 
 if __name__ == "__main__":
@@ -140,8 +182,6 @@ if __name__ == "__main__":
         selected = [full_genome_ids[i] for i in total_ids]
         print(len(selected), ", frac = %g" % (len(selected) / len(full_genome_ids)), file=sys.stderr)
         s = ""
-        print(np.min(tups), np.max(tups))
-        print(tups.shape)
         for tup in tups:
             # print(tup.shape)
             s += ",".join("%s-%s" % (x[0], x[1]) for x in tup)
@@ -149,15 +189,16 @@ if __name__ == "__main__":
         hv = abs(hash(",".join(sys.argv)))
         rng = range(args.s, args.S, args.T)
         sdict = {"k": k, "executable": args.executable, "cpu": args.cpu}
+        tdict = {i: (full_genome_ids[l], full_genome_ids[r]) for i, (l, r) in enumerate(tups.reshape(-1, 2))}
         tups = [(full_genome_ids[l], full_genome_ids[r], k, 1 << size, args.executable) for l, r in tups.reshape(-1, 2) for size in rng]
-        print(f"Generated {len(tups)} tuples, which are being passed to pargetall", file=sys.stderr)
-        fullmat = np.stack(pargetall(tups, **sdict))
-        fs = str(fullmat.shape).replace(" ", "").replace(",", "-")
-        fullmat.astype(np.float32).tofile("fullmat.%s.f32.%d.%s" % (args.name, hv, fs))
         with open("settings.%s.%d.txt" % (args.name, hv), "w") as f:
             for st in tups:
                 l, r, k, size, _ = st
                 print("%s\t%s\t%d\t%d" % (l, r, k, size), file=f)
+        print(f"Generated {len(tups)} tuples, which are being passed to pargetall", file=sys.stderr)
+        fullmat = np.stack(pargetall(tups, **sdict))
+        fs = str(fullmat.shape).replace(" ", "").replace(",", "-")
+        fullmat.astype(np.float32).tofile("fullmat.%s.f32.%d.%s" % (args.name, hv, fs))
     else:
         print("Running tests, not running experiment", file=sys.stderr)
         parse_bf(sys.argv[1] if sys.argv[1:] else "selected_buckets_100.txt")
