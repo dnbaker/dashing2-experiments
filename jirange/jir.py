@@ -8,15 +8,15 @@ import os
 from subprocess import PIPE, check_call
 
 
-def check_output(x, stderr=PIPE):
+def check_output(x):
     from subprocess import check_output as sco
     t = 0
     while 1:
         try:
-            return sco(x, shell=True, stderr=stderr)
+            return sco(x, shell=True, stderr=PIPE)
         except Exception as e:
             t += 1
-            if t == 3:
+            if t == 10:
                 print("Failed to subprocess call '%s', error = %s" % (x, e), file=sys.stderr)
                 raise
 
@@ -56,18 +56,17 @@ def parsedata(path, fn):
     return (bkts, rngs, tups, ids, genome_ids)
 
 
-def getani(l, r): 
+def getani(l, r):
     '''For genomes l and r, which must exist as files, estimate ANI using fastANI
        returns a numpy array with [ANI, num, denom] as values.
     '''
     # return [ANI, num, denom]
     cmd = f"fastANI --minFraction 0. -q {l} -r {r} -o /dev/stdout"
-    out = check_output(cmd)
+    out = check_output(cmd).decode().strip()
     try:
-        return np.fromiter(out.decode().strip().split("\t")[-3:], dtype=np.float64)
+        return np.fromiter(out.split("\t")[-3:], dtype=np.float64)[0]
     except Exception as se:
-        print("Exception failed: " + str(se))
-        raise
+        return 0.
 
 
 def getmashji(l, r, *, k, size=1024):
@@ -110,13 +109,22 @@ def bindash_jaccard(p1, p2, size, k=17, nb=8, executable="bindash"):
     assert size % 64 == 0, "Size must be divisible by 64"
     bb = nb * 8
     def mc(p):
-        return os.path.basename(p + f".{k}.{bb}.{size}")
+        return "bdsh_tmp/" + os.path.basename(p + f".{k}.{bb}.{size}")
     cp1, cp2 = map(mc, (p1, p2))
     for cp, p in zip((cp1, cp2), (p1, p2)):
         if not (os.path.isfile(cp + ".dat") and os.path.isfile(cp + ".txt")):
             cmd = f"{executable} sketch --kmerlen={k} --bbits={bb} --minhashtype=2 --sketchsize64={size // 64} --outfname={cp} {p}"
             check_call(cmd, shell=True, stderr=PIPE)
-    num, denom = map(float, check_output(f"{executable} dist {cp1} {cp2}").decode().strip().split('\t')[-1].split("/"))
+    out = check_output(f"{executable} dist {cp1} {cp2}").decode().strip()
+    # print("Output: ", out)
+    if not out:
+        cmd = f"{executable} dist {cp1} {cp2}"
+        # print(f"bindash failed to emit a result {cmd}. Returning -1; this signals an error.", file=sys.stderr)
+        return -1
+    toks = out.split('\t')[-1].split("/")
+    # print(toks)
+    num, denom = map(float, toks)
+    # print(num, denom)
     return num / denom
 
 
@@ -128,7 +136,7 @@ def getall(l, r, k=17, size=1024, executable="dashing2"):
         for values of k, size, and executable, return
         all similarity comparisons using Mash, Dashing, Dashing2, and fastANI
     '''
-    return np.array([getani(l, r)[0],
+    return np.array([getani(l, r),
                      exact_wjaccard(l, r),
                      exact_jaccard(l, r),
                      getmashji(l, r, k=k, size=size),
@@ -142,11 +150,17 @@ def packed(x):
     l, r, k, size, executable = x
     return getall(l, r, k=k, size=size, executable=executable)
 
+def packedani(x):
+    l, r = x
+    return getani(l, r)
+
+
 def pargetall(tups, k=17, executable="dashing2", cpu=-1):
     import multiprocessing as mp
     if cpu < 0: cpu = mp.cpu_count()
     with mp.Pool(cpu) as p:
-        return p.map(packed, tups)
+        return np.stack(p.map(packed, tups))
+
 
 
 if __name__ == "__main__":
@@ -168,8 +182,6 @@ if __name__ == "__main__":
         selected = [full_genome_ids[i] for i in total_ids]
         print(len(selected), ", frac = %g" % (len(selected) / len(full_genome_ids)), file=sys.stderr)
         s = ""
-        print(np.min(tups), np.max(tups))
-        print(tups.shape)
         for tup in tups:
             # print(tup.shape)
             s += ",".join("%s-%s" % (x[0], x[1]) for x in tup)
@@ -177,15 +189,16 @@ if __name__ == "__main__":
         hv = abs(hash(",".join(sys.argv)))
         rng = range(args.s, args.S, args.T)
         sdict = {"k": k, "executable": args.executable, "cpu": args.cpu}
+        tdict = {i: (full_genome_ids[l], full_genome_ids[r]) for i, (l, r) in enumerate(tups.reshape(-1, 2))}
         tups = [(full_genome_ids[l], full_genome_ids[r], k, 1 << size, args.executable) for l, r in tups.reshape(-1, 2) for size in rng]
-        print(f"Generated {len(tups)} tuples, which are being passed to pargetall", file=sys.stderr)
-        fullmat = np.stack(pargetall(tups, **sdict))
-        fs = str(fullmat.shape).replace(" ", "").replace(",", "-")
-        fullmat.astype(np.float32).tofile("fullmat.%s.f32.%d.%s" % (args.name, hv, fs))
         with open("settings.%s.%d.txt" % (args.name, hv), "w") as f:
             for st in tups:
                 l, r, k, size, _ = st
                 print("%s\t%s\t%d\t%d" % (l, r, k, size), file=f)
+        print(f"Generated {len(tups)} tuples, which are being passed to pargetall", file=sys.stderr)
+        fullmat = np.stack(pargetall(tups, **sdict))
+        fs = str(fullmat.shape).replace(" ", "").replace(",", "-")
+        fullmat.astype(np.float32).tofile("fullmat.%s.f32.%d.%s" % (args.name, hv, fs))
     else:
         print("Running tests, not running experiment", file=sys.stderr)
         parse_bf(sys.argv[1] if sys.argv[1:] else "selected_buckets_100.txt")
