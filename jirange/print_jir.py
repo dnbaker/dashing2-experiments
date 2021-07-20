@@ -9,7 +9,7 @@ ap.add_argument("matrix", help="Emitted numpy array from jirange/jir.py, which i
 ap.add_argument("settings", help="Emitted results from jirange/jir.py, which has tuples for the experimental conditions")
 ap = ap.parse_args()
 
-mat = np.memmap(ap.matrix, np.float32).reshape(-1, 23)
+mat = np.memmap(ap.matrix, np.float32).reshape(-1, 28)
 
 print(header)
 for mr, l in zip(mat, open(ap.settings)):
