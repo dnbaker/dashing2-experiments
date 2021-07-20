@@ -128,8 +128,7 @@ def bindash_jaccard(p1, p2, size, k=17, nb=8, executable="bindash"):
     return num / denom
 
 
-header = "#ANI\tWJI\tJI\tMash\tDash1\tBD8\tBD4\tBD2\tBD1\tBDN\tSS8\tSS2\tSS1\tSSN\tFSS8\tFSS2\tFSS1\tFSSN\tMH8\tMH4\tMH2\tMH1\tMHN"
-
+header = "#ANI\tWJI\tJI\tMash\tDash1\tBD8\tBD4\tBD2\tBD1\tBDN\tSS8\tSS2\tSS1\tSSN\tFSS8\tFSS2\tFSS1\tFSSN\tMH8\tMH4\tMH2\tMH1\tMHN\tFMH8\tFMH4\tFMH2\tFMH1\tFMHN"
 
 def getall(l, r, k=17, size=1024, executable="dashing2"):
     '''
@@ -144,6 +143,7 @@ def getall(l, r, k=17, size=1024, executable="dashing2"):
                      [bindash_jaccard(l, r, size=size, nb=nb) for nb in (8, 4, 2, 1, .5)] +
                      [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=False, executable=executable) for nb in (8, 2, 1, .5)] +
                      [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=True, executable=executable) for nb in (8, 2, 1, .5)] +
+                     [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=False, executable=executable) for nb in (8, 4, 2, 1, .5)] +
                      [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=True, executable=executable) for nb in (8, 4, 2, 1, .5)], np.float32)
 
 def packed(x):
