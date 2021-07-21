@@ -136,11 +136,11 @@ def getall(l, r, k=17, size=1024, executable="dashing2"):
         all similarity comparisons using Mash, Dashing, Dashing2, and fastANI
     '''
     return np.array([getani(l, r),
-                     exact_wjaccard(l, r),
-                     exact_jaccard(l, r),
+                     exact_wjaccard(l, r, k=k),
+                     exact_jaccard(l, r, k=k),
                      getmashji(l, r, k=k, size=size),
                      getdashingji(l, r, k=k, l2s=int(np.log2(size)))] +
-                     [bindash_jaccard(l, r, size=size, nb=nb) for nb in (8, 4, 2, 1, .5)] +
+                     [bindash_jaccard(l, r, k=k, size=size, nb=nb) for nb in (8, 4, 2, 1, .5)] +
                      [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=False, executable=executable) for nb in (8, 2, 1, .5)] +
                      [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=True, executable=executable) for nb in (8, 2, 1, .5)] +
                      [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=False, executable=executable) for nb in (8, 4, 2, 1, .5)] +
