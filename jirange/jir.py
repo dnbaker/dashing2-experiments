@@ -77,15 +77,19 @@ def getdashingji(l, r, *, k, l2s=10):
     return float(check_output(f"dashing dist -S{l2s} -k{k} {l} {r}").decode().strip().split("\n")[-2].split("\t")[-1])
 
 
-def exact_wjaccard(p1, p2, k=17):
+def exact_wjaccard(p1, p2, *, k):
     return float(check_output(f"dashing2 sketch -k{k} --countdict --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
-def exact_jaccard(p1, p2, k=17):
-    return float(check_output(f"dashing2 sketch -k{k} --set --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
+def exact_jaccard(p1, p2, *, k):
+    res = check_output(f"dashing2 sketch -k{k} --set --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n')
+    rf = float(res.split('\n')[-2].split("\t")[1])
+    if rf > 1.:
+        print("Res", res, rf, file=sys.stderr)
+    return rf
 
 
-def setsketch_jaccard(p1, p2, size, k=17, nb=8, fss=False, executable="dashing2"):
+def setsketch_jaccard(p1, p2, size, *, k, nb=8, fss=False, executable="dashing2"):
     '''k is the k to use, and nb is the number of bytes to use in the setsketch-based set similarity estimation
        nb is 8 by default, which is Dashing 2's typical size, though dashing-f and dashing-ld use 4 bytes and 16 bytes
        to store float32 and long double hash registers, respectively.
@@ -94,7 +98,7 @@ def setsketch_jaccard(p1, p2, size, k=17, nb=8, fss=False, executable="dashing2"
     return float(check_output(f"{executable} sketch -k{k} {'--full-setsketch ' if fss else ''} -S{size} --fastcmp {nb} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
-def bbminhash_jaccard(p1, p2, size, k=17, nb=32, fss=False, executable="dashing2"):
+def bbminhash_jaccard(p1, p2, size, *, k, nb=32, fss=False, executable="dashing2"):
     '''k is the k to use, and nb is the number of bytes to use in the setsketch-based set similarity estimation
        nb is 8 by default, which is Dashing 2's typical size
     '''
@@ -103,7 +107,7 @@ def bbminhash_jaccard(p1, p2, size, k=17, nb=32, fss=False, executable="dashing2
     return float(check_output(f"{executable} sketch -k{k} {'--full-setsketch ' if fss else ''} --bbit-sigs -S{size} {fcstr} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
-def bindash_jaccard(p1, p2, size, k=17, nb=8, executable="bindash"):
+def bindash_jaccard(p1, p2, size, *, k, nb=8, executable="bindash"):
     """Get bindash Jaccard, as well as caching its sketches
     """
     assert size % 64 == 0, "Size must be divisible by 64"
@@ -128,14 +132,19 @@ def bindash_jaccard(p1, p2, size, k=17, nb=8, executable="bindash"):
     return num / denom
 
 
-header = "#ANI\tWJI\tJI\tMash\tDash1\tBD8\tBD4\tBD2\tBD1\tBDN\tSS8\tSS2\tSS1\tSSN\tFSS8\tFSS2\tFSS1\tFSSN\tMH8\tMH4\tMH2\tMH1\tMHN\tFMH8\tFMH4\tFMH2\tFMH1\tFMHN"
+def probminhash_jaccard(p1, p2, size, *, k, nb=8, cssize=-1):
+    cstr = "dashing2 sketch --cache --cmpout /dev/stdout -k {k} --prob"
+    
+
+
+header = "#G1\tG2\t\tK\tsketchsize\tANI\tWJI\tJI\tMash\tDash1\tBD8\tBD4\tBD2\tBD1\tBDN\tSS8\tSS2\tSS1\tSSN\tFSS8\tFSS2\tFSS1\tFSSN\tMH8\tMH4\tMH2\tMH1\tMHN\tFMH8\tFMH4\tFMH2\tFMH1\tFMHN"
 
 def getall(l, r, k=17, size=1024, executable="dashing2"):
     '''
         for values of k, size, and executable, return
         all similarity comparisons using Mash, Dashing, Dashing2, and fastANI
     '''
-    return np.array([getani(l, r),
+    ret = np.array([getani(l, r),
                      exact_wjaccard(l, r, k=k),
                      exact_jaccard(l, r, k=k),
                      getmashji(l, r, k=k, size=size),
@@ -144,7 +153,11 @@ def getall(l, r, k=17, size=1024, executable="dashing2"):
                      [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=False, executable=executable) for nb in (8, 2, 1, .5)] +
                      [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=True, executable=executable) for nb in (8, 2, 1, .5)] +
                      [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=False, executable=executable) for nb in (8, 4, 2, 1, .5)] +
-                     [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=True, executable=executable) for nb in (8, 4, 2, 1, .5)], np.float32)
+                     [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=True, executable=executable) for nb in (8, 4, 2, 1, .5)]
+                , np.float32)
+    if ret[2] > 1.:
+        print(f"Distance {l} {r}, k = {k}, size = {size}... For some reason, Jaccard was > 1...What's going on?", ret[2], file=sys.stderr)
+    return ret
 
 def packed(x):
     l, r, k, size, executable = x
@@ -159,7 +172,9 @@ def pargetall(tups, k=17, executable="dashing2", cpu=-1):
     import multiprocessing as mp
     if cpu < 0: cpu = mp.cpu_count()
     with mp.Pool(cpu) as p:
-        return np.stack(p.map(packed, tups))
+        ret = np.stack(p.map(packed, tups))
+        # print(ret)
+        return ret
 
 
 
@@ -175,6 +190,7 @@ if __name__ == "__main__":
         ap.add_argument("--cpu", type=int, default=-1)
         ap.add_argument("--executable", '-E', default="dashing2")
         ap.add_argument("--name", default="noname")
+        ap.add_argument("-o", "--outfile", default="/dev/stdout")
         args = ap.parse_args()
         k = args.k
         res = parsedata(args.table, args.fnames)
@@ -197,8 +213,13 @@ if __name__ == "__main__":
                 print("%s\t%s\t%d\t%d" % (l, r, k, size), file=f)
         print(f"Generated {len(tups)} tuples, which are being passed to pargetall", file=sys.stderr)
         fullmat = np.stack(pargetall(tups, **sdict))
+        print(fullmat.shape)
         fs = str(fullmat.shape).replace(" ", "").replace(",", "-")
         fullmat.astype(np.float32).tofile("fullmat.%s.f32.%d.%s" % (args.name, hv, fs))
+        with open(args.outfile, "w") as ofp:
+            print(header, file=ofp)
+            for (l, r, k, size, _), mr in zip(tups, fullmat):
+                    print(f"{l}\t{r}\t{k}\t{size}\t" + "\t".join(map(str, mr)), file=ofp)
     else:
         print("Running tests, not running experiment", file=sys.stderr)
         parse_bf(sys.argv[1] if sys.argv[1:] else "selected_buckets_100.txt")
