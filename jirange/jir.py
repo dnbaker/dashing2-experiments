@@ -132,14 +132,33 @@ def bindash_jaccard(p1, p2, size, *, k, nb=8, executable="bindash"):
     return num / denom
 
 
+def bagminhash_jaccard(p1, p2, size, *, k, nb=8, cssize=-1):
+    css = "--countsketch-size %d" % cssize if cssize > 0 else ""
+    fss = f" --fastcmp {nb}" if nb in (8, 4, 2, 1, .5) else ""
+    cstr = f"dashing2 sketch --cache --cmpout /dev/stdout -k {k} --multiset {css + fss} {p1} {p2}"
+    return check_output(cstr).decode().strip('\n').split('\n')[-2].split("\t")[1]
+
+
 def probminhash_jaccard(p1, p2, size, *, k, nb=8, cssize=-1):
-    cstr = "dashing2 sketch --cache --cmpout /dev/stdout -k {k} --prob"
-    
+    css = "--countsketch-size %d" % cssize if cssize > 0 else ""
+    fss = f" --fastcmp {nb}" if nb in (8, 4, 2, 1, .5) else ""
+    cstr = f"dashing2 sketch --cache --cmpout /dev/stdout -k {k} --prob {css + fss} {p1} {p2}"
+    return check_output(cstr).decode().strip('\n').split('\n')[-2].split("\t")[1]
 
 
 header = "#G1\tG2\t\tK\tsketchsize\tANI\tWJI\tJI\tMash\tDash1\tBD8\tBD4\tBD2\tBD1\tBDN\tSS8\tSS2\tSS1\tSSN\tFSS8\tFSS2\tFSS1\tFSSN\tMH8\tMH4\tMH2\tMH1\tMHN\tFMH8\tFMH4\tFMH2\tFMH1\tFMHN"
+PMNBs = [8, 4, 2, 1, .5]
+BMNBs = [8, 4, 2, 1, .5]
+CSSZ = [-1, 50000000, 50000]
+PMHSettings = [(b, cs) for b in PMNBs for cs in CSSZ]
+BMHSettings = [(b, cs) for b in BMNBs for cs in CSSZ]
+for (b, cs) in PMHSettings:
+    header = header + "\tPMH%s%s" % (b if b >= 1 else "N", "-%d" % cs if cs > 0 else "Exact")
+for (b, cs) in BMHSettings:
+    header = header + "\tBMH%s%s" % (b if b >= 1 else "N", "-%d" % cs if cs > 0 else "Exact")
 
-def getall(l, r, k=17, size=1024, executable="dashing2"):
+
+def getall(l, r, k=17, size=1024, executable="dashing2", cssize_set=[500, 50000, 50000000]):
     '''
         for values of k, size, and executable, return
         all similarity comparisons using Mash, Dashing, Dashing2, and fastANI
@@ -153,8 +172,9 @@ def getall(l, r, k=17, size=1024, executable="dashing2"):
                      [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=False, executable=executable) for nb in (8, 2, 1, .5)] +
                      [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=True, executable=executable) for nb in (8, 2, 1, .5)] +
                      [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=False, executable=executable) for nb in (8, 4, 2, 1, .5)] +
-                     [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=True, executable=executable) for nb in (8, 4, 2, 1, .5)]
-                , np.float32)
+                     [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=True, executable=executable) for nb in (8, 4, 2, 1, .5)] +
+                     [probminhash_jaccard(l, r, size=size, k=k, nb=b, cssize=csz) for b, csz in PMHSettings] +
+                     [bagminhash_jaccard(l, r, size=size, k=k, nb=b, cssize=csz) for b, csz in BMHSettings], np.float32)
     if ret[2] > 1.:
         print(f"Distance {l} {r}, k = {k}, size = {size}... For some reason, Jaccard was > 1...What's going on?", ret[2], file=sys.stderr)
     return ret
