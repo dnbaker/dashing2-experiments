@@ -193,7 +193,6 @@ def pargetall(tups, k=17, executable="dashing2", cpu=-1):
     if cpu < 0: cpu = mp.cpu_count()
     with mp.Pool(cpu) as p:
         ret = np.stack(p.map(packed, tups))
-        # print(ret)
         return ret
 
 
@@ -219,7 +218,6 @@ if __name__ == "__main__":
         print(len(selected), ", frac = %g" % (len(selected) / len(full_genome_ids)), file=sys.stderr)
         s = ""
         for tup in tups:
-            # print(tup.shape)
             s += ",".join("%s-%s" % (x[0], x[1]) for x in tup)
             s += '\n'
         hv = abs(hash(",".join(sys.argv)))
@@ -233,7 +231,6 @@ if __name__ == "__main__":
                 print("%s\t%s\t%d\t%d" % (l, r, k, size), file=f)
         print(f"Generated {len(tups)} tuples, which are being passed to pargetall", file=sys.stderr)
         fullmat = np.stack(pargetall(tups, **sdict))
-        print(fullmat.shape)
         fs = str(fullmat.shape).replace(" ", "").replace(",", "-")
         fullmat.astype(np.float32).tofile("fullmat.%s.f32.%d.%s" % (args.name, hv, fs))
         with open(args.outfile, "w") as ofp:
