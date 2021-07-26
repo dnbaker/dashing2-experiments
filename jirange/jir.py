@@ -146,7 +146,7 @@ def probminhash_jaccard(p1, p2, size, *, k, nb=8, cssize=-1):
     return check_output(cstr).decode().strip('\n').split('\n')[-2].split("\t")[1]
 
 
-header = "#G1\tG2\t\tK\tsketchsize\tANI\tWJI\tJI\tMash\tDash1\tBD8\tBD4\tBD2\tBD1\tBDN\tSS8\tSS2\tSS1\tSSN\tFSS8\tFSS2\tFSS1\tFSSN\tMH8\tMH4\tMH2\tMH1\tMHN\tFMH8\tFMH4\tFMH2\tFMH1\tFMHN"
+header = "#G1\tG2\tK\tsketchsize\tANI\tWJI\tJI\tMash\tDash1\tBD8\tBD4\tBD2\tBD1\tBDN\tSS8\tSS2\tSS1\tSSN\tFSS8\tFSS2\tFSS1\tFSSN\tMH8\tMH4\tMH2\tMH1\tMHN\tFMH8\tFMH4\tFMH2\tFMH1\tFMHN"
 PMNBs = [8, 4, 2, 1, .5]
 BMNBs = [8, 4, 2, 1, .5]
 CSSZ = [-1, 50000000, 50000]
