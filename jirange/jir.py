@@ -17,7 +17,7 @@ def check_output(x):
         except Exception as e:
             t += 1
             if t == 10:
-                print("Failed to subprocess call '%s', error = %s" % (x, e), file=sys.stderr)
+                print("Failed call '%s', error = %s" % (x, e), file=sys.stderr)
                 raise
 
 
@@ -57,8 +57,8 @@ def parsedata(path, fn):
 
 
 def getani(l, r):
-    '''For genomes l and r, which must exist as files, estimate ANI using fastANI
-       returns a numpy array with [ANI, num, denom] as values.
+    '''For genomes l and r, which must exist as files, estimate ANI using
+       fastANI returns a numpy array with [ANI, num, denom] as values.
     '''
     # return [ANI, num, denom]
     cmd = f"fastANI --minFraction 0. -q {l} -r {r} -o /dev/stdout"
@@ -89,13 +89,20 @@ def exact_jaccard(p1, p2, *, k):
     return rf
 
 
+def fsarg2str(x):
+    if x:
+        return ""
+    else:
+        return " --oneperm "
+
+
 def setsketch_jaccard(p1, p2, size, *, k, nb=8, fss=False, executable="dashing2"):
     '''k is the k to use, and nb is the number of bytes to use in the setsketch-based set similarity estimation
        nb is 8 by default, which is Dashing 2's typical size, though dashing-f and dashing-ld use 4 bytes and 16 bytes
        to store float32 and long double hash registers, respectively.
     '''
     fcstr = f"--fastcmp {nb}" if nb < 8 else ""
-    return float(check_output(f"{executable} sketch -k{k} {'--full-setsketch ' if fss else ''} -S{size} --fastcmp {nb} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
+    return float(check_output(f"{executable} sketch -k{k} {fsarg2str(fss)} -S{size} --fastcmp {nb} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
 def bbminhash_jaccard(p1, p2, size, *, k, nb=32, fss=False, executable="dashing2"):
@@ -104,13 +111,13 @@ def bbminhash_jaccard(p1, p2, size, *, k, nb=32, fss=False, executable="dashing2
     '''
     assert (nb & (nb - 1)) == 0 and 4 <= nb <= 64, "nb, number of bits for bbit minhash, should be 4, 8, 16, 32, or 64"
     fcstr = f"--fastcmp {nb / 8}"
-    return float(check_output(f"{executable} sketch -k{k} {'--full-setsketch ' if fss else ''} --bbit-sigs -S{size} {fcstr} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
+    return float(check_output(f"{executable} sketch -k{k} {fsarg2str(fss)} --bbit-sigs -S{size} {fcstr} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
 def bindash_jaccard(p1, p2, size, *, k, nb=8, executable="bindash"):
     """Get bindash Jaccard, as well as caching its sketches
     """
-    assert size % 64 == 0, "Size must be divisible by 64"
+    assert size % 64 == 0, f"Size must be divisible by 64, found {size}"
     bb = nb * 8
     def mc(p):
         return "bdsh_tmp/" + os.path.basename(p + f".{k}.{bb}.{size}")
@@ -223,20 +230,20 @@ if __name__ == "__main__":
         hv = abs(hash(",".join(sys.argv)))
         rng = range(args.s, args.S, args.T)
         sdict = {"k": k, "executable": args.executable, "cpu": args.cpu}
-        tdict = {i: (full_genome_ids[l], full_genome_ids[r]) for i, (l, r) in enumerate(tups.reshape(-1, 2))}
-        tups = [(full_genome_ids[l], full_genome_ids[r], k, 1 << size, args.executable) for l, r in tups.reshape(-1, 2) for size in rng]
+        tdict = {i: (full_genome_ids[left], full_genome_ids[r]) for i, (left, r) in enumerate(tups.reshape(-1, 2))}
+        tups = [(full_genome_ids[left], full_genome_ids[r], k, 1 << size, args.executable) for left, r in tups.reshape(-1, 2) for size in rng]
         with open("settings.%s.%d.txt" % (args.name, hv), "w") as f:
             for st in tups:
-                l, r, k, size, _ = st
-                print("%s\t%s\t%d\t%d" % (l, r, k, size), file=f)
+                left, r, k, size, _ = st
+                print("%s\t%s\t%d\t%d" % (left, r, k, size), file=f)
         print(f"Generated {len(tups)} tuples, which are being passed to pargetall", file=sys.stderr)
         fullmat = np.stack(pargetall(tups, **sdict))
         fs = str(fullmat.shape).replace(" ", "").replace(",", "-")
         fullmat.astype(np.float32).tofile("fullmat.%s.f32.%d.%s" % (args.name, hv, fs))
         with open(args.outfile, "w") as ofp:
             print(header, file=ofp)
-            for (l, r, k, size, _), mr in zip(tups, fullmat):
-                    print(f"{l}\t{r}\t{k}\t{size}\t" + "\t".join(map(str, mr)), file=ofp)
+            for (left, r, k, size, _), mr in zip(tups, fullmat):
+                    print(f"{left}\t{r}\t{k}\t{size}\t" + "\t".join(map(str, mr)), file=ofp)
     else:
         print("Running tests, not running experiment", file=sys.stderr)
         parse_bf(sys.argv[1] if sys.argv[1:] else "selected_buckets_100.txt")
