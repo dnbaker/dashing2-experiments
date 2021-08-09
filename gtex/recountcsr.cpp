@@ -1,4 +1,5 @@
 #include <atomic>
+#include <algorithm>
 #include <vector>
 #include <cassert>
 #include <cstring>
@@ -55,7 +56,7 @@ auto parse_file(std::FILE *ifp) {
 	for(ssize_t rc; (rc = ::getline(&lptr, &linesz, ifp)) >= 0;++ln) {
         if(ln % 65536 == 0) std::fprintf(stderr, "Processed %zu lines, last rc is %zd\n", ln, rc);
         const uint64_t myid = idcounter++;
-        
+
         char *p = std::strchr(lptr, '\t');
         assert(p);
         char *p2 = std::strchr(p + 1, '\t');
@@ -95,6 +96,14 @@ auto parse_file(std::FILE *ifp) {
 
 int main(int argc, char **argv) {
     std::FILE *fp = std::fopen(argc == 1 ? "/dev/stdin": argv[1], "r");
+    std::string outpref = "parsed";
+    if(argc > 2) outpref = argv[2];
+    if(std::find_if(argv, argv + argc, [](auto x) {return !(std::strcmp("-h", x) && std::strcmp("--help", x));}) != argv + argc) {
+        std::fprintf(stderr, "recountcsr: This executable parses a tab-delimited, potentially tabix-compressed/indexed, and writes the input to a several files with a prefix {prefix}.cts.u16, {prefix}.ids.u16, {prefix}.indptr.u64, {prefix}.remap");
+        std::fprintf(stderr, "This defaults to parsed, but if a second positional argument is provided, it will use it.\n");
+        std::fprintf(stderr, "Example: `recountcsr junctions.bgz`\n");
+        std::fprintf(stderr, "Example: `recountcsr junctions.bgz jnct`, which uses the 'jnct' as the prefix.\n");
+    }
     auto [cids, cnames, counts, ids, indptr, nf] = parse_file(fp);
     std::fclose(fp);
 
@@ -108,20 +117,21 @@ int main(int argc, char **argv) {
     assert(mapper.size() < 65536);
     for(size_t i = 0; i < ids.size(); ++i)
         ids[i] = mapper[ids[i]];
-    fp = std::fopen("parsed.cts.u16", "wb");
+
+    fp = std::fopen((outpref + ".cts.u16").data(), "wb");
     std::fwrite(counts.data(), 2, counts.size(), fp);
     std::fclose(fp);
-    fp = std::fopen("parsed.ids.u16", "wb");
+    fp = std::fopen((outpref + ".ids.u16").data(), "wb");
     for(const auto id: ids) {
         uint16_t sid(id);
         std::fwrite(&sid, 2, 1, fp);
     }
     std::fclose(fp);
-    fp = std::fopen("parsed.indptr.u64", "w");
+    fp = std::fopen((outpref + ".indptr.u64").data(), "w");
     std::fwrite(indptr.data(), sizeof(indptr[0]), indptr.size(), fp);
     std::fclose(fp);
 
-    fp = std::fopen("parsed.remap", "w");
+    fp = std::fopen((outpref + ".remap").data(), "w");
     for(const auto &pair: mapper)
         std::fprintf(fp, "%zu:%zu\n", size_t(pair.first), size_t(pair.second));
     std::fclose(fp);
