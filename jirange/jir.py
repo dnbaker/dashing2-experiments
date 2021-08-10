@@ -239,7 +239,7 @@ if __name__ == "__main__":
         print(f"Generated {len(tups)} tuples, which are being passed to pargetall", file=sys.stderr)
         fullmat = np.stack(pargetall(tups, **sdict))
         fs = str(fullmat.shape).replace(" ", "").replace(",", "-")
-        fullmat.astype(np.float32).tofile("fullmat.%s.f32.%d.%s" % (args.name, hv, fs))
+        fullmat.astype(np.float32).tofile("fullmat.%s.f32.%d.%d.%s" % (args.name, hv, k, fs))
         with open(args.outfile, "w") as ofp:
             print(header, file=ofp)
             for (left, r, k, size, _), mr in zip(tups, fullmat):
