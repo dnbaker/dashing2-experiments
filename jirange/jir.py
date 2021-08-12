@@ -153,10 +153,10 @@ def probminhash_jaccard(p1, p2, size, *, k, nb=8, cssize=-1):
     return check_output(cstr).decode().strip('\n').split('\n')[-2].split("\t")[1]
 
 
-header = "#G1\tG2\tK\tsketchsize\tANI\tWJI\tJI\tMash\tDash1\tBD8\tBD4\tBD2\tBD1\tBDN\tSS8\tSS2\tSS1\tSSN\tFSS8\tFSS2\tFSS1\tFSSN\tMH8\tMH4\tMH2\tMH1\tMHN\tFMH8\tFMH4\tFMH2\tFMH1\tFMHN"
+header = "#G1\tG2\tK\tsketchsize\tANI\tWJI\tJI\tMash\tDash1\tBD8\tBD4\tBD2\tBD1\tBDN\tSS8\tSS4\tSS2\tSS1\tSSN\tFSS8\tFSS4\tFSS2\tFSS1\tFSSN\tMH8\tMH4\tMH2\tMH1\tMHN\tFMH8\tFMH4\tFMH2\tFMH1\tFMHN"
 PMNBs = [8, 4, 2, 1, .5]
 BMNBs = [8, 4, 2, 1, .5]
-CSSZ = [-1, 50000000, 50000]
+CSSZ = [-1, 50000000, 500000]
 PMHSettings = [(b, cs) for b in PMNBs for cs in CSSZ]
 BMHSettings = [(b, cs) for b in BMNBs for cs in CSSZ]
 for (b, cs) in PMHSettings:
@@ -170,16 +170,17 @@ def getall(l, r, k=17, size=1024, executable="dashing2", cssize_set=[500, 50000,
         for values of k, size, and executable, return
         all similarity comparisons using Mash, Dashing, Dashing2, and fastANI
     '''
+    bbnbs = (8, 4, 2, 1, .5)
     ret = np.array([getani(l, r),
                     exact_wjaccard(l, r, k=k),
                     exact_jaccard(l, r, k=k),
                     getmashji(l, r, k=k, size=size),
                     getdashingji(l, r, k=k, l2s=int(np.log2(size)))] +
-                    [bindash_jaccard(l, r, k=k, size=size, nb=nb) for nb in (8, 4, 2, 1, .5)] +
-                    [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=False, executable=executable) for nb in (8, 2, 1, .5)] +
-                    [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=True, executable=executable) for nb in (8, 2, 1, .5)] +
-                    [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=False, executable=executable) for nb in (8, 4, 2, 1, .5)] +
-                    [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=True, executable=executable) for nb in (8, 4, 2, 1, .5)] +
+                    [bindash_jaccard(l, r, k=k, size=size, nb=nb) for nb in bbnbs] +
+                    [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=False, executable=executable) for nb in bbnbs] +
+                    [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=True, executable=executable) for nb in bbnbs] +
+                    [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=False, executable=executable) for nb in bbnbs] +
+                    [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=True, executable=executable) for nb in bbnbs] +
                     [probminhash_jaccard(l, r, size=size, k=k, nb=b, cssize=csz) for b, csz in PMHSettings] +
                     [bagminhash_jaccard(l, r, size=size, k=k, nb=b, cssize=csz) for b, csz in BMHSettings], np.float32)
     if ret[2] > 1.:
@@ -188,13 +189,16 @@ def getall(l, r, k=17, size=1024, executable="dashing2", cssize_set=[500, 50000,
 
 
 def packed(x):
+    from time import time
+    startt = time()
     try:
         l, r, k, size, executable = x
     except:
         print(len(x))
         raise
-    return getall(l, r, k=k, size=size, executable=executable)
-
+    ret = getall(l, r, k=k, size=size, executable=executable)
+    print("Processed tuple in %gs" % (time() - startt), file=sys.stderr)
+    return ret
 
 def packedani(x):
     l, r = x
@@ -239,17 +243,27 @@ if __name__ == "__main__":
         if cpu < 0:
             cpu = mp.cpu_count()
         shape = (len(tups), 62)
-        fs = str(shape).replace(" ", "").replace(",", "-")
-        with open("fullmat.%s.f32.%d.%d.%s" % (args.name, hv, k, fs), "wb") as of:
-            nblocks = (len(tups) + 1023) >> 10
-            CS = 1024
-            subtups = [tups[x:x + CS] for x in map(lambda x: x * CS, range(nblocks))]
-            with mp.Pool(cpu) as p:
-                for i, st in enumerate(subtups):
-                    np.stack(list(p.map(packed, st))).tofile(of)
-                    print("Finished subgroup %d/%d" % (i, len(subtups)), file=sys.stderr)
+        fs = str(shape).replace(" ", "").replace(",", "-").replace("(", "_").replace(")", "_")
+        nblocks = (len(tups) + 1023) >> 10
+        CS = 1024
+        subtups = [tups[x:x + CS] for x in map(lambda x: x * CS, range(nblocks))]
+        tmpfs = ["fullmat.%s.f32.%d.%d.%s.part%d" % (args.name, hv, k, fs, i) for i in range(nblocks)]
+        with mp.Pool(cpu) as p:
+            for i, (tmpf, st) in enumerate(zip(tmpfs, subtups)):
+                from time import time
+                startt = time()
+                print("Started subgroup %d/%d" % (i, len(subtups)), file=sys.stderr)
+                res = np.stack(list(p.map(packed, st)))
+                print(res, res.shape, file=sys.stderr)
+                print("Writing to tmpf %s" % tmpf, file=sys.stderr)
+                res.tofile(tmpf)
+                print("Finished subgroup %d/%d after %g" % (i, len(subtups), time() - startt), file=sys.stderr)
+        resmat = "fullmat.%s.f32.%d.%d.%s" % (args.name, hv, k, fs)
+        subprocess.check_call("cat " + " ".join(tmpfs) + " > " + resmat, shell=True)
+        subprocess.check_call(["rm"] + tmpfs)
         with open(args.outfile, "w") as ofp:
             print(header, file=ofp)
+            fullmat = np.memmap(resmat, np.float32).reshape(-1, 60)
             for (left, r, k, size, _), mr in zip(tups, fullmat):
                     print(f"{left}\t{r}\t{k}\t{size}\t" + "\t".join(map(str, mr)), file=ofp)
     else:
