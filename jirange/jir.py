@@ -56,12 +56,12 @@ def parsedata(path, fn):
     return (bkts, rngs, tups, ids, genome_ids)
 
 
-def getani(l, r):
-    '''For genomes l and r, which must exist as files, estimate ANI using
+def getani(left, r):
+    '''For genomes left and r, which must exist as files, estimate ANI using
        fastANI returns a numpy array with [ANI, num, denom] as values.
     '''
     # return [ANI, num, denom]
-    cmd = f"fastANI --minFraction 0. -q {l} -r {r} -o /dev/stdout"
+    cmd = f"fastANI --minFraction 0. -q {left} -r {r} -o /dev/stdout"
     out = check_output(cmd).decode().strip()
     try:
         return np.fromiter(out.split("\t")[-3:], dtype=np.float64)[0]
@@ -69,12 +69,12 @@ def getani(l, r):
         return 0.
 
 
-def getmashji(l, r, *, k, size=1024):
-    return float(check_output(f"jaccard_mash dist -s {size} -k {k} -j -t {l} {r}").decode().strip().split("\n")[1].split()[-1])
+def getmashji(left, r, *, k, size=1024):
+    return float(check_output(f"jaccard_mash dist -s {size} -k {k} -j -t {left} {r}").decode().strip().split("\n")[1].split()[-1])
 
 
-def getdashingji(l, r, *, k, l2s=10):
-    return float(check_output(f"dashing dist -S{l2s} -k{k} {l} {r}").decode().strip().split("\n")[-2].split("\t")[-1])
+def getdashingji(left, r, *, k, l2s=10):
+    return float(check_output(f"dashing dist -S{l2s} -k{k} {left} {r}").decode().strip().split("\n")[-2].split("\t")[-1])
 
 
 def exact_wjaccard(p1, p2, *, k):
@@ -171,37 +171,34 @@ def getall(l, r, k=17, size=1024, executable="dashing2", cssize_set=[500, 50000,
         all similarity comparisons using Mash, Dashing, Dashing2, and fastANI
     '''
     ret = np.array([getani(l, r),
-                     exact_wjaccard(l, r, k=k),
-                     exact_jaccard(l, r, k=k),
-                     getmashji(l, r, k=k, size=size),
-                     getdashingji(l, r, k=k, l2s=int(np.log2(size)))] +
-                     [bindash_jaccard(l, r, k=k, size=size, nb=nb) for nb in (8, 4, 2, 1, .5)] +
-                     [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=False, executable=executable) for nb in (8, 2, 1, .5)] +
-                     [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=True, executable=executable) for nb in (8, 2, 1, .5)] +
-                     [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=False, executable=executable) for nb in (8, 4, 2, 1, .5)] +
-                     [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=True, executable=executable) for nb in (8, 4, 2, 1, .5)] +
-                     [probminhash_jaccard(l, r, size=size, k=k, nb=b, cssize=csz) for b, csz in PMHSettings] +
-                     [bagminhash_jaccard(l, r, size=size, k=k, nb=b, cssize=csz) for b, csz in BMHSettings], np.float32)
+                    exact_wjaccard(l, r, k=k),
+                    exact_jaccard(l, r, k=k),
+                    getmashji(l, r, k=k, size=size),
+                    getdashingji(l, r, k=k, l2s=int(np.log2(size)))] +
+                    [bindash_jaccard(l, r, k=k, size=size, nb=nb) for nb in (8, 4, 2, 1, .5)] +
+                    [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=False, executable=executable) for nb in (8, 2, 1, .5)] +
+                    [setsketch_jaccard(l, r, size=size, k=k, nb=nb, fss=True, executable=executable) for nb in (8, 2, 1, .5)] +
+                    [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=False, executable=executable) for nb in (8, 4, 2, 1, .5)] +
+                    [bbminhash_jaccard(l, r, size=size, k=k, nb=int(nb * 8), fss=True, executable=executable) for nb in (8, 4, 2, 1, .5)] +
+                    [probminhash_jaccard(l, r, size=size, k=k, nb=b, cssize=csz) for b, csz in PMHSettings] +
+                    [bagminhash_jaccard(l, r, size=size, k=k, nb=b, cssize=csz) for b, csz in BMHSettings], np.float32)
     if ret[2] > 1.:
         print(f"Distance {l} {r}, k = {k}, size = {size}... For some reason, Jaccard was > 1...What's going on?", ret[2], file=sys.stderr)
     return ret
 
+
 def packed(x):
-    l, r, k, size, executable = x
+    try:
+        l, r, k, size, executable = x
+    except:
+        print(len(x))
+        raise
     return getall(l, r, k=k, size=size, executable=executable)
+
 
 def packedani(x):
     l, r = x
     return getani(l, r)
-
-
-def pargetall(tups, k=17, executable="dashing2", cpu=-1):
-    import multiprocessing as mp
-    if cpu < 0: cpu = mp.cpu_count()
-    with mp.Pool(cpu) as p:
-        ret = np.stack(p.map(packed, tups))
-        return ret
-
 
 
 if __name__ == "__main__":
@@ -236,10 +233,21 @@ if __name__ == "__main__":
             for st in tups:
                 left, r, k, size, _ = st
                 print("%s\t%s\t%d\t%d" % (left, r, k, size), file=f)
-        print(f"Generated {len(tups)} tuples, which are being passed to pargetall", file=sys.stderr)
-        fullmat = np.stack(pargetall(tups, **sdict))
-        fs = str(fullmat.shape).replace(" ", "").replace(",", "-")
-        fullmat.astype(np.float32).tofile("fullmat.%s.f32.%d.%d.%s" % (args.name, hv, k, fs))
+        print(f"Generated {len(tups)} tuples", file=sys.stderr)
+        import multiprocessing as mp
+        cpu = args.cpu
+        if cpu < 0:
+            cpu = mp.cpu_count()
+        shape = (len(tups), 62)
+        fs = str(shape).replace(" ", "").replace(",", "-")
+        with open("fullmat.%s.f32.%d.%d.%s" % (args.name, hv, k, fs), "wb") as of:
+            nblocks = (len(tups) + 1023) >> 10
+            CS = 1024
+            subtups = [tups[x:x + CS] for x in map(lambda x: x * CS, range(nblocks))]
+            with mp.Pool(cpu) as p:
+                for i, st in enumerate(subtups):
+                    np.stack(list(p.map(packed, st))).tofile(of)
+                    print("Finished subgroup %d/%d" % (i, len(subtups)), file=sys.stderr)
         with open(args.outfile, "w") as ofp:
             print(header, file=ofp)
             for (left, r, k, size, _), mr in zip(tups, fullmat):
