@@ -197,7 +197,6 @@ def packed(x):
         print(len(x))
         raise
     ret = getall(l, r, k=k, size=size, executable=executable)
-    print("Processed tuple in %gs" % (time() - startt), file=sys.stderr)
     return ret
 
 def packedani(x):
@@ -248,24 +247,23 @@ if __name__ == "__main__":
         CS = 1024
         subtups = [tups[x:x + CS] for x in map(lambda x: x * CS, range(nblocks))]
         tmpfs = ["fullmat.%s.f32.%d.%d.%s.part%d" % (args.name, hv, k, fs, i) for i in range(nblocks)]
+        ofp = open(args.outfile, "w")
+        print(header, file=ofp, flush=True)
         with mp.Pool(cpu) as p:
             for i, (tmpf, st) in enumerate(zip(tmpfs, subtups)):
                 from time import time
                 startt = time()
-                print("Started subgroup %d/%d" % (i, len(subtups)), file=sys.stderr)
+                print("Started subgroup %d/%d" % (i, len(subtups)), file=sys.stderr, flush=True)
                 res = np.stack(list(p.map(packed, st)))
-                print(res, res.shape, file=sys.stderr)
-                print("Writing to tmpf %s" % tmpf, file=sys.stderr)
+                print("Writing to tmpf %s" % tmpf, file=sys.stderr, flush=True)
+                for (left, r, k, size, _), mr in zip(st, res.reshape(-1, 60)):
+                    print(f"{left}\t{r}\t{k}\t{size}\t" + "\t".join(map(str, mr)), file=ofp, flush=True)
                 res.tofile(tmpf)
-                print("Finished subgroup %d/%d after %g" % (i, len(subtups), time() - startt), file=sys.stderr)
+                print("Finished subgroup %d/%d after %g" % (i, len(subtups), time() - startt), file=sys.stderr, flush=True)
+        ofp.close()
         resmat = "fullmat.%s.f32.%d.%d.%s" % (args.name, hv, k, fs)
         subprocess.check_call("cat " + " ".join(tmpfs) + " > " + resmat, shell=True)
         subprocess.check_call(["rm"] + tmpfs)
-        with open(args.outfile, "w") as ofp:
-            print(header, file=ofp)
-            fullmat = np.memmap(resmat, np.float32).reshape(-1, 60)
-            for (left, r, k, size, _), mr in zip(tups, fullmat):
-                    print(f"{left}\t{r}\t{k}\t{size}\t" + "\t".join(map(str, mr)), file=ofp)
     else:
         print("Running tests, not running experiment", file=sys.stderr)
         parse_bf(sys.argv[1] if sys.argv[1:] else "selected_buckets_100.txt")
