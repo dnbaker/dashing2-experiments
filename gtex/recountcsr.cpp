@@ -1,4 +1,5 @@
 #include <atomic>
+#include <memory>
 #include <algorithm>
 #include <vector>
 #include <cassert>
@@ -7,6 +8,7 @@
 #include <string>
 #include <cstdio>
 #include <unordered_map>
+#include <zlib.h>
 
 
 template<typename K, typename V>
@@ -37,7 +39,7 @@ static inline bool matchchr(const char *s) {
     return (*s | char(32)) == 'c' && s[1] == 'h' && s[2] == 'r';
 }
 
-auto parse_file(std::FILE *ifp) {
+auto parse_file(gzFile ifp) {
     std::vector<uint32_t> contigids;
     std::vector<uint64_t> ids;
     std::vector<uint32_t> starts, stops;
@@ -48,12 +50,11 @@ auto parse_file(std::FILE *ifp) {
     indptr.push_back(0);
     map<std::string, uint32_t> contignames;
     idcounter.store(0);
-    char *lptr = nullptr;
-    size_t linesz = 0;
     std::string cname;
     size_t ln = 0;
+    std::unique_ptr<char[]> buf(new char[1<<20]);
     ssize_t rc;
-	for(ssize_t rc; (rc = ::getline(&lptr, &linesz, ifp)) >= 0;++ln) {
+    for(char *lptr; (lptr = gzgets(ifp, lptr, 1ull << 20)) != nullptr; ++ln) {
         if(ln % 65536 == 0) std::fprintf(stderr, "Processed %zu lines, last rc is %zd\n", ln, rc);
         const uint64_t myid = idcounter++;
 
@@ -95,18 +96,26 @@ auto parse_file(std::FILE *ifp) {
 }
 
 int main(int argc, char **argv) {
-    std::FILE *fp = std::fopen(argc == 1 ? "/dev/stdin": argv[1], "r");
+    gzFile ifp;
+    if(argc == 1 || std::strcmp(argv[1], "-") == 0 || std::strcmp(argv[1], "/dev/stdin") == 0) {
+        ifp = gzdopen(STDIN_FILENO, "r");
+    } else {
+        ifp = gzopen(argv[1], "r");
+    }
     std::string outpref = "parsed";
     if(argc > 2) outpref = argv[2];
     if(std::find_if(argv, argv + argc, [](auto x) {return !(std::strcmp("-h", x) && std::strcmp("--help", x));}) != argv + argc) {
         std::fprintf(stderr, "recountcsr: This executable parses a tab-delimited, potentially tabix-compressed/indexed, and writes the input to a several files with a prefix {prefix}.cts.u16, {prefix}.ids.u16, {prefix}.indptr.u64, {prefix}.remap");
         std::fprintf(stderr, "This defaults to parsed, but if a second positional argument is provided, it will use it.\n");
-        std::fprintf(stderr, "Example: `recountcsr junctions.bgz`\n");
+        std::fprintf(stderr, "Example (using stdin): `gzip -dc junctions.bgz | recountcsr`\n");
+        std::fprintf(stderr, "Example (using zlib): `recountcsr junctions.bgz`\n");
         std::fprintf(stderr, "Example: `recountcsr junctions.bgz jnct`, which uses the 'jnct' as the prefix.\n");
+        std::exit(1);
     }
-    auto [cids, cnames, counts, ids, indptr, nf] = parse_file(fp);
-    std::fclose(fp);
+    auto [cids, cnames, counts, ids, indptr, nf] = parse_file(ifp);
+    gzclose(ifp);
 
+    std::FILE *fp;
     map<uint64_t, uint16_t> mapper;
     for(const auto id: ids) {
         if(mapper.find(id) == mapper.end()) {
@@ -118,10 +127,16 @@ int main(int argc, char **argv) {
     for(size_t i = 0; i < ids.size(); ++i)
         ids[i] = mapper[ids[i]];
 
-    fp = std::fopen((outpref + ".cts.u16").data(), "wb");
+    if((fp = std::fopen((outpref + ".cts.u16").data(), "wb")) == nullptr) {
+        std::fprintf(stderr, "Failed to write counts to disk...\n");
+        std::exit(1);
+    }
     std::fwrite(counts.data(), 2, counts.size(), fp);
     std::fclose(fp);
-    fp = std::fopen((outpref + ".ids.u16").data(), "wb");
+    if((fp = std::fopen((outpref + ".ids.u16").data(), "wb")) == nullptr) {
+        std::fprintf(stderr, "Failed to write IDs to disk...\n");
+        std::exit(1);
+    }
     for(const auto id: ids) {
         uint16_t sid(id);
         std::fwrite(&sid, 2, 1, fp);
