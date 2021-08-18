@@ -54,7 +54,7 @@ auto parse_file(gzFile ifp) {
     size_t ln = 0;
     std::unique_ptr<char[]> buf(new char[1<<20]);
     ssize_t rc;
-    for(char *lptr; (lptr = gzgets(ifp, lptr, 1ull << 20)) != nullptr; ++ln) {
+    for(char *lptr; (lptr = gzgets(ifp, buf.get(), 1ull << 20)) != nullptr; ++ln) {
         if(ln % 65536 == 0) std::fprintf(stderr, "Processed %zu lines, last rc is %zd\n", ln, rc);
         const uint64_t myid = idcounter++;
 
@@ -92,6 +92,7 @@ auto parse_file(gzFile ifp) {
         }
         indptr.push_back(nids + indptr.back());
     }
+    std::fprintf(stderr, "%zu total lines\n", ln);
     return std::make_tuple(contigids, contignames, counts, ids, indptr, ln);
 }
 
@@ -99,8 +100,10 @@ int main(int argc, char **argv) {
     gzFile ifp;
     if(argc == 1 || std::strcmp(argv[1], "-") == 0 || std::strcmp(argv[1], "/dev/stdin") == 0) {
         ifp = gzdopen(STDIN_FILENO, "r");
+        if(ifp == nullptr) throw std::runtime_error("Failed to open STDIN fileno");
     } else {
         ifp = gzopen(argv[1], "r");
+        if(ifp == nullptr) throw std::runtime_error(std::string("Failed to open ") + argv[1]);
     }
     std::string outpref = "parsed";
     if(argc > 2) outpref = argv[2];
