@@ -39,21 +39,27 @@ static inline bool matchchr(const char *s) {
     return (*s | char(32)) == 'c' && s[1] == 'h' && s[2] == 'r';
 }
 
-auto parse_file(gzFile ifp) {
+auto parse_file(gzFile ifp, std::string outpref) {
+    std::FILE *ipfp = std::fopen((outpref + ".indptr.u64").data(), "w");
+    if(!ipfp) throw 1;
+    uint64_t ipv = 0;
+    std::fwrite(&ipv, sizeof(ipv), 1, ipfp);
+    std::FILE *ctfp;
+    if((ctfp = std::fopen((outpref + ".cts.u32").data(), "wb")) == nullptr) {
+        throw 2;
+    }
     std::vector<uint32_t> contigids;
     std::vector<uint64_t> ids;
     std::vector<uint32_t> starts, stops;
-    std::vector<uint8_t> startms, stopms;
+    //std::vector<uint8_t> startms, stopms;
     std::atomic<uint64_t> idcounter;
-    std::vector<uint16_t> counts;
-    std::vector<uint64_t> indptr;
-    indptr.push_back(0);
     map<std::string, uint32_t> contignames;
     idcounter.store(0);
     std::string cname;
     size_t ln = 0;
     std::unique_ptr<char[]> buf(new char[1<<20]);
     ssize_t rc;
+    uint32_t maxct = 0;
     for(char *lptr; (lptr = gzgets(ifp, buf.get(), 1ull << 20)) != nullptr; ++ln) {
         if(ln % 65536 == 0) std::fprintf(stderr, "Processed %zu lines, last rc is %zd\n", ln, rc);
         const uint64_t myid = idcounter++;
@@ -76,24 +82,28 @@ auto parse_file(gzFile ifp) {
         assert(p[1] == '+' || p[1] == '-' || p[1] == '?' || !std::fprintf(stderr, "p: %s, %d\n", p, p[1]));
         //p += 3;
         p = std::strchr(p + 3, '\t') + 1;
-        startms.push_back(str2ms(p));
+        //startms.push_back(str2ms(p));
         p = std::strchr(p, '\t') + 1;
-        stopms.push_back(str2ms(p));
+        //stopms.push_back(str2ms(p));
         p = std::strchr(std::strchr(std::strchr(p, '\t') + 1, '\t') + 1, '\t') + 1; // Skip two fields
         uint64_t id;
-        int32_t ct;
+        uint32_t ct;
         size_t nids = 0;
         for(char *p3 = p;*p3 && *p3 != '\t';) {
             id = std::strtoull(p3 + 1, &p3, 10);
             ct = std::strtoll(p3 + 1, &p3, 10);
-            counts.push_back(ct);
             ids.push_back(id);
+            std::fwrite(&ct, sizeof(ct), 1, ctfp);
             ++nids;
+            maxct == std::max(ct, maxct);
         }
-        indptr.push_back(nids + indptr.back());
+        ipv += nids;
+        std::fwrite(&ipv, sizeof(ipv), 1, ipfp);
     }
     std::fprintf(stderr, "%zu total lines\n", ln);
-    return std::make_tuple(contigids, contignames, counts, ids, indptr, ln);
+    std::fclose(ipfp);
+    std::fclose(ctfp);
+    return std::make_tuple(contigids, contignames, ln, ids, (outpref + ".indptr.u64"), (outpref + ".cts.u32"), maxct, ipv);
 }
 
 int main(int argc, char **argv) {
@@ -115,45 +125,70 @@ int main(int argc, char **argv) {
         std::fprintf(stderr, "Example: `recountcsr junctions.bgz jnct`, which uses the 'jnct' as the prefix.\n");
         std::exit(1);
     }
-    auto [cids, cnames, counts, ids, indptr, nf] = parse_file(ifp);
+    auto [cids, cnames, nlines, ids, indptrpath, ctspath, maxct, nnz] = parse_file(ifp, outpref);
     gzclose(ifp);
 
     std::FILE *fp;
-    map<uint64_t, uint16_t> mapper;
+    map<uint64_t, uint64_t> mapper;
     for(const auto id: ids) {
-        if(mapper.find(id) == mapper.end()) {
-            auto oldsz = mapper.size();
-            mapper.emplace(id, oldsz);
+        if(auto it = mapper.find(id); it == mapper.end()) {
+            const auto sz = mapper.size();
+            mapper.emplace(id, sz);
         }
     }
-    assert(mapper.size() < 65536);
-    for(size_t i = 0; i < ids.size(); ++i)
-        ids[i] = mapper[ids[i]];
-
-    if((fp = std::fopen((outpref + ".cts.u16").data(), "wb")) == nullptr) {
-        std::fprintf(stderr, "Failed to write counts to disk...\n");
-        std::exit(1);
+    const size_t njnct = mapper.size();
+    std::transform(ids.begin(), ids.end(), ids.begin(), [&mapper](auto x) {return mapper[x];});
+    if((fp = std::fopen((outpref + ".remap").data(), "w")) == nullptr) {
+        throw std::runtime_error(std::string("Failed to open remap file ") + outpref + ".remap");
     }
-    std::fwrite(counts.data(), 2, counts.size(), fp);
-    std::fclose(fp);
-    if((fp = std::fopen((outpref + ".ids.u16").data(), "wb")) == nullptr) {
-        std::fprintf(stderr, "Failed to write IDs to disk...\n");
-        std::exit(1);
-    }
-    for(const auto id: ids) {
-        uint16_t sid(id);
-        std::fwrite(&sid, 2, 1, fp);
-    }
-    std::fclose(fp);
-    fp = std::fopen((outpref + ".indptr.u64").data(), "w");
-    std::fwrite(indptr.data(), sizeof(indptr[0]), indptr.size(), fp);
-    std::fclose(fp);
-
-    fp = std::fopen((outpref + ".remap").data(), "w");
     for(const auto &pair: mapper)
         std::fprintf(fp, "%zu:%zu\n", size_t(pair.first), size_t(pair.second));
     std::fclose(fp);
-    std::fprintf(stderr, "Shape: %zu, %zu;%zu nnz\n", mapper.size(), nf, counts.size());
+    {map<uint64_t, uint64_t> tmpmapper(std::move(mapper));} // Clear map
+
+    std::string idop = outpref + ".ids.u";
+    int itype = -1;
+    if(njnct <= 255u) {
+        idop += "8";
+        itype = 0;
+    } else if(njnct <= 65535u) {
+        idop += "16";
+        itype = 1;
+    } else if(njnct <= 0xFFFFFFFFu) {
+        idop += "32";
+        itype = 2;
+    } else {
+        idop += "64";
+        itype = 3;
+    }
+    if((fp = std::fopen(idop.data(), "wb")) == nullptr) {
+        std::fprintf(stderr, "Failed to write IDs to disk...\n");
+        std::exit(1);
+    }
+    switch(itype) {
+#define CASE_I(iv, IT)\
+        case iv: {\
+            IT tmpv;\
+            for(const auto id: ids) {\
+                tmpv = id;\
+                std::fwrite(&tmpv, sizeof(tmpv), 1, fp);\
+            }\
+            break;\
+        }
+        CASE_I(0, uint8_t)
+        CASE_I(1, uint16_t)
+        CASE_I(2, uint32_t)
+#undef CASE_I
+        case 3: {
+            if(std::fwrite(ids.data(), sizeof(uint64_t), ids.size(), fp) != ids.size()) {
+                throw std::runtime_error("Failed to write ids to disk in 64-bit mode");
+            }
+            break;
+        }
+    }
+    std::fclose(fp);
+
+    std::fprintf(stderr, "Shape: %zu, %zu;%zu nnz. Max count: %u\n", nlines, njnct, nnz, maxct);
 
     return 0;
 }
