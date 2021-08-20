@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <unordered_map>
 #include <zlib.h>
+#include <mio.hpp>
 
 
 template<typename K, typename V>
@@ -39,26 +40,39 @@ static inline bool matchchr(const char *s) {
     return (*s | char(32)) == 'c' && s[1] == 'h' && s[2] == 'r';
 }
 
+void buffer_fp(std::FILE *fp) {
+    struct stat st;
+    ::fstat(::fileno(fp), &st);
+    std::setvbuf(fp, nullptr,  _IOFBF, st.st_blksize);
+}
+
 auto parse_file(gzFile ifp, std::string outpref) {
     std::FILE *ipfp = std::fopen((outpref + ".indptr.u64").data(), "w");
     if(!ipfp) throw 1;
+    buffer_fp(ipfp);
     uint64_t ipv = 0;
     std::fwrite(&ipv, sizeof(ipv), 1, ipfp);
     std::FILE *ctfp;
     if((ctfp = std::fopen((outpref + ".cts.u32").data(), "wb")) == nullptr) {
         throw 2;
     }
+    buffer_fp(ctfp);
+    std::FILE *idfp;
+    std::string idpath = outpref + ".ids.u64";
+    if((idfp = std::fopen(idpath.data(), "wb")) == nullptr) {
+        throw 3;
+    }
+    buffer_fp(idfp);
     std::vector<uint32_t> contigids;
-    std::vector<uint64_t> ids;
-    std::vector<uint32_t> starts, stops;
+    //std::vector<uint32_t> starts, stops;
     //std::vector<uint8_t> startms, stopms;
-    std::atomic<uint64_t> idcounter;
+    std::atomic<uint64_t> idcounter{0};
+    //idcounter.store(0);
     map<std::string, uint32_t> contignames;
-    idcounter.store(0);
-    std::string cname;
+    std::string contig_name;
     size_t ln = 0;
     std::unique_ptr<char[]> buf(new char[1<<20]);
-    ssize_t rc;
+    ssize_t rc = -1;
     uint32_t maxct = 0;
     for(char *lptr; (lptr = gzgets(ifp, buf.get(), 1ull << 20)) != nullptr; ++ln) {
         if(ln % 65536 == 0) std::fprintf(stderr, "Processed %zu lines, last rc is %zd\n", ln, rc);
@@ -69,11 +83,11 @@ auto parse_file(gzFile ifp, std::string outpref) {
         char *p2 = std::strchr(p + 1, '\t');
         assert(p2);
         if(matchchr(p)) p += 3;
-        cname.assign(p, p2);
-        uint32_t mycid = cname.size();
-        auto cnit = contignames.find(cname);
+        contig_name.assign(p, p2);
+        uint32_t mycid = contignames.size();
+        auto cnit = contignames.find(contig_name);
         if(cnit != contignames.end()) mycid = cnit->second;
-        else contignames.emplace(cname, mycid);
+        else contignames.emplace(contig_name, mycid);
         contigids.push_back(mycid);
         p = p2 + 1;
         ssize_t srpos = std::strtoll(p, &p, 10);
@@ -92,7 +106,7 @@ auto parse_file(gzFile ifp, std::string outpref) {
         for(char *p3 = p;*p3 && *p3 != '\t';) {
             id = std::strtoull(p3 + 1, &p3, 10);
             ct = std::strtoll(p3 + 1, &p3, 10);
-            ids.push_back(id);
+            std::fwrite(&id, sizeof(id), 1, idfp);
             std::fwrite(&ct, sizeof(ct), 1, ctfp);
             ++nids;
             maxct == std::max(ct, maxct);
@@ -102,8 +116,9 @@ auto parse_file(gzFile ifp, std::string outpref) {
     }
     std::fprintf(stderr, "%zu total lines\n", ln);
     std::fclose(ipfp);
+    std::fclose(idfp);
     std::fclose(ctfp);
-    return std::make_tuple(contigids, contignames, ln, ids, (outpref + ".indptr.u64"), (outpref + ".cts.u32"), maxct, ipv);
+    return std::make_tuple(contigids, contignames, ln, idpath, (outpref + ".indptr.u64"), (outpref + ".cts.u32"), maxct, ipv);
 }
 
 int main(int argc, char **argv) {
@@ -125,26 +140,40 @@ int main(int argc, char **argv) {
         std::fprintf(stderr, "Example: `recountcsr junctions.bgz jnct`, which uses the 'jnct' as the prefix.\n");
         std::exit(1);
     }
-    auto [cids, cnames, nlines, ids, indptrpath, ctspath, maxct, nnz] = parse_file(ifp, outpref);
+    auto [cids, cnames, nlines, idpath, indptrpath, ctspath, maxct, nnz] = parse_file(ifp, outpref);
     gzclose(ifp);
 
-    std::FILE *fp;
-    map<uint64_t, uint64_t> mapper;
-    for(const auto id: ids) {
-        if(auto it = mapper.find(id); it == mapper.end()) {
-            const auto sz = mapper.size();
-            mapper.emplace(id, sz);
+
+    size_t njnct = 0, idn = 0; // This is set after filling the mapper
+    {
+        std::FILE *fp;
+
+        int idfd = ::open(idpath.data(), O_RDWR);
+        if(idfd < 0) {
+            perror("Failed to open idpath for reading and writing");
+            throw std::runtime_error("idpath RDWR O_failure");
         }
+        mio::mmap_sink idmm(idfd);
+        uint64_t *idptr = (uint64_t *)idmm.data();
+        idn = idmm.size() / 8;
+        assert(idmm.size() % 8 == 0);
+        // Re-name ids in-place, but converting to 32-bits
+        map<uint64_t, uint64_t> mapper;
+        if((fp = std::fopen((outpref + ".remap").data(), "w")) == nullptr) {
+            throw std::runtime_error(std::string("Failed to open remap file ") + outpref + ".remap");
+        }
+        std::transform(idptr, &idptr[idn], (uint64_t *)idptr, [&mapper,fp](uint64_t x) -> uint64_t {
+            auto it = mapper.find(x);
+            if(it == mapper.end()) {
+                it = mapper.emplace(x, mapper.size()).first;
+                std::fprintf(fp, "%zu:%zu\n", size_t(it->first), size_t(it->second));
+            }
+            return it->second;
+        });
+        ::close(idfd);
+        njnct = mapper.size();
+        std::fclose(fp);
     }
-    const size_t njnct = mapper.size();
-    std::transform(ids.begin(), ids.end(), ids.begin(), [&mapper](auto x) {return mapper[x];});
-    if((fp = std::fopen((outpref + ".remap").data(), "w")) == nullptr) {
-        throw std::runtime_error(std::string("Failed to open remap file ") + outpref + ".remap");
-    }
-    for(const auto &pair: mapper)
-        std::fprintf(fp, "%zu:%zu\n", size_t(pair.first), size_t(pair.second));
-    std::fclose(fp);
-    {map<uint64_t, uint64_t> tmpmapper(std::move(mapper));} // Clear map
 
     std::string idop = outpref + ".ids.u";
     int itype = -1;
@@ -161,32 +190,29 @@ int main(int argc, char **argv) {
         idop += "64";
         itype = 3;
     }
-    if((fp = std::fopen(idop.data(), "wb")) == nullptr) {
-        std::fprintf(stderr, "Failed to write IDs to disk...\n");
-        std::exit(1);
-    }
-    switch(itype) {
+    if(itype != 3) { // If uint32_t, do nothing!
+        int idfd = ::open(idpath.data(), O_RDWR);
+        if(idfd < 0) {
+            perror("Failed to open idpath for reading and writing");
+            throw std::runtime_error("idpath RDWR O_failure");
+        }
+        mio::mmap_sink idmm(idfd);
+        uint64_t *idptr = (uint64_t *)idmm.data();
 #define CASE_I(iv, IT)\
         case iv: {\
-            IT tmpv;\
-            for(const auto id: ids) {\
-                tmpv = id;\
-                std::fwrite(&tmpv, sizeof(tmpv), 1, fp);\
-            }\
+            std::copy(idptr, idptr + idn, (IT *)idptr);\
+            ::ftruncate(idfd, idn * sizeof(IT));\
             break;\
         }
-        CASE_I(0, uint8_t)
-        CASE_I(1, uint16_t)
-        CASE_I(2, uint32_t)
-#undef CASE_I
-        case 3: {
-            if(std::fwrite(ids.data(), sizeof(uint64_t), ids.size(), fp) != ids.size()) {
-                throw std::runtime_error("Failed to write ids to disk in 64-bit mode");
-            }
-            break;
+        switch(itype) {
+            CASE_I(0, uint8_t) CASE_I(1, uint16_t) CASE_I(2, uint32_t)
+            default: throw std::runtime_error("This should never happen");
+        }
+        ::close(idfd);
+        if(int rc = ::system((std::string("mv ") + idpath + " " + idop).data()); rc != 0) {
+            throw std::runtime_error("Failed to mv idpath to final idpath");
         }
     }
-    std::fclose(fp);
 
     std::fprintf(stderr, "Shape: %zu, %zu;%zu nnz. Max count: %u\n", nlines, njnct, nnz, maxct);
 
