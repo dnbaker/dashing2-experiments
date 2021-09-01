@@ -1,4 +1,5 @@
 #include <atomic>
+#include <ctime>
 #include <memory>
 #include <algorithm>
 #include <vector>
@@ -48,7 +49,7 @@ void buffer_fp(std::FILE *fp) {
     std::setvbuf(fp, nullptr,  _IOFBF, st.st_blksize);
 }
 
-auto parse_file(gzFile ifp, std::string outpref) {
+auto parse_file(gzFile ifp, std::string outpref, const size_t bufsize=size_t(1<<26)) {
     std::FILE *ipfp = std::fopen((outpref + ".indptr.u64").data(), "w");
     if(!ipfp) throw 1;
     buffer_fp(ipfp);
@@ -73,15 +74,15 @@ auto parse_file(gzFile ifp, std::string outpref) {
     map<std::string, uint32_t> contignames;
     std::string contig_name;
     size_t ln = 0;
-    std::unique_ptr<char[]> buf(new char[1<<20]);
+    std::unique_ptr<char[]> buf(new char[bufsize]);
     ssize_t rc = -1;
     uint32_t maxct = 0;
-    for(char *lptr; (lptr = gzgets(ifp, buf.get(), 1ull << 20)) != nullptr; ++ln) {
-        if(ln % 65536 == 0) std::fprintf(stderr, "Processed %zu lines, last rc is %zd\n", ln, rc);
+    for(char *lptr; (lptr = gzgets(ifp, buf.get(), bufsize)) != nullptr; ++ln) {
+        if(ln % 65536 == 0) std::fprintf(stderr, "Processed %zu lines\n", ln);
         const uint64_t myid = idcounter++;
 
         char *p = std::strchr(lptr, '\t');
-        assert(p);
+        assert(p || !std::fprintf(stderr, "Line %zu failed. p: '%s'. line: '%s'\n", ln, p, lptr));
         char *p2 = std::strchr(p + 1, '\t');
         assert(p2);
         if(matchchr(p)) p += 3;
@@ -124,7 +125,7 @@ auto parse_file(gzFile ifp, std::string outpref) {
 }
 
 int usage(const char *ex) {
-    std::fprintf(stderr, "Usage: %s <junctions.bgz> [optional: outprefix, defaults to 'parsed'", ex);
+    std::fprintf(stderr, "Usage: %s <junctions.bgz> [optional: outprefix, defaults to 'parsed'\n", ex);
     std::fprintf(stderr, "recountcsr: This executable parses a tab-delimited, potentially tabix-compressed/indexed, and writes the input to a several files with a prefix {prefix}.cts.u16, {prefix}.ids.u16, {prefix}.indptr.u64, {prefix}.remap");
     std::fprintf(stderr, "This defaults to parsed, but if a second positional argument is provided, it will use it.\n");
     std::fprintf(stderr, "Example (using stdin): `gzip -dc junctions.bgz | recountcsr`\n");
@@ -134,21 +135,20 @@ int usage(const char *ex) {
 }
 
 int main(int argc, char **argv) {
-    gzFile ifp;
-    for(int c;(c = getopt(argc, argv, "-h?")) >= 0;) {
-        switch(c) {
-            case 'h': case '?': return usage(argv[0]);
-        }
+    if(std::find_if(argv, argv + argc, [](auto x) {return std::strcmp("--help", x) == 0 || std::strcmp("-h", x) == 0;}) !=  argc + argv) {
+        return usage(argv[0]);
     }
-    if(argc == optind || std::strcmp(argv[optind], "-") == 0 || std::strcmp(argv[optind], "/dev/stdin") == 0) {
+    gzFile ifp;
+    if(argc == 1 || std::strcmp(argv[1], "-") == 0 || std::strcmp(argv[1], "/dev/stdin") == 0) {
         ifp = gzdopen(STDIN_FILENO, "r");
         if(ifp == nullptr) throw std::runtime_error("Failed to open STDIN fileno");
     } else {
-        ifp = gzopen(argv[optind], "r");
-        if(ifp == nullptr) throw std::runtime_error(std::string("Failed to open ") + argv[optind]);
+        ifp = gzopen(argv[1], "r");
+        if(ifp == nullptr) throw std::runtime_error(std::string("Failed to open ") + argv[1]);
     }
-    std::string outpref = "parsed";
-    if(argc - optind > 1) {
+    std::time_t result = std::time(NULL);
+    std::string outpref = std::string("parsed") + std::to_string(static_cast<size_t>(result));
+    if(argc > 2) {
         outpref = argv[optind + 1];
     }
     auto [cids, cnames, nlines, idpath, indptrpath, ctspath, maxct, nnz] = parse_file(ifp, outpref);
