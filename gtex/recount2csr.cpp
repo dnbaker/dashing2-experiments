@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <zlib.h>
 #include <mio.hpp>
+#include <getopt.h>
 
 
 template<typename K, typename V>
@@ -34,6 +35,7 @@ int str2ms(const char *s) {
     }
     return ret;
 }
+
 
 static inline bool matchchr(const char *s) {
     // | 32 lower-cases the letter, allowing C and c to match
@@ -121,24 +123,33 @@ auto parse_file(gzFile ifp, std::string outpref) {
     return std::make_tuple(contigids, contignames, ln, idpath, (outpref + ".indptr.u64"), (outpref + ".cts.u32"), maxct, ipv);
 }
 
+int usage(const char *ex) {
+    std::fprintf(stderr, "Usage: %s <junctions.bgz> [optional: outprefix, defaults to 'parsed'", ex);
+    std::fprintf(stderr, "recountcsr: This executable parses a tab-delimited, potentially tabix-compressed/indexed, and writes the input to a several files with a prefix {prefix}.cts.u16, {prefix}.ids.u16, {prefix}.indptr.u64, {prefix}.remap");
+    std::fprintf(stderr, "This defaults to parsed, but if a second positional argument is provided, it will use it.\n");
+    std::fprintf(stderr, "Example (using stdin): `gzip -dc junctions.bgz | recountcsr`\n");
+    std::fprintf(stderr, "Example (using zlib): `recountcsr junctions.bgz`\n");
+    std::fprintf(stderr, "Example: `recountcsr junctions.bgz jnct`, which uses the 'jnct' as the prefix.\n");
+    return 1;
+}
+
 int main(int argc, char **argv) {
     gzFile ifp;
-    if(argc == 1 || std::strcmp(argv[1], "-") == 0 || std::strcmp(argv[1], "/dev/stdin") == 0) {
+    for(int c;(c = getopt(argc, argv, "-h?")) >= 0;) {
+        switch(c) {
+            case 'h': case '?': return usage(argv[0]);
+        }
+    }
+    if(argc == optind || std::strcmp(argv[optind], "-") == 0 || std::strcmp(argv[optind], "/dev/stdin") == 0) {
         ifp = gzdopen(STDIN_FILENO, "r");
         if(ifp == nullptr) throw std::runtime_error("Failed to open STDIN fileno");
     } else {
-        ifp = gzopen(argv[1], "r");
-        if(ifp == nullptr) throw std::runtime_error(std::string("Failed to open ") + argv[1]);
+        ifp = gzopen(argv[optind], "r");
+        if(ifp == nullptr) throw std::runtime_error(std::string("Failed to open ") + argv[optind]);
     }
     std::string outpref = "parsed";
-    if(argc > 2) outpref = argv[2];
-    if(std::find_if(argv, argv + argc, [](auto x) {return !(std::strcmp("-h", x) && std::strcmp("--help", x));}) != argv + argc) {
-        std::fprintf(stderr, "recountcsr: This executable parses a tab-delimited, potentially tabix-compressed/indexed, and writes the input to a several files with a prefix {prefix}.cts.u16, {prefix}.ids.u16, {prefix}.indptr.u64, {prefix}.remap");
-        std::fprintf(stderr, "This defaults to parsed, but if a second positional argument is provided, it will use it.\n");
-        std::fprintf(stderr, "Example (using stdin): `gzip -dc junctions.bgz | recountcsr`\n");
-        std::fprintf(stderr, "Example (using zlib): `recountcsr junctions.bgz`\n");
-        std::fprintf(stderr, "Example: `recountcsr junctions.bgz jnct`, which uses the 'jnct' as the prefix.\n");
-        std::exit(1);
+    if(argc - optind > 1) {
+        outpref = argv[optind + 1];
     }
     auto [cids, cnames, nlines, idpath, indptrpath, ctspath, maxct, nnz] = parse_file(ifp, outpref);
     gzclose(ifp);
