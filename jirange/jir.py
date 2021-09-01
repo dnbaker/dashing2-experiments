@@ -134,7 +134,6 @@ def bindash_jaccard(p1, p2, size, *, k, nb=8, executable="bindash"):
     # print("Output: ", out)
     if not out:
         cmd = f"{executable} dist {cp1} {cp2}"
-        # print(f"bindash failed to emit a result {cmd}. Returning -1; this signals an error.", file=sys.stderr)
         return -1
     toks = out.split('\t')[-1].split("/")
     # print(toks)
