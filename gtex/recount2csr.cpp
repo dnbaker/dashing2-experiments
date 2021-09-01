@@ -12,6 +12,7 @@
 #include <zlib.h>
 #include <mio.hpp>
 #include <getopt.h>
+#include <omp.h>
 
 
 template<typename K, typename V>
@@ -75,14 +76,13 @@ auto parse_file(gzFile ifp, std::string outpref, const size_t bufsize=size_t(1<<
     std::string contig_name;
     size_t ln = 0;
     std::unique_ptr<char[]> buf(new char[bufsize]);
-    ssize_t rc = -1;
     uint32_t maxct = 0;
     for(char *lptr; (lptr = gzgets(ifp, buf.get(), bufsize)) != nullptr; ++ln) {
         if(ln % 65536 == 0) std::fprintf(stderr, "Processed %zu lines\n", ln);
         const uint64_t myid = idcounter++;
 
         char *p = std::strchr(lptr, '\t');
-        assert(p || !std::fprintf(stderr, "Line %zu failed. p: '%s'. line: '%s'\n", ln, p, lptr));
+        assert(p || !std::fprintf(stderr, "Line %zu failed. line: '%s'\n", ln, lptr));
         char *p2 = std::strchr(p + 1, '\t');
         assert(p2);
         if(matchchr(p)) p += 3;
@@ -109,10 +109,14 @@ auto parse_file(gzFile ifp, std::string outpref, const size_t bufsize=size_t(1<<
         for(char *p3 = p;*p3 && *p3 != '\t';) {
             id = std::strtoull(p3 + 1, &p3, 10);
             ct = std::strtoll(p3 + 1, &p3, 10);
+            if(__builtin_expect(ct == 0, 0)) {
+                std::fprintf(stderr, "Found a count of 0 in line '%s'\n", lptr);
+                std::exit(1);
+            }
             std::fwrite(&id, sizeof(id), 1, idfp);
             std::fwrite(&ct, sizeof(ct), 1, ctfp);
             ++nids;
-            maxct == std::max(ct, maxct);
+            maxct = std::max(ct, maxct);
         }
         ipv += nids;
         std::fwrite(&ipv, sizeof(ipv), 1, ipfp);
@@ -133,6 +137,14 @@ int usage(const char *ex) {
     std::fprintf(stderr, "Example: `recountcsr junctions.bgz jnct`, which uses the 'jnct' as the prefix.\n");
     return 1;
 }
+int getnt() {
+    int ret = 0;
+    #pragma omp parallel
+    {
+        ret = omp_get_num_threads();
+    }
+    return ret;
+}
 
 int main(int argc, char **argv) {
     if(std::find_if(argv, argv + argc, [](auto x) {return std::strcmp("--help", x) == 0 || std::strcmp("-h", x) == 0;}) !=  argc + argv) {
@@ -152,11 +164,13 @@ int main(int argc, char **argv) {
         outpref = argv[optind + 1];
     }
     auto [cids, cnames, nlines, idpath, indptrpath, ctspath, maxct, nnz] = parse_file(ifp, outpref);
+    std::fprintf(stderr, "max ct %u\n", maxct);
     gzclose(ifp);
 
 
     size_t njnct = 0, idn = 0; // This is set after filling the mapper
     {
+        std::atomic<size_t> idgen{0};
         std::FILE *fp;
 
         int idfd = ::open(idpath.data(), O_RDWR);
@@ -169,18 +183,43 @@ int main(int argc, char **argv) {
         idn = idmm.size() / 8;
         assert(idmm.size() % 8 == 0);
         // Re-name ids in-place, but converting to 32-bits
-        map<uint64_t, uint64_t> mapper;
         if((fp = std::fopen((outpref + ".remap").data(), "w")) == nullptr) {
             throw std::runtime_error(std::string("Failed to open remap file ") + outpref + ".remap");
         }
-        std::transform(idptr, &idptr[idn], (uint64_t *)idptr, [&mapper,fp](uint64_t x) -> uint64_t {
-            auto it = mapper.find(x);
-            if(it == mapper.end()) {
-                it = mapper.emplace(x, mapper.size()).first;
-                std::fprintf(fp, "%zu:%zu\n", size_t(it->first), size_t(it->second));
+        const int nt = getnt();
+        map<uint64_t, uint64_t> mapper;
+        if(nt == 1) {
+            std::transform(idptr, &idptr[idn], (uint64_t *)idptr, [&mapper,fp](uint64_t x) -> uint64_t {
+                auto it = mapper.find(x);
+                if(it == mapper.end()) {
+                    it = mapper.emplace(x, mapper.size()).first;
+                    std::fprintf(fp, "%zu:%zu\n", size_t(it->first), size_t(it->second));
+                }
+                return it->second;
+            });
+        } else {
+            #pragma omp parallel for
+            for(size_t i = 0; i < idn; ++i) {
+                auto id = idptr[i];
+                auto it = mapper.find(id);
+                if(it == mapper.end()) {
+                    #pragma omp critical
+                    {
+                        if((it = mapper.find(id)) == mapper.end()) {
+                            it = mapper.emplace(id, mapper.size()).first;
+                        }
+                    }
+                }
             }
-            return it->second;
-        });
+            const auto &cmap = mapper;
+            #pragma omp parallel for schedule(static, 8192)
+            for(size_t i = 0; i < idn; ++i) {
+                auto &res = idptr[i];
+                auto it = cmap.find(res);
+                if(it == cmap.end()) {std::fprintf(stderr, "Map failed!!!!\n"); std::exit(1);}
+                res = it->second;
+            }
+        }
         ::close(idfd);
         njnct = mapper.size();
         std::fclose(fp);
