@@ -78,7 +78,9 @@ def getmashji(left, r, *, k, size=1024):
 
 
 def getdashingji(left, r, *, k, l2s=10):
-    return float(check_output(f"dashing dist -S{l2s} -k{k} {left} {r}").decode().strip().split("\n")[-2].split("\t")[-1])
+    cyclic_flag = "" if k <= 32 else " --use-cyclic-hash "
+    cmd = f"dashing dist {cyclic_flag} -S{l2s} -k{k} {left} {r}"
+    return float(check_output(cmd).decode().strip().split("\n")[-2].split("\t")[-1])
 
 
 def exact_wjaccard(p1, p2, *, k):
