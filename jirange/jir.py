@@ -9,16 +9,18 @@ from subprocess import PIPE, check_call
 
 
 def check_output(x):
-    from subprocess import check_output as sco
+    from subprocess import Popen, PIPE
     t = 0
     while 1:
-        try:
-            return sco(x, shell=True, stderr=PIPE)
-        except Exception as e:
+        process = Popen(x, shell=True, stdout=PIPE, stderr=PIPE, executable="/bin/bash")
+        out, err = process.communicate()
+        if process.returncode:
             t += 1
+            print("Failed call time #%d '%s', error = %s" % (t, x, err.decode()), file=sys.stderr)
             if t == 10:
-                print("Failed call '%s', error = %s" % (x, e), file=sys.stderr)
-                raise
+                raise RuntimeError("Failed 10 times to run command " + x)
+        else:
+            return out
 
 
 def parse_bf(path):
@@ -70,7 +72,14 @@ def getani(left, r):
 
 
 def getmashji(left, r, *, k, size=1024):
-    return float(check_output(f"jaccard_mash dist -s {size} -k {k} -j -t {left} {r}").decode().strip().split("\n")[1].split()[-1])
+    cmd = f"mash dist -s {size} -k {k} {left} {r}"
+    output = check_output(cmd).decode().strip()
+    try:
+        num, denom = map(int, output.split('\n')[-1].split()[-1].split("/"))
+        return num / denom if denom else 1
+    except:
+        print(f"Command {cmd} yielded output  {output}", file=sys.stderr)
+        raise
 
 
 def getdashingji(left, r, *, k, l2s=10):
@@ -78,11 +87,11 @@ def getdashingji(left, r, *, k, l2s=10):
 
 
 def exact_wjaccard(p1, p2, *, k):
-    return float(check_output(f"dashing2 sketch -k{k} --countdict --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
+    return float(check_output(f"dashing2 sketch --phylip -k{k} --countdict --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
 def exact_jaccard(p1, p2, *, k):
-    res = check_output(f"dashing2 sketch -k{k} --set --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n')
+    res = check_output(f"dashing2 sketch --phylip -k{k} --set --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n')
     rf = float(res.split('\n')[-2].split("\t")[1])
     if rf > 1.:
         print("Res", res, rf, file=sys.stderr)
@@ -102,7 +111,7 @@ def setsketch_jaccard(p1, p2, size, *, k, nb=8, fss=False, executable="dashing2"
        to store float32 and long double hash registers, respectively.
     '''
     fcstr = f"--fastcmp {nb}" if nb < 8 else ""
-    return float(check_output(f"{executable} sketch -k{k} {fsarg2str(fss)} -S{size} --fastcmp {nb} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
+    return float(check_output(f"{executable} sketch --phylip -k{k} {fsarg2str(fss)} -S{size} --fastcmp {nb} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
 def bbminhash_jaccard(p1, p2, size, *, k, nb=32, fss=False, executable="dashing2"):
@@ -111,7 +120,7 @@ def bbminhash_jaccard(p1, p2, size, *, k, nb=32, fss=False, executable="dashing2
     '''
     assert (nb & (nb - 1)) == 0 and 4 <= nb <= 64, "nb, number of bits for bbit minhash, should be 4, 8, 16, 32, or 64"
     fcstr = f"--fastcmp {nb / 8}"
-    return float(check_output(f"{executable} sketch -k{k} {fsarg2str(fss)} --bbit-sigs -S{size} {fcstr} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
+    return float(check_output(f"{executable} sketch --phylip -k{k} {fsarg2str(fss)} --bbit-sigs -S{size} {fcstr} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
 def bindash_jaccard(p1, p2, size, *, k, nb=8, executable="bindash"):
@@ -119,6 +128,8 @@ def bindash_jaccard(p1, p2, size, *, k, nb=8, executable="bindash"):
     """
     assert size % 64 == 0, f"Size must be divisible by 64, found {size}"
     bb = nb * 8
+    if not os.path.isdir("bdsh_tmp"):
+        os.mkdir("bdsh_tmp")
     def mc(p):
         return "bdsh_tmp/" + os.path.basename(p + f".{k}.{bb}.{size}")
     cp1, cp2 = map(mc, (p1, p2))
@@ -142,14 +153,14 @@ def bindash_jaccard(p1, p2, size, *, k, nb=8, executable="bindash"):
 def bagminhash_jaccard(p1, p2, size, *, k, nb=8, cssize=-1):
     css = "--countsketch-size %d" % cssize if cssize > 0 else ""
     fss = f" --fastcmp {nb}" if nb in (8, 4, 2, 1, .5) else ""
-    cstr = f"dashing2 sketch --cache --cmpout /dev/stdout -k {k} --multiset {css + fss} {p1} {p2}"
+    cstr = f"dashing2 sketch --phylip --cache --cmpout /dev/stdout -k {k} --multiset {css + fss} {p1} {p2}"
     return check_output(cstr).decode().strip('\n').split('\n')[-2].split("\t")[1]
 
 
 def probminhash_jaccard(p1, p2, size, *, k, nb=8, cssize=-1):
     css = "--countsketch-size %d" % cssize if cssize > 0 else ""
     fss = f" --fastcmp {nb}" if nb in (8, 4, 2, 1, .5) else ""
-    cstr = f"dashing2 sketch --cache --cmpout /dev/stdout -k {k} --prob {css + fss} {p1} {p2}"
+    cstr = f"dashing2 sketch --phylip --cache --cmpout /dev/stdout -k {k} --prob {css + fss} {p1} {p2}"
     return check_output(cstr).decode().strip('\n').split('\n')[-2].split("\t")[1]
 
 
@@ -198,6 +209,7 @@ def packed(x):
         raise
     ret = getall(l, r, k=k, size=size, executable=executable)
     return ret
+
 
 def packedani(x):
     l, r = x
