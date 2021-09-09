@@ -58,12 +58,12 @@ def parsedata(path, fn):
     return (bkts, rngs, tups, ids, genome_ids)
 
 
-def getani(left, r):
+def getani(left, r, ex="fastANI"):
     '''For genomes left and r, which must exist as files, estimate ANI using
        fastANI returns a numpy array with [ANI, num, denom] as values.
     '''
     # return [ANI, num, denom]
-    cmd = f"fastANI --minFraction 0. -q {left} -r {r} -o /dev/stdout"
+    cmd = f"{ex} --minFraction 0. -q {left} -r {r} -o /dev/stdout"
     out = check_output(cmd).decode().strip()
     try:
         return np.fromiter(out.split("\t")[-3:], dtype=np.float64)[0]
@@ -72,18 +72,19 @@ def getani(left, r):
 
 
 def getmashji(left, r, *, k, size=1024):
-    cmd = f"mash dist -s {size} -k {k} {left} {r}"
-    output = check_output(cmd).decode().strip()
-    try:
-        num, denom = map(int, output.split('\n')[-1].split()[-1].split("/"))
-        return num / denom if denom else 1
-    except:
-        print(f"Command {cmd} yielded output  {output}", file=sys.stderr)
-        raise
+    if k > 32:
+        return 0. # Mash doesn't support long kmers
+    out = check_output(f"mash dist -s {size} -k {k} {left} {r}").decode().strip().split("\n")[-1].split()[-1]
+    num, denom = map(float, out.split("/"))
+    if not denom:
+        return 0.
+    return num / denom
 
 
 def getdashingji(left, r, *, k, l2s=10):
-    return float(check_output(f"dashing dist -S{l2s} -k{k} {left} {r}").decode().strip().split("\n")[-2].split("\t")[-1])
+    cyclic_flag = "" if k <= 32 else " --use-cyclic-hash "
+    cmd = f"dashing dist {cyclic_flag} -S{l2s} -k{k} {left} {r}"
+    return float(check_output(cmd).decode().strip().split("\n")[-2].split("\t")[-1])
 
 
 def exact_wjaccard(p1, p2, *, k):
@@ -141,7 +142,6 @@ def bindash_jaccard(p1, p2, size, *, k, nb=8, executable="bindash"):
     # print("Output: ", out)
     if not out:
         cmd = f"{executable} dist {cp1} {cp2}"
-        # print(f"bindash failed to emit a result {cmd}. Returning -1; this signals an error.", file=sys.stderr)
         return -1
     toks = out.split('\t')[-1].split("/")
     # print(toks)
@@ -176,13 +176,13 @@ for (b, cs) in BMHSettings:
     header = header + "\tBMH%s%s" % (b if b >= 1 else "N", "-%d" % cs if cs > 0 else "Exact")
 
 
-def getall(l, r, k=17, size=1024, executable="dashing2", cssize_set=[500, 50000, 50000000]):
+def getall(l, r, k=17, size=1024, executable="dashing2", cssize_set=[500000, 5000000, 50000000], faex="fastANI"):
     '''
         for values of k, size, and executable, return
         all similarity comparisons using Mash, Dashing, Dashing2, and fastANI
     '''
     bbnbs = (8, 4, 2, 1, .5)
-    ret = np.array([getani(l, r),
+    ret = np.array([getani(l, r, ex=faex),
                     exact_wjaccard(l, r, k=k),
                     exact_jaccard(l, r, k=k),
                     getmashji(l, r, k=k, size=size),
@@ -228,7 +228,7 @@ if __name__ == "__main__":
         ap.add_argument("--cpu", type=int, default=-1)
         ap.add_argument("--executable", '-E', default="dashing2")
         ap.add_argument("--name", default="noname")
-        ap.add_argument("-o", "--outfile", default="/dev/stdout")
+        ap.add_argument("-o", "--outfile", default=sys.stdout)
         args = ap.parse_args()
         k = args.k
         res = parsedata(args.table, args.fnames)
@@ -258,24 +258,21 @@ if __name__ == "__main__":
         nblocks = (len(tups) + 1023) >> 10
         CS = 1024
         subtups = [tups[x:x + CS] for x in map(lambda x: x * CS, range(nblocks))]
-        tmpfs = ["fullmat.%s.f32.%d.%d.%s.part%d" % (args.name, hv, k, fs, i) for i in range(nblocks)]
-        ofp = open(args.outfile, "w")
+        ofp = open(args.outfile, "w") if args.outfile is not sys.stdout else sys.stdout
         print(header, file=ofp, flush=True)
+        rawmat = []
         with mp.Pool(cpu) as p:
-            for i, (tmpf, st) in enumerate(zip(tmpfs, subtups)):
+            for i, st in enumerate(subtups):
                 from time import time
                 startt = time()
                 print("Started subgroup %d/%d" % (i, len(subtups)), file=sys.stderr, flush=True)
                 res = np.stack(list(p.map(packed, st)))
-                print("Writing to tmpf %s" % tmpf, file=sys.stderr, flush=True)
+                rawmat.append(res)
                 for (left, r, k, size, _), mr in zip(st, res.reshape(-1, 60)):
                     print(f"{left}\t{r}\t{k}\t{size}\t" + "\t".join(map(str, mr)), file=ofp, flush=True)
-                res.tofile(tmpf)
-                print("Finished subgroup %d/%d after %g" % (i, len(subtups), time() - startt), file=sys.stderr, flush=True)
-        ofp.close()
-        resmat = "fullmat.%s.f32.%d.%d.%s" % (args.name, hv, k, fs)
-        subprocess.check_call("cat " + " ".join(tmpfs) + " > " + resmat, shell=True)
-        subprocess.check_call(["rm"] + tmpfs)
+        if ofp is not sys.stdout:
+            ofp.close()
+        np.vstack(rawmat).tofile(f"fullmat.{args.name}.f32.{hv}.{k}.{fs}")
     else:
         print("Running tests, not running experiment", file=sys.stderr)
         parse_bf(sys.argv[1] if sys.argv[1:] else "selected_buckets_100.txt")
