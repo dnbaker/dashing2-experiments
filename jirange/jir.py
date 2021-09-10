@@ -9,16 +9,18 @@ from subprocess import PIPE, check_call
 
 
 def check_output(x):
-    from subprocess import check_output as sco
+    from subprocess import Popen, PIPE
     t = 0
     while 1:
-        try:
-            return sco(x, shell=True, stderr=PIPE)
-        except Exception as e:
+        process = Popen(x, shell=True, stdout=PIPE, stderr=PIPE, executable="/bin/bash")
+        out, err = process.communicate()
+        if process.returncode:
             t += 1
+            print("Failed call time #%d '%s', error = %s" % (t, x, err.decode()), file=sys.stderr)
             if t == 10:
-                print("Failed call '%s', error = %s" % (x, e), file=sys.stderr)
-                raise
+                raise RuntimeError("Failed 10 times to run command " + x)
+        else:
+            return out
 
 
 def parse_bf(path):
@@ -74,6 +76,8 @@ def getmashji(left, r, *, k, size=1024):
         return 0. # Mash doesn't support long kmers
     out = check_output(f"mash dist -s {size} -k {k} {left} {r}").decode().strip().split("\n")[-1].split()[-1]
     num, denom = map(float, out.split("/"))
+    if not denom:
+        return 0.
     return num / denom
 
 
@@ -108,7 +112,7 @@ def setsketch_jaccard(p1, p2, size, *, k, nb=8, fss=False, executable="dashing2"
        to store float32 and long double hash registers, respectively.
     '''
     fcstr = f"--fastcmp {nb}" if nb < 8 else ""
-    return float(check_output(f"{executable} sketch -k{k} --phylip {fsarg2str(fss)} -S{size} --fastcmp {nb} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
+    return float(check_output(f"{executable} sketch --phylip -k{k} {fsarg2str(fss)} -S{size} --fastcmp {nb} --cache --cmpout /dev/stdout {p1} {p2}").decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
 def bbminhash_jaccard(p1, p2, size, *, k, nb=32, fss=False, executable="dashing2"):
@@ -125,6 +129,8 @@ def bindash_jaccard(p1, p2, size, *, k, nb=8, executable="bindash"):
     """
     assert size % 64 == 0, f"Size must be divisible by 64, found {size}"
     bb = nb * 8
+    if not os.path.isdir("bdsh_tmp"):
+        os.mkdir("bdsh_tmp")
     def mc(p):
         return "bdsh_tmp/" + os.path.basename(p + f".{k}.{bb}.{size}")
     cp1, cp2 = map(mc, (p1, p2))
@@ -154,7 +160,7 @@ def bagminhash_jaccard(p1, p2, size, *, k, nb=8, cssize=-1):
 def probminhash_jaccard(p1, p2, size, *, k, nb=8, cssize=-1):
     css = "--countsketch-size %d" % cssize if cssize > 0 else ""
     fss = f" --fastcmp {nb}" if nb in (8, 4, 2, 1, .5) else ""
-    cstr = f"dashing2 sketch --cache --phylip --cmpout /dev/stdout -k {k} --prob {css + fss} {p1} {p2}"
+    cstr = f"dashing2 sketch --phylip --cache --cmpout /dev/stdout -k {k} --prob {css + fss} {p1} {p2}"
     return check_output(cstr).decode().strip('\n').split('\n')[-2].split("\t")[1]
 
 
@@ -203,6 +209,7 @@ def packed(x):
         raise
     ret = getall(l, r, k=k, size=size, executable=executable)
     return ret
+
 
 def packedani(x):
     l, r = x
