@@ -1,4 +1,5 @@
 import sys
+import os
 import numpy as np
 import subprocess
 from time import time
@@ -90,6 +91,7 @@ def test():
     print(bdpath, bdtime)
     mmed = repeat_x(bch_sketch_mash, 3, "fn.txt", 31, 1, "mashdest.msh", 1024)
     print(mmed)
+    return 0
 
 
 def main():
@@ -97,18 +99,30 @@ def main():
     ap = AP()
     ap.add_argument("--nrepeat", type=int, default=3)
     ap.add_argument("--nthreads", type=int, default=1)
+    ap.add_argument("--sketchsize", type=int, default=0)
     ap.add_argument("-k", type=int, default=31)
     ap.add_argument("fnames", type=str)
     args = ap.parse_args()
+    ssz = args.sketchsize
+    if ssz <= 0:
+        raise ValueError("sketchsize must be > 0")
+    elif (ssz - 1) & ssz:
+        raise ValueError("Sketchsize must be a power of 2 for this experiment")
     nt = args.nthreads
     fn = args.fnames
+    assert os.path.isfile(fn), f"fnames argument ({fn}) does not exist"
     ntimes = args.nrepeat
     print(f"##Results for {fn}")
     print("#Method\tk\tSketchTime\tDistanceTime")
+    mdfile = "mashdest.msh"
+    mdstfile = "mashdist.out"
+    msout_fn, tsketch = repeat_x(bch_sketch_mash, args.nrepeat, fn, args.k, nt, mdfile, size=args.sketchsize)
+    msdistout_fn, tdist = repeat_x(bch_dist_mash, args.nrepeat, msout_fn, nt, mdstfile)
+    print(f"Mash\t{args.k}\t{tsketch}\t{tdist}")
     return 0
 
 if __name__ == "__main__":
     if not sys.argv[1:]:
-        test()
+        sys.exit(test())
     else:
-        main()
+        sys.exit(main())
