@@ -141,12 +141,10 @@ def bindash_jaccard(p1, p2, size, *, k, nb=8, executable="bindash"):
     out = check_output(f"{executable} dist {cp1} {cp2}").decode().strip()
     # print("Output: ", out)
     if not out:
-        cmd = f"{executable} dist {cp1} {cp2}"
+        cmd = f"{executable} dist --ithres=1 {cp1} {cp2}"
         return -1
     toks = out.split('\t')[-1].split("/")
-    # print(toks)
     num, denom = map(float, toks)
-    # print(num, denom)
     return num / denom
 
 
