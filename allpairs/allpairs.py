@@ -141,7 +141,7 @@ def main():
                     bdfile = f"BDASHdest.k{k}.sz{ssz}.{rstr}.{nbits}"
                     bdstfile = f"BDASHdist.k{k}.sz{ssz}.{rstr}.{nbits}.out"
                     bdsout_fn, tsketch = repeat_x(bch_sketch_bindash, args.nrepeat, fn, k, threads=nt, destp=bdfile, bbits=nbits, size=ssz)
-                    bddistout_fn, tdist = repeat_x(bch_dist_bindash, args.nrepeat, bdsout_fn, threads=nt, distdest=mdstfile)
+                    bddistout_fn, tdist = repeat_x(bch_dist_bindash, args.nrepeat, bdsout_fn, threads=nt, distdest=bdstfile)
                     print(f"Bindash\t{k}\t{ssz}\t{regsize}\t{nt}\t{tsketch}\t{tdist}", flush=True)
                 for isbin in [1, 0]:
                     d1out_fn, tsketch = repeat_x(bch_sketch_dashing, args.nrepeat, fn, k=k, threads=nt, size=ssz)
