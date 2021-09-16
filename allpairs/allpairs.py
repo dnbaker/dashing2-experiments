@@ -49,11 +49,11 @@ def bch_dist_dashing(pathf, k, threads, size, distdest=None, binary=False):
     return pathf, (time() - startt)
 
 
-def bch_dist_bindash(pathf, threads, size, distdest=None):
+def bch_dist_bindash(pathf, threads, distdest=None):
     if distdest is None:
         raise RuntimeError("Must provide distdest to bch_dist_dashing2")
     startt = time()
-    subprocess.check_call(f"bindash dist --outfname={distdest} --nthreads={threads} {pathf}", shell=True)
+    subprocess.check_call(f"bindash dist --outfname={distdest} --nthreads={threads} {pathf} 2>/dev/null", shell=True)
     return pathf, (time() - startt)
 
 
@@ -83,7 +83,7 @@ def test():
     print(bch_sketch_mash("fn.txt", 31, 1, "MASHdest.msh", 1024))
     bch_dist_mash("MASHdest.msh", 1, "mashDistance.msh")
     bdpath, bdtime = bch_sketch_bindash("fn.txt", 31, 1, size=1024, destp="bdshdest.bdsh", bbits=32)
-    bch_dist_bindash(bdpath, 1, 1024, "bdshDistance.bdsh")
+    bch_dist_bindash(bdpath, 1, "bdshDistance.bdsh")
     print(bch_dist_dashing2("fn.txt", 31, 1, 1024, distdest="d1dist.bin", binary=True, regsize=8))
     print(bch_dist_dashing("fn.txt", 31, 1, 1024, distdest="d2dist.bin", binary=True))
     print(bch_sketch_mash("fn.txt", 31, 1, "MASHdest.msh", 1024))
@@ -129,11 +129,20 @@ def main():
             nt = cpu_count()
         for k in map(int, args.k):
             for ssz in sszes:
+                # Handle MASH
                 mdfile = f"MASHdest.k{k}.sz{ssz}.{rstr}"
                 mdstfile = f"MASHdist.k{k}.sz{ssz}.{rstr}.phylip"
                 msout_fn, tsketch = repeat_x(bch_sketch_mash, args.nrepeat, fn, k, nt, mdfile, size=ssz)
                 msdistout_fn, tdist = repeat_x(bch_dist_mash, args.nrepeat, msout_fn, nt, mdstfile)
                 print(f"Mash\t{k}\t{ssz}\t8\t{nt}\t{tsketch}\t{tdist}", flush=True)
+                # Handle BinDash
+                for regsize in (8, 4, 2, 1, .5):
+                    nbits = int(regsize * 8)
+                    bdfile = f"BDASHdest.k{k}.sz{ssz}.{rstr}.{nbits}"
+                    bdstfile = f"BDASHdist.k{k}.sz{ssz}.{rstr}.{nbits}.out"
+                    bdsout_fn, tsketch = repeat_x(bch_sketch_bindash, args.nrepeat, fn, k, threads=nt, destp=bdfile, bbits=nbits, size=ssz)
+                    bddistout_fn, tdist = repeat_x(bch_dist_bindash, args.nrepeat, bdsout_fn, threads=nt, distdest=mdstfile)
+                    print(f"Bindash\t{k}\t{ssz}\t{regsize}\t{nt}\t{tsketch}\t{tdist}", flush=True)
                 for isbin in [1, 0]:
                     d1out_fn, tsketch = repeat_x(bch_sketch_dashing, args.nrepeat, fn, k=k, threads=nt, size=ssz)
                     d1distout_fn, tdist = repeat_x(bch_dist_dashing, args.nrepeat, fn, k=k, threads=nt, size=ssz, distdest=msdistout_fn.replace("mash", "dashing"), binary=isbin)
