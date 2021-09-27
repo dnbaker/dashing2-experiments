@@ -21,6 +21,51 @@ def bch_sketch_dashing(pathf, k, threads, size):
     return pathf, (stopt - startt)
 
 
+def bch_dist_dashing(pathf, k, threads, size, distdest=None, binary=False):
+    if distdest is None:
+        raise RuntimeError("Must provide distdest to bch_dist_dashing")
+    startt = time()
+    pstr = " --emit-binary" if binary else ""
+    subprocess.check_call(f"dashing dist --cache-sketches -k {k} -O{distdest} -o {distdest + '.sizes'} -S {int(np.ceil(np.log2(size)))} -F {pathf} -p {threads} {pstr} 2>/dev/null", shell=True)
+    return pathf, (time() - startt)
+
+
+def bch_sketch_dashingbb(pathf, k, threads, size):
+    startt = time()
+    subprocess.check_call(f"dashing sketch --use-bb-minhash --bbits 8 -S {int(np.ceil(np.log2(size)))} -k {k} -F {pathf} -p {threads}, 2>/dev/null", shell=True)
+    stopt = time()
+    return pathf, (stopt - startt)
+
+
+def bch_dist_dashingbb(pathf, k, threads, size, distdest=None, binary=False):
+    if distdest is None:
+        raise RuntimeError("Must provide distdest to bch_dist_dashingbb")
+    startt = time()
+    pstr = " --emit-binary" if binary else ""
+    subprocess.check_call(f"dashing dist --use-bb-minhash --bbits 8 --cache-sketches -k {k} -O{distdest} -o {distdest + '.sizes'} -S {int(np.ceil(np.log2(size)))} -F {pathf} -p {threads} {pstr} 2>/dev/null", shell=True)
+    return pathf, (time() - startt)
+
+
+def bch_sketch_pmh(pathf, k, threads, size, *, cssize=None):
+    startt = time()
+    csstr = f"--countsketch-size {cssize}" if cssize is not None else ""
+    subprocess.check_call(f"dashing2 sketch --probminhash -k {k} -S {size} -F {pathf} -p {threads} {csstr} 2>/dev/null ", shell=True)
+    return pathf, (time() - startt)
+
+
+def bch_dist_pmh(pathf, k, threads, size, *, cssize=None, distdest=None, binary=False, regsize=-1):
+    if distdest is None:
+        raise RuntimeError("Must provide distdest to bch_dist_pmh")
+    if regsize <= 0. or regsize not in [0.5, 1, 2, 4, 8]:
+        raise ValueError("regsize must be > 0 and in [.5, 1, 2, 4, 8]")
+    startt = time()
+    pstr = " --binary-output " if binary else ""
+    pstr += f" --countsketch-size {cssize}" if cssize is not None else ""
+    subprocess.check_call(f"dashing2 sketch -k {k} --bbit-sigs --fastcmp {regsize} --cache --cmpout {distdest} -S {size} -F {pathf} -p {threads} {pstr} 2>/dev/null", shell=True)
+    return pathf, (time() - startt)
+
+
+
 def bch_sketch_dashing2(pathf, k, threads, size, oneperm=False):
     startt = time()
     pstr = " --oph " if oneperm else ""
@@ -37,15 +82,6 @@ def bch_dist_dashing2(pathf, k, threads, size, oneperm=False, distdest=None, bin
     pstr = " --oph " if oneperm else ""
     pstr += " --binary-output " if binary else ""
     subprocess.check_call(f"dashing2 sketch -k {k} --fastcmp {regsize} --cache --cmpout {distdest} -S {size} -F {pathf} -p {threads} {pstr} 2>/dev/null", shell=True)
-    return pathf, (time() - startt)
-
-
-def bch_dist_dashing(pathf, k, threads, size, distdest=None, binary=False):
-    if distdest is None:
-        raise RuntimeError("Must provide distdest to bch_dist_dashing2")
-    startt = time()
-    pstr = " --emit-binary" if binary else ""
-    subprocess.check_call(f"dashing dist --cache-sketches -k {k} -O{distdest} -o {distdest + '.sizes'} -S {int(np.ceil(np.log2(size)))} -F {pathf} -p {threads} {pstr} 2>/dev/null", shell=True)
     return pathf, (time() - startt)
 
 
@@ -80,18 +116,20 @@ def repeat_x(func, ntimes, *args, **kwargs):
 
 
 def test():
-    print(bch_sketch_mash("fn.txt", 31, 1, "MASHdest.msh", 1024))
+    print(bch_sketch_mash("fn.txt", 31, 1, "MASHdest", 1024))
     bch_dist_mash("MASHdest.msh", 1, "mashDistance.msh")
     bdpath, bdtime = bch_sketch_bindash("fn.txt", 31, 1, size=1024, destp="bdshdest.bdsh", bbits=32)
     bch_dist_bindash(bdpath, 1, "bdshDistance.bdsh")
     print(bch_dist_dashing2("fn.txt", 31, 1, 1024, distdest="d1dist.bin", binary=True, regsize=8))
     print(bch_dist_dashing("fn.txt", 31, 1, 1024, distdest="d2dist.bin", binary=True))
-    print(bch_sketch_mash("fn.txt", 31, 1, "MASHdest.msh", 1024))
+    print(bch_sketch_mash("fn.txt", 31, 1, "MASHdest", 1024))
     print(bch_sketch_dashing("fn.txt", 31, 1, 1024))
     print(bch_sketch_dashing2("fn.txt", 31, 1, 1024))
     print(bch_sketch_dashing2("fn.txt", 31, 1, 1024, oneperm=True))
+    print(bch_sketch_pmh("fn.txt", 31, 1, 1024, cssize=100000))
+    print(bch_dist_pmh("fn.txt", 31, 1, 1024, regsize=2, cssize=100000, distdest="pmhdest.bin", binary=True))
     print(bdpath, bdtime)
-    mmed = repeat_x(bch_sketch_mash, 3, "fn.txt", 31, 1, "MASHdest.msh", 1024)
+    mmed = repeat_x(bch_sketch_mash, 3, "fn.txt", 31, 1, "MASHdest", 1024)
     print(mmed)
     return 0
 
@@ -144,9 +182,13 @@ def main():
                     bddistout_fn, tdist = repeat_x(bch_dist_bindash, args.nrepeat, bdsout_fn, threads=nt, distdest=bdstfile)
                     print(f"Bindash-{regsize}\t{k}\t{ssz}\t{regsize}\t{nt}\t{tsketch}\t{tdist}", flush=True)
                 for isbin in [1, 0]:
-                    d1out_fn, tsketch = repeat_x(bch_sketch_dashing, args.nrepeat, fn, k=k, threads=nt, size=ssz)
-                    d1distout_fn, tdist = repeat_x(bch_dist_dashing, args.nrepeat, fn, k=k, threads=nt, size=ssz, distdest=msdistout_fn.lower().replace("mash", "dashing"), binary=isbin)
-                    print(f"Dashing1-{'bin' if isbin else 'txt'}\t{k}\t{ssz}\t1\t{nt}\t{tsketch}\t{tdist}", flush=True)
+                    for isbb in [1, 0]:
+                        sketchfn = bch_sketch_dashingbb if isbb else bch_sketch_dashing
+                        distfn = bch_dist_dashingbb if isbb else bch_dist_dashing
+                        d1out_fn, tsketch = repeat_x(sketchfn, args.nrepeat, fn, k=k, threads=nt, size=ssz)
+                        d1distout_fn, tdist = repeat_x(distfn, args.nrepeat, fn, k=k, threads=nt, size=ssz, distdest=msdistout_fn.lower().replace("mash", "dashing"), binary=isbin)
+                        basename = "Dashing1" if isbb else "Dashing1-bb"
+                        print(f"{basename}-{'bin' if isbin else 'txt'}\t{k}\t{ssz}\t1\t{nt}\t{tsketch}\t{tdist}", flush=True)
                 for isbin, bstr in zip((True, False), ("-bin", "-txt")):
                     for OP, D2S in zip([True, False], ("D2OP", "D2FSS")):
                         for regsize in (8, 4, 2, 1, .5):
@@ -155,6 +197,15 @@ def main():
                             distdest = f"d2dest.{OP3}.k{k}.{rstr}"
                             d2out_fn, tsketch = repeat_x(bch_sketch_dashing2, args.nrepeat, fn, k=k, threads=nt, size=ssz, oneperm=OP)
                             d2distout_fn, tdist = repeat_x(bch_dist_dashing2, args.nrepeat, fn, k=k, threads=nt, size=ssz, oneperm=OP, regsize=regsize, binary=isbin, distdest=distdest)
+                            print(f"{OP3}\t{k}\t{ssz}\t{regsize}\t{nt}\t{tsketch}\t{tdist}", flush=True)
+                for isbin, bstr in zip((True, False), ("-bin", "-txt")):
+                    for regsize in (8, 2, 1, .5):
+                        for cssize in [500000, 2500000, None]:
+                            OP2 = "PMH" + bstr
+                            OP3 = OP2 + "-%g-%s" % (regsize, str(cssize) if cssize is not None else "exact")
+                            distdest = f"d2dest.{OP3}.k{k}.{rstr}"
+                            d2out_fn, tsketch = repeat_x(bch_sketch_pmh, args.nrepeat, fn, k=k, threads=nt, size=ssz, cssize=cssize)
+                            d2distout_fn, tdist = repeat_x(bch_dist_pmh, args.nrepeat, fn, k=k, threads=nt, size=ssz, cssize=cssize, regsize=regsize, binary=isbin, distdest=distdest)
                             print(f"{OP3}\t{k}\t{ssz}\t{regsize}\t{nt}\t{tsketch}\t{tdist}", flush=True)
     return 0
 
