@@ -35,7 +35,7 @@ simmats = sorted(glob("*distmat.u[0-9][0-9]*xz"))
 
 
 # dms = list(map(load_distmat, distmats))
-sms = list(map(load_simmat, simmats))[:1]
+sms = list(map(load_simmat, simmats))
 simnrgs = [int(x.split(".xz")[0].split(".")[-4]) for x in simmats]
 tissue_masks = [np.where(tissuesbin == x) for x in np.arange(NT)]
 
@@ -73,9 +73,10 @@ ninfdistmats = [make_xmat(x, mean_noninf_distance) for x in range(len(sms))]
 nmatchmats = [make_xmat(x, mean_sim) for x in range(len(sms))]
 nzeromatchmats = [make_xmat(x, mean_nonzero_sim) for x in range(len(sms))]
 
+div = 1. / NT
+
 for (i, path), ninfmat, nmatchmat, nzmatchmat in zip(enumerate(simmats), ninfdistmats, nmatchmats, nzeromatchmats):
     ncorrect_infdist = np.sum(np.argmin(ninfmat, axis=0) == np.arange(NT))
     ncorrect_match = np.sum(np.argmin(nmatchmat, axis=0) == np.arange(NT))
     ncorrect_zeromatch = np.sum(np.argmin(nzmatchmat, axis=0) == np.arange(NT))
-    div = 1. / NT
     print(f"{path}\t{ncorrect_infdist}/{ncorrect_infdist * div}\t{ncorrect_match}/{ncorrect_match * div}\t{ncorrect_zeromatch}/{ncorrect_zeromatch * div}", flush=True)
