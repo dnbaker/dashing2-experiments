@@ -1,1 +1,14 @@
+/home/dbaker49/miniconda3/lib/python3.9/site-packages/numpy/core/fromnumeric.py:3419: RuntimeWarning: Mean of empty slice.
+  return _methods._mean(a, axis=axis, dtype=dtype,
+/home/dbaker49/miniconda3/lib/python3.9/site-packages/numpy/core/_methods.py:188: RuntimeWarning: invalid value encountered in double_scalars
+  ret = ret.dtype.type(ret / rcount)
 GTexSplicing.stackedsketches.S1024.bmh.sampled.indices.stacked.19214.1024.i64.distmat.u16.xz	18/0.5625	0/0.0	1/0.03125
+GTexSplicing.stackedsketches.S1024.pmh.sampled.indices.stacked.19214.1024.i64.distmat.u16.xz	27/0.84375	0/0.0	1/0.03125
+GTexSplicing.stackedsketches.S1024.ss.sampled.indices.stacked.19214.1024.i64.distmat.u16.xz	26/0.8125	0/0.0	0/0.0
+GTexSplicing.stackedsketches.S2048.bmh.sampled.indices.stacked.19214.2048.i64.distmat.u16.xz	18/0.5625	0/0.0	1/0.03125
+GTexSplicing.stackedsketches.S2048.pmh.sampled.indices.stacked.19214.2048.i64.distmat.u16.xz	26/0.8125	0/0.0	0/0.0
+GTexSplicing.stackedsketches.S2048.ss.sampled.indices.stacked.19214.2048.i64.distmat.u16.xz	21/0.65625	0/0.0	0/0.0
+GTexSplicing.stackedsketches.S32768.pmh.sampled.indices.stacked.19214.32768.i64.distmat.u16.xz	12/0.375	0/0.0	0/0.0
+GTexSplicing.stackedsketches.S8192.bmh.sampled.indices.stacked.19214.8192.i64.distmat.u16.xz	24/0.75	0/0.0	0/0.0
+GTexSplicing.stackedsketches.S8192.pmh.sampled.indices.stacked.19214.8192.i64.distmat.u16.xz	24/0.75	0/0.0	0/0.0
+GTexSplicing.stackedsketches.S8192.ss.sampled.indices.stacked.19214.8192.i64.distmat.u16.xz	20/0.625	0/0.0	0/0.0
