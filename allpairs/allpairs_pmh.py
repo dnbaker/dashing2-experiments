@@ -181,8 +181,8 @@ def main():
                     bdsout_fn, tsketch = repeat_x(bch_sketch_bindash, args.nrepeat, fn, k, threads=nt, destp=bdfile, bbits=nbits, size=ssz)
                     bddistout_fn, tdist = repeat_x(bch_dist_bindash, args.nrepeat, bdsout_fn, threads=nt, distdest=bdstfile)
                     print(f"Bindash-{regsize}\t{k}\t{ssz}\t{regsize}\t{nt}\t{tsketch}\t{tdist}", flush=True)
-                for isbin in [1, 0]:
-                    for isbb in [1, 0]:
+                for isbb in [1, 0]:
+                    for isbin in [1, 0]:
                         sketchfn = bch_sketch_dashingbb if isbb else bch_sketch_dashing
                         distfn = bch_dist_dashingbb if isbb else bch_dist_dashing
                         d1out_fn, tsketch = repeat_x(sketchfn, args.nrepeat, fn, k=k, threads=nt, size=ssz)
