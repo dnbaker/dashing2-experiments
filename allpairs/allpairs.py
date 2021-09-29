@@ -132,8 +132,8 @@ def main():
                 # Handle MASH
                 mdfile = f"MASHdest.k{k}.sz{ssz}.{rstr}"
                 mdstfile = f"MASHdist.k{k}.sz{ssz}.{rstr}.phylip"
-                msout_fn, tsketch = repeat_x(bch_sketch_mash, args.nrepeat, fn, k, nt, mdfile, size=ssz)
-                msdistout_fn, tdist = repeat_x(bch_dist_mash, args.nrepeat, msout_fn, nt, mdstfile)
+                msout_fn, tsketch = repeat_x(bch_sketch_mash, args.nrepeat, fn, k, threads=nt, mdfile, size=ssz)
+                msdistout_fn, tdist = repeat_x(bch_dist_mash, args.nrepeat, msout_fn, threads=nt, mdstfile)
                 print(f"Mash\t{k}\t{ssz}\t8\t{nt}\t{tsketch}\t{tdist}", flush=True)
                 # Handle BinDash
                 for regsize in (8, 4, 2, 1, .5):

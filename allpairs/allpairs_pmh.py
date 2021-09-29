@@ -167,6 +167,8 @@ def main():
             nt = cpu_count()
         for k in map(int, args.k):
             for ssz in sszes:
+                # For now, only compute PMH
+                '''
                 # Handle MASH
                 mdfile = f"MASHdest.k{k}.sz{ssz}.{rstr}"
                 mdstfile = f"MASHdist.k{k}.sz{ssz}.{rstr}.phylip"
@@ -198,8 +200,9 @@ def main():
                             d2out_fn, tsketch = repeat_x(bch_sketch_dashing2, args.nrepeat, fn, k=k, threads=nt, size=ssz, oneperm=OP)
                             d2distout_fn, tdist = repeat_x(bch_dist_dashing2, args.nrepeat, fn, k=k, threads=nt, size=ssz, oneperm=OP, regsize=regsize, binary=isbin, distdest=distdest)
                             print(f"{OP3}\t{k}\t{ssz}\t{regsize}\t{nt}\t{tsketch}\t{tdist}", flush=True)
+                '''
                 for isbin, bstr in zip((True, False), ("-bin", "-txt")):
-                    for regsize in (8, 2, 1, .5):
+                    for regsize in (8, 4, 2, 1, .5):
                         for cssize in [500000, 2500000, None]:
                             OP2 = "PMH" + bstr
                             OP3 = OP2 + "-%g-%s" % (regsize, str(cssize) if cssize is not None else "exact")
