@@ -7,7 +7,7 @@ from time import time
 
 def bch_sketch_mash(pathf, k, threads, destp, size):
     startt = time()
-    subprocess.check_call(f"mash sketch -k {k} -o {destp} -l {pathf} -p {threads}", shell=True)
+    subprocess.check_call(f"mash sketch -s {size} -k {k} -o {destp} -l {pathf} -p {threads}", shell=True)
     stopt = time()
     destp += ".msh"
     assert os.path.isfile(destp)
