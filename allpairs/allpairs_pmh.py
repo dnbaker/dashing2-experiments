@@ -70,7 +70,7 @@ def main():
                 '''
                 for isbin, bstr in zip((True, False), ("-bin", "-txt")):
                     for regsize in (8, 4, 2, 1, .5):
-                        for cssize in [500000, 2500000, None]:
+                        for cssize in [500000, 2500000, 10000000]:
                             OP2 = "PMH" + bstr
                             OP3 = OP2 + "-%g-%s" % (regsize, str(cssize) if cssize is not None else "exact")
                             distdest = f"d2dest.{OP3}.k{k}.{rstr}"
