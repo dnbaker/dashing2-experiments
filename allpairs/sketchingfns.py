@@ -2,30 +2,30 @@ import sys
 import os
 import numpy as np
 import subprocess
-from time import time
+from timeit import default_timer as time
 
 
 def bch_sketch_mash(pathf, k, threads, destp, size):
-    startt = time()
+    starttm = time()
     subprocess.check_call(f"mash sketch -s {size} -k {k} -o {destp} -l {pathf} -p {threads}", shell=True)
-    stopt = time()
+    stoptm = time()
     destp += ".msh"
     assert os.path.isfile(destp)
-    return destp, (stopt - startt)
+    return destp, (stoptm - starttm)
 
 
 def bch_sketch_dashing(pathf, k, threads, size):
-    startt = time()
+    starttd1 = time()
     subprocess.check_call(f"dashing sketch -S {int(np.ceil(np.log2(size)))} -k {k} -F {pathf} -p {threads}, 2>/dev/null", shell=True)
-    stopt = time()
-    return pathf, (stopt - startt)
+    stoptd1 = time()
+    return pathf, (stoptd1 - starttd1)
 
 
 def bch_sketch_dashing2(pathf, k, threads, size, oneperm=False):
-    startt = time()
+    starttd2 = time()
     pstr = " --oph " if oneperm else ""
     subprocess.check_call(f"dashing2 sketch -k {k} -S {size} -F {pathf} -p {threads} {pstr} 2>/dev/null ", shell=True)
-    return pathf, (time() - startt)
+    return pathf, (time() - starttd2)
 
 
 def bch_dist_dashing2(pathf, k, threads, size, oneperm=False, distdest=None, binary=False, regsize=-1):
@@ -73,16 +73,16 @@ def bch_sketch_bindash(pathf, k, threads, *, destp, bbits, size):
 
 def repeat_x(func, ntimes, *args, **kwargs):
     timevec = np.zeros(ntimes)
-    for i in range(ntimes):
-        res = func(*args, **kwargs)
-        timevec[i] = res[-1]
-    return (res[0], np.median(timevec))
+    results = [func(*args, **kwargs) for i in range(ntimes)]
+    timevec = [x[-1] for x in results]
+    return (results[0][0], np.median([x[-1] for x in results]))
+
 
 def bch_sketch_pmh(pathf, k, threads, size, *, cssize=None):
-    startt = time()
+    starttpmh = time()
     csstr = f"--countsketch-size {cssize}" if cssize is not None else ""
     subprocess.check_call(f"dashing2 sketch --probminhash -k {k} -S {size} -F {pathf} -p {threads} {csstr} 2>/dev/null ", shell=True)
-    return pathf, (time() - startt)
+    return pathf, (time() - starttpmh)
 
 
 def bch_dist_pmh(pathf, k, threads, size, *, cssize=None, distdest=None, binary=False, regsize=-1):

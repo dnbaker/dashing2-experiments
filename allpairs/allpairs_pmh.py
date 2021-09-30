@@ -23,6 +23,7 @@ def main():
     if any(x <= 0 or ((x - 1) & x) != 0 for x in sszes):
         raise ValueError("sketchsize must be > 1 and a power of 2")
     nt = args.nthreads
+    import os
     assert os.path.isfile(fn), f"fnames argument ({fn}) does not exist"
     ntimes = args.nrepeat
     import random
