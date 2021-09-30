@@ -19,9 +19,9 @@ def main():
     from argparse import ArgumentParser as AP
     ap = AP()
     ap.add_argument("--nrepeat", type=int, default=3)
-    ap.add_argument("--nthreads", '-p', action='append')
-    ap.add_argument("--sketchsize", '-s', action='append')
-    ap.add_argument("-k", action='append')
+    ap.add_argument("--nthreads", '-p', action='append', type=int)
+    ap.add_argument("--sketchsize", '-s', action='append', type=int)
+    ap.add_argument("-k", action='append', type=int)
     ap.add_argument("fnames", type=str)
     args = ap.parse_args()
     if not args.nthreads:
@@ -34,19 +34,18 @@ def main():
         raise ValueError("Required: at least one value for sketchsize")
     if not args.k:
         raise ValueError("Required: at least one value for k")
-    sszes = list(map(int, args.sketchsize))
+    sszes = args.sketchsize
     if any(x <= 0 or ((x - 1) & x) != 0 for x in sszes):
         raise ValueError("sketchsize must be > 1 and a power of 2")
-    nt = args.nthreads
     assert os.path.isfile(fn), f"fnames argument ({fn}) does not exist"
     ntimes = args.nrepeat
     import random
-    rstr = "".join(random.choice("abcdefgh") for i in range(12))
-    for nt in map(int, args.nthreads):
+    rstr = "".join(random.choice("abcdefghijkl") for i in range(12))
+    for nt in args.nthreads:
         if nt < 0:
             from multiprocessing import cpu_count
             nt = cpu_count()
-        for k in map(int, args.k):
+        for k in args.k:
             for ssz in sszes:
                 # Handle MASH
                 mdfile = f"MASHdest.k{k}.sz{ssz}.{rstr}"
