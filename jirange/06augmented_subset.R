@@ -5,7 +5,7 @@ library(dplyr)
 
 df <- read.fst('01pivoted.fst')
 df$k <- df$K
-df <- df[df$ANI > 0,]
+df <- df[df$ANI >= 87,]
 df$totbits <- df$sketchsize
 # some are negative
 df$ani_est <- ifelse(df$jest > 0, 1 + 1/df$k * log(2*df$jest/(1+df$jest)), 0)
@@ -48,23 +48,6 @@ df$totbits[r8] <- df$totbits[r8] * 8
 df$totbits[r4] <- df$totbits[r4] * 4
 stopifnot(all(df$totbits != df$sketchsize))
 
-#r low_and_high_hi
-print('Invalid low JI')
-print('==============')
-print('Histogram of how often each sketch type has low JI:')
-table(df$type[df$jest < 0.0])
-print('Histogram of values of low JIs:')
-table(df$jest[df$jest < 0.0])
-df <- df[df$jest >= 0.0,]
-
-print('Invalid high JI')
-print('===============')
-print('Histogram of how often each sketch type has high JI:')
-table(df$type[df$jest > 1.0])
-print('Histogram of values of high JIs:')
-table(df$jest[df$jest > 1.0])
-df <- df[df$jest <= 1.0,]
-
 stopifnot(all(0 <= df$jest))
 stopifnot(all(df$jest <= 1.0))
 stopifnot(all(0 <= df$ani_est))
@@ -72,4 +55,4 @@ stopifnot(all(df$ani_est <= 1.0))
 
 df$ani_quartile <- ntile(df$ANI, 4)
 
-write.fst(df, '02augmented.fst')
+write.fst(df, '06augmented_subset.fst')
