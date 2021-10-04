@@ -1,6 +1,7 @@
 ##Options: Namespace(fnames='sampled_fns.txt', k=[31], nrepeat=2, nthreads=[268], sketchsize=[1024])
 ##Results for sampled_fns.txt
-#Method	k	NumReg	RegisterSize	NumThreads	SketchTiMash	31	1024	8	268	6273.527568722144	15664.852101851255
+#Method	k	NumReg	RegisterSize	NumThreads	SketchTime
+Mash	31	1024	8	268	6273.527568722144	15664.852101851255
 Bindash-8	31	1024	8	268	5608.96659757942	799.7967629134655
 Bindash-4	31	1024	4	268	5622.399869285524	803.2891772333533
 Bindash-2	31	1024	2	268	5628.087366400287	807.1870708614588
