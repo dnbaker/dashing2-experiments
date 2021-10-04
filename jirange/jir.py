@@ -151,14 +151,14 @@ def bindash_jaccard(p1, p2, size, *, k, nb=8, executable="bindash"):
 def bagminhash_jaccard(p1, p2, size, *, k, nb=8, cssize=-1):
     css = "--countsketch-size %d" % cssize if cssize > 0 else ""
     fss = f" --fastcmp {nb}" if nb in (8, 4, 2, 1, .5) else ""
-    cstr = f"dashing2 sketch --phylip --cache --cmpout /dev/stdout -k {k} --multiset {css + fss} {p1} {p2}"
+    cstr = f"dashing2 sketch --phylip --cache --bbit-sigs --cmpout /dev/stdout -S {size} -k {k} --multiset {css + fss} {p1} {p2}"
     return check_output(cstr).decode().strip('\n').split('\n')[-2].split("\t")[1]
 
 
 def probminhash_jaccard(p1, p2, size, *, k, nb=8, cssize=-1):
     css = "--countsketch-size %d" % cssize if cssize > 0 else ""
     fss = f" --fastcmp {nb}" if nb in (8, 4, 2, 1, .5) else ""
-    cstr = f"dashing2 sketch --phylip --cache --cmpout /dev/stdout -k {k} --prob {css + fss} {p1} {p2}"
+    cstr = f"dashing2 sketch --phylip --cache --bbit-sigs --cmpout /dev/stdout -S {size} -k {k} --prob {css + fss} {p1} {p2}"
     return check_output(cstr).decode().strip('\n').split('\n')[-2].split("\t")[1]
 
 

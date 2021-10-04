@@ -74,6 +74,15 @@ def main():
                             d2out_fn, tsketch = repeat_x(bch_sketch_dashing2, args.nrepeat, fn, k=k, threads=nt, size=ssz, oneperm=OP)
                             d2distout_fn, tdist = repeat_x(bch_dist_dashing2, args.nrepeat, fn, k=k, threads=nt, size=ssz, oneperm=OP, regsize=regsize, binary=isbin, distdest=distdest)
                             print(f"{OP3}\t{k}\t{ssz}\t{regsize}\t{nt}\t{tsketch}\t{tdist}", flush=True)
+                for isbin, bstr in zip((True, False), ("-bin", "-txt")):
+                    for regsize in (8, 2, 1, .5):
+                        for cssize in [500000, 2500000]:
+                            OP2 = "PMH" + bstr
+                            OP3 = OP2 + "-%g-%s" % (regsize, str(cssize) if cssize is not None else "exact")
+                            distdest = f"d2dest.{OP3}.k{k}.{rstr}"
+                            d2out_fn, tsketch = repeat_x(bch_sketch_pmh, args.nrepeat, fn, k=k, threads=nt, size=ssz, cssize=cssize)
+                            d2distout_fn, tdist = repeat_x(bch_dist_pmh, args.nrepeat, fn, k=k, threads=nt, size=ssz, cssize=cssize, regsize=regsize, binary=isbin, distdest=distdest)
+                            print(f"{OP3}\t{k}\t{ssz}\t{regsize}\t{nt}\t{tsketch}\t{tdist}", flush=True)
     return 0
 
 if __name__ == "__main__":
