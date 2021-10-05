@@ -46,7 +46,7 @@ def parse_bf(path):
             rngs[i].append(rngs[i][0])
     assert len(set(map(len, rngs))) == 1
     rngs = np.array(rngs)
-    print(f"Total {len(total_ids)} ids parsed", file=sys.stderr)
+    # print(f"Total {len(total_ids)} ids parsed", file=sys.stderr)
     return list(map(np.array, (bkts, rngs, tups, total_ids)))
 
 
@@ -203,7 +203,7 @@ def packed(x):
     try:
         l, r, k, size, executable = x
     except:
-        print(len(x))
+        print(len(x), file=sys.stderr)
         raise
     ret = getall(l, r, k=k, size=size, executable=executable)
     return ret
@@ -222,7 +222,7 @@ if __name__ == "__main__":
         ap.add_argument("-k", type=int, default=17, help="Set k for experiment. If exact representations aren't cached for this value of k, it may take a very long time to run")
         ap.add_argument("-s", type=int, default=10, help="Set start sketch size in log2.")
         ap.add_argument("-S", type=int, default=14, help="Set start sketch size in log2.")
-        ap.add_argument("-T", type=int, default=2, help="Set step size for sketch size.")
+        ap.add_argument("-T", type=int, default=1, help="Set step size for sketch size.")
         ap.add_argument("--cpu", type=int, default=-1)
         ap.add_argument("--executable", '-E', default="dashing2")
         ap.add_argument("--name", default="noname")

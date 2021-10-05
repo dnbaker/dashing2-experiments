@@ -3,11 +3,20 @@ import os
 import numpy as np
 import subprocess
 from timeit import default_timer as time
+import random
+
+def getrstr(x):
+    return "".join(map(str, (random.choice(range(10)) for x in range(20))))
 
 
 def bch_sketch_mash(pathf, k, threads, destp, size):
     starttm = time()
-    subprocess.check_call(f"mash sketch -s {size} -k {k} -o {destp} -l {pathf} -p {threads}", shell=True)
+    errfile = getrstr()
+    try:
+        subprocess.check_call(f"mash sketch -s {size} -k {k} -o {destp} -l {pathf} -p {threads} 2> {errfile}", shell=True)
+    except subprocess.CalledProcessError as e:
+        print(f"error: {e}. Errfile: {errfile}", file=sys.stderr)
+        raise
     stoptm = time()
     destp += ".msh"
     assert os.path.isfile(destp)
@@ -16,7 +25,12 @@ def bch_sketch_mash(pathf, k, threads, destp, size):
 
 def bch_sketch_dashing(pathf, k, threads, size):
     starttd1 = time()
-    subprocess.check_call(f"dashing sketch -S {int(np.ceil(np.log2(size)))} -k {k} -F {pathf} -p {threads}, 2>/dev/null", shell=True)
+    errfile = getrstr()
+    try:
+        subprocess.check_call(f"dashing sketch -S {int(np.ceil(np.log2(size)))} -k {k} -F {pathf} -p {threads}, 2>errfile.{errfile}.txt", shell=True)
+    except subprocess.CalledProcessError as e:
+        print(f"error: {e}. Errfile: {errfile}", file=sys.stderr)
+        raise
     stoptd1 = time()
     return pathf, (stoptd1 - starttd1)
 
@@ -24,7 +38,12 @@ def bch_sketch_dashing(pathf, k, threads, size):
 def bch_sketch_dashing2(pathf, k, threads, size, oneperm=False):
     starttd2 = time()
     pstr = " --oph " if oneperm else ""
-    subprocess.check_call(f"dashing2 sketch -k {k} -S {size} -F {pathf} -p {threads} {pstr} 2>/dev/null ", shell=True)
+    errfile = getrstr()
+    try:
+        subprocess.check_call(f"dashing2 sketch -k {k} -S {size} -F {pathf} -p {threads} {pstr} 2>errfile.{errfile}.txt ", shell=True)
+    except subprocess.CalledProcessError as e:
+        print(f"error: {e}. Errfile: {errfile}", file=sys.stderr)
+        raise
     return pathf, (time() - starttd2)
 
 
@@ -36,7 +55,12 @@ def bch_dist_dashing2(pathf, k, threads, size, oneperm=False, distdest=None, bin
     startt = time()
     pstr = " --oph " if oneperm else ""
     pstr += " --binary-output " if binary else ""
-    subprocess.check_call(f"dashing2 sketch -k {k} --fastcmp {regsize} --cache --cmpout {distdest} -S {size} -F {pathf} -p {threads} {pstr} 2>/dev/null", shell=True)
+    errfile = getrstr()
+    try:
+        subprocess.check_call(f"dashing2 sketch -k {k} --fastcmp {regsize} --cache --cmpout {distdest} -S {size} -F {pathf} -p {threads} {pstr} 2>errfile.{errfile}.txt", shell=True)
+    except subprocess.CalledProcessError as e:
+        print(f"error: {e}. Errfile: {errfile}", file=sys.stderr)
+        raise
     return pathf, (time() - startt)
 
 
@@ -45,7 +69,7 @@ def bch_dist_dashing(pathf, k, threads, size, distdest=None, binary=False):
         raise RuntimeError("Must provide distdest to bch_dist_dashing2")
     startt = time()
     pstr = " --emit-binary" if binary else ""
-    subprocess.check_call(f"dashing dist --cache-sketches -k {k} -O{distdest} -o {distdest + '.sizes'} -S {int(np.ceil(np.log2(size)))} -F {pathf} -p {threads} {pstr} 2>/dev/null", shell=True)
+    subprocess.check_call(f"dashing dist --cache-sketches -k {k} -O{distdest} -o {distdest + '.sizes'} -S {int(np.ceil(np.log2(size)))} -F {pathf} -p {threads} {pstr} 2>errfile.{getrstr()}.txt", shell=True)
     return pathf, (time() - startt)
 
 
@@ -53,7 +77,7 @@ def bch_dist_bindash(pathf, threads, distdest=None):
     if distdest is None:
         raise RuntimeError("Must provide distdest to bch_dist_dashing2")
     startt = time()
-    subprocess.check_call(f"bindash dist --outfname={distdest} --nthreads={threads} {pathf} 2>/dev/null", shell=True)
+    subprocess.check_call(f"bindash dist --outfname={distdest} --nthreads={threads} {pathf} 2>errfile.{getrstr()}.txt", shell=True)
     return pathf, (time() - startt)
 
 
@@ -67,7 +91,7 @@ def bch_dist_mash(pathf, threads, distdest=None):
 
 def bch_sketch_bindash(pathf, k, threads, *, destp, bbits, size):
     startt = time()
-    subprocess.check_call(f"bindash sketch --kmerlen={k} --sketchsize64={size//64} --listfname={pathf} --outfname={destp} --nthreads={threads} 2>/dev/null", shell=True)
+    subprocess.check_call(f"bindash sketch --kmerlen={k} --sketchsize64={size//64} --listfname={pathf} --outfname={destp} --nthreads={threads} 2>errfile.{getrstr()}.txt", shell=True)
     return destp, (time() - startt)
 
 
@@ -81,7 +105,7 @@ def repeat_x(func, ntimes, *args, **kwargs):
 def bch_sketch_pmh(pathf, k, threads, size, *, cssize=None):
     starttpmh = time()
     csstr = f"--countsketch-size {cssize}" if cssize is not None else ""
-    subprocess.check_call(f"dashing2 sketch --probminhash -k {k} -S {size} -F {pathf} -p {threads} {csstr} 2>/dev/null ", shell=True)
+    subprocess.check_call(f"dashing2 sketch --probminhash -k {k} -S {size} -F {pathf} -p {threads} {csstr} 2>errfile.{getrstr()}.txt ", shell=True)
     return pathf, (time() - starttpmh)
 
 
@@ -93,5 +117,5 @@ def bch_dist_pmh(pathf, k, threads, size, *, cssize=None, distdest=None, binary=
     startt = time()
     pstr = " --binary-output " if binary else ""
     pstr += f" --countsketch-size {cssize}" if cssize is not None else ""
-    subprocess.check_call(f"dashing2 sketch -k {k} --bbit-sigs --fastcmp {regsize} --cache --cmpout {distdest} -S {size} -F {pathf} -p {threads} {pstr} 2>/dev/null", shell=True)
+    subprocess.check_call(f"dashing2 sketch -k {k} --bbit-sigs --fastcmp {regsize} --cache --cmpout {distdest} -S {size} -F {pathf} -p {threads} {pstr} 2>errfile.{getrstr()}.txt", shell=True)
     return pathf, (time() - startt)
