@@ -4,12 +4,15 @@ library(fst)
 library(tidyr)
 
 df.wide <- read.fst('00wide.fst')
+df.wide$JItrue <- df.wide$JI
+df.wide$WJItrue <- df.wide$WJI
 df <- df.wide %>% pivot_longer(cols=c(Mash, Dash1,
                                  BD8, BD4, BD2, BD1, BDN,
                                  SS8, SS4, SS2, SS1, SSN,
                                  FSS8, FSS4, FSS2, FSS1, FSSN,
                                  MH8, MH4, MH2, MH1, MHN,
                                  FMH8, FMH4, FMH2, FMH1, FMHN,
+                                 JItrue, WJItrue,
                                  PMH8Exact, 'PMH8-50000000', 'PMH8-500000',
                                  PMH4Exact, 'PMH4-50000000', 'PMH4-500000',
                                  PMH2Exact, 'PMH2-50000000', 'PMH2-500000',
