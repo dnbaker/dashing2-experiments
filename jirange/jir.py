@@ -135,10 +135,16 @@ def bindash_jaccard(p1, p2, size, *, k, nb=8, executable="bindash"):
         return "bdsh_tmp/" + os.path.basename(p + f".{k}.{bb}.{size}")
     cp1, cp2 = map(mc, (p1, p2))
     for cp, p in zip((cp1, cp2), (p1, p2)):
-        if not (os.path.isfile(cp + ".dat") and os.path.isfile(cp + ".txt")):
+        if not all(map(os.path.isfile, (cp, cp + ".dat", cp + ".txt"))):
             cmd = f"{executable} sketch --kmerlen={k} --bbits={bb} --minhashtype=2 --sketchsize64={size // 64} --outfname={cp} {p}"
             check_call(cmd, shell=True, stderr=PIPE)
-    out = check_output(f"{executable} dist {cp1} {cp2}").decode().strip()
+    try:
+        out = check_output(f"{executable} dist {cp1} {cp2}").decode().strip()
+    except RuntimeError: # Failed multiple times
+        check_call(f"rm {cp1}* {cp2}*", shell=True)
+        cmd = f"{executable} sketch --kmerlen={k} --bbits={bb} --minhashtype=2 --sketchsize64={size // 64} --outfname={cp} {p}"
+        check_call(cmd, shell=True, stderr=PIPE)
+        out = check_output(f"{executable} dist {cp1} {cp2}").decode().strip()
     # print("Output: ", out)
     if not out:
         cmd = f"{executable} dist --ithres=1 {cp1} {cp2}"

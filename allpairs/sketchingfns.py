@@ -5,7 +5,7 @@ import subprocess
 from timeit import default_timer as time
 import random
 
-def getrstr(x):
+def getrstr():
     return "".join(map(str, (random.choice(range(10)) for x in range(20))))
 
 
