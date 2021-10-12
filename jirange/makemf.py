@@ -12,7 +12,7 @@ def makerule(cmd, name):
 
 if __name__ == "__main__":
     from argparse import ArgumentParser as AP
-    ap = AP()
+    ap = AP("Parser taking a set of genomes, a set of ids, and makes a Makefile which generates the final table.", epilog="You will need to compile `safecat`, which cats and annotates the lines compiled.")
     ap.add_argument("table", help="Path to a list of selected genomes with ranged Jaccards")
     ap.add_argument("fnames", help="Path to a list of selected genomes")
     ap.add_argument("--outfile", default="/dev/stdout", help="Path to use for output. Default: stdout")
@@ -45,6 +45,6 @@ if __name__ == "__main__":
     ruletexts = [makerule(cmd, dest) for cmd, dest, _, __, ___ in ruletups]
     with open(ap.outfile, "w") as f:
         f.write(f"all: experiment_result.{outpref}\n")
-        f.write(f"experiment_result.{outpref}: {' '.join(rules)}\n\tsafecat.sh outfiles.txt experiment_result.{outpref}\n")
+        f.write(f"experiment_result.{outpref}: {' '.join(rules)}\n\tsafecat outfiles.txt experiment_result.{outpref}\n")
         for rt in ruletups:
             print(makerule(rt[0], rt[1]), file=f)
