@@ -1,0 +1,4 @@
+##Options: Namespace(fnames='fns.txt', k=['31'], nrepeat=3, nthreads=['96'], sketchsize=['32768'])
+##Results for fns.txt
+#Method	k	NumReg	RegisterSize	NumThreads	SketchTime	DistanceTime
+PMH-bin-8-500000	31	32768	8	96	2223.801726810634	20563.4457442984

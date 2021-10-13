@@ -1,6 +1,6 @@
 CXX?=g++
 
-all: select_buckets
+all: select_buckets safecat
 
 %: %.cpp
-	$(CXX) -O3 select_buckets.cpp -march=native -o select_buckets -std=c++17
+	$(CXX) -O3 $< -march=native -o $@ -std=c++17
