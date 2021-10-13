@@ -46,5 +46,5 @@ if __name__ == "__main__":
     with open(ap.outfile, "w") as f:
         f.write(f"all: experiment_result.{outpref}\n")
         f.write(f"experiment_result.{outpref}: {' '.join(rules)}\n\tsafecat.sh outfiles.txt experiment_result.{outpref}\n")
-        for rt in ruletups:
-            print(makerule(rt[0], rt[1]), file=f)
+        for line in itertools.starmap(makerule, ruletups):
+            print(line, file=f)

@@ -1,0 +1,2 @@
+#Calling Dashing2 version v2.1.6 with command '/scratch4/blangme2/dnb/dashing2-experiments/allpairs/thresholded/dashing2 dashing2 sketch --cache -k 12 -o uniref50.fasta.gz.LSH-assisted.PROTEIN6.512.time4406620.296028907.sketches.bin --cmpout uniref50.fasta.gz.LSH-assisted.PROTEIN6.512.time4406620.296028907.topk.matrix -p48 -S512 --protein6 --nLSH 2 --topk 32 --sig-ram-limit 21474836480 --parse-by-seq uniref50.fasta.gz'
+Parsing amino acid sequences with 6-letter compressed alphabet.
