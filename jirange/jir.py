@@ -73,7 +73,7 @@ def getani(left, r, ex="fastANI"):
 
 def getmashji(left, r, *, k, size=1024):
     if k > 32:
-        return 0. # Mash doesn't support long kmers
+        return -1. # Mash doesn't support long kmers
     out = check_output(f"mash dist -s {size} -k {k} {left} {r}").decode().strip().split("\n")[-1].split()[-1]
     num, denom = map(float, out.split("/"))
     if not denom:

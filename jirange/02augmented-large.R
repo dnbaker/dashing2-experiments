@@ -7,6 +7,8 @@ df <- read.fst('01pivoted-large.fst')
 df$k <- df$K
 df <- df[df$ANI > 0,]
 df$totbits <- df$sketchsize
+# some must be corrected (Mash for k > 32)
+df$jest <- ifelse(df$k > 32 & (df$type == 'Mash'), -1., df$jest)
 # some are negative
 df$ani_est <- ifelse(df$jest > 0, 1 + 1/df$k * log(2*df$jest/(1+df$jest)), 0)
 df$ani_est <- pmax(df$ani_est, 0.0)
