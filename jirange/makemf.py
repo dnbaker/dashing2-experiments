@@ -36,14 +36,13 @@ if __name__ == "__main__":
     sizeset = list(range(ap.s, ap.S, ap.T))
     subcombs = list(itertools.product((1<<x for x in sizeset), k))
     tupcombs = reduce(lambda x, y: x + y, ([(x, (y, z)) for y, z in subcombs] for x in tups))
-    ruletups = [(f"computeonerow.py {full_genome_ids[lid]} {full_genome_ids[rid]} {sz} {k} > {lid}.{rid}.{sz}.{k}.row", f"{lid}.{rid}.{sz}.{k}.row", (full_genome_ids[lid], full_genome_ids[rid]), sz, k) for (lid, rid), (sz, k) in tupcombs]
-    rules = [x[1] for x in ruletups]
+    ruletups = [(f"computeonerow.py {full_genome_ids[lid]} {full_genome_ids[rid]} {sz} {k} > {lid}.{rid}.{sz}.{k}.{outpref}.row", f"{lid}.{rid}.{sz}.{k}.{outpref}.row", (full_genome_ids[lid], full_genome_ids[rid]), sz, k) for (lid, rid), (sz, k) in tupcombs]
     outf = f"outfiles.{outpref}.txt"
     with open(outf, "w") as f:
-        for r in rules:
-            print(r, file=f)
+        for t in ruletups:
+            print(t[1], file=f)
     with open(ap.outfile, "w") as f:
         f.write(f"all: experiment_result.{outpref}\n")
-        f.write(f"experiment_result.{outpref}: {' '.join(rules)}\n\tsafecat.py {outf} experiment_result.{outpref}\n")
+        f.write(f"experiment_result.{outpref}: {' '.join(x[1] for x in ruletups)}\n\tsafecat.py {outf} experiment_result.{outpref}\n")
         for line in itertools.starmap(makerule, (x[:2] for x in ruletups)):
             print(line, file=f)
