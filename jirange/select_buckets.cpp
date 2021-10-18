@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <cstring>
 #include <memory>
 #include <algorithm>
 #include <cmath>
@@ -6,12 +7,16 @@
 #include <sys/stat.h>
 
 int main(int argc, char **argv) {
+    if(std::find_if(argv, argc + argv, [](auto x) {return std::strcmp(x, "-h") == 0 || std::strcmp(x, "--help") == 0;}) != argc + argv) {
+        std::fprintf(stderr, "Usage: %s distance_matrix.f32 <nperbucket=64> <nbuckets=256>\n", argv[0]);
+        std::exit(1);
+    }
     struct stat st;
     if(::stat(argv[1], &st)) {
         std::fprintf(stderr, "input %s is empty.\n", argv[1]);
         std::exit(1);
     }
-    const size_t nelem = std::ceil(std::sqrt(st.st_size / 4));
+    const size_t nelem = std::ceil(std::sqrt(st.st_size / sizeof(float) * 2));
     const size_t npairs = st.st_size / 4;
     std::fprintf(stderr, "Pairwise distances between %zu items\n", nelem);
     size_t nperbucket = 64, nbuckets = 256;
