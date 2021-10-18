@@ -90,7 +90,7 @@ def main():
                 binvals = (1, 0) if passes("d1") else ()
                 for isbin in binvals:
                     d1out_fn, tsketch = repeat_x(bch_sketch_dashing, args.nrepeat, fn, k=k, threads=nt, size=ssz)
-                    d1distout_fn, tdist = repeat_x(bch_dist_dashing, args.nrepeat, fn, k=k, threads=nt, size=ssz, distdest=msdistout_fn.lower().replace("mash", "dashing"), binary=isbin)
+                    d1distout_fn, tdist = repeat_x(bch_dist_dashing, args.nrepeat, fn, k=k, threads=nt, size=ssz, distdest=f"dashing1.dist.k{k}.sz{ssz}.{rstr}.phylip", binary=isbin)
                     print(f"Dashing1-{'bin' if isbin else 'txt'}\t{k}\t{ssz}\t1\t{nt}\t{tsketch}\t{tdist}", flush=True)
                     fallible_rm(d1distout_fn)
                 if passes("d2op"):
