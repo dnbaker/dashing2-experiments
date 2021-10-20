@@ -5,14 +5,17 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 
+infile <- '03filtered-large.fst'
+
 columns=c('totbits', 'k', 'ji_diff', 'ani_diff', 'type')
-df <- read.fst('03filtered-large.fst', columns=columns)
+df <- read.fst(infile, columns=columns)
 df <- df %>% filter(!(type %in% c('BDN', 'BD1', 'BD2', 'BD4', 'BD8')))
+print(table(df$type))
 stopifnot(length(unique(table(df$type))) == 1)
 
 hist_type <- function(type1, type2, diff_col='ji_diff', est='JI') {
   columns=c('totbits', 'k', 'type', 'ani_quartile', diff_col)
-  df <- read.fst('03filtered-large.fst', columns=columns)
+  df <- read.fst(infile, columns=columns)
   d1 <- df[[diff_col]][df$type == type1]
   d2 <- df[[diff_col]][df$type == type2]
   mx <- max(abs(c(d1, d2)))
