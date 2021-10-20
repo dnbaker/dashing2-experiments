@@ -3,9 +3,18 @@
 library(data.table)
 library(fst)
 
-fns <- c('outfiles.cat.tbl.xz')
-cmd <- 'xz -d -c'
+fns <- commandArgs(trailingOnly = TRUE)
+getcmd <- function(name) {
+    return(ifelse(endsWith(name, '.xz'), 'xz -dc', ifelse(endsWith(name, '.gz'), 'gzip -dc', 'cat')))
+}
+cmd <- getcmd(fns[1])
 df.wide <- fread(cmd = paste(cmd, fns[1]), sep='\t', header=T)
+if(length(fns) > 1) {
+  for(fn in fns[2:length(fns)]) {
+    cmd <- getcmd(fn)
+    df.wide <- rbind(df.wide, fread(cmd = paste(cmd, fn), sep='\t', header=T))
+  }
+}
 write.fst(df.wide, '00wide-large.fst')
 
 print('Number of rows where JI == 0:')
