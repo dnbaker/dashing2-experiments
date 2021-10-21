@@ -1,4 +1,4 @@
-#Tool	k	sketchsize	regsize	sketchtime	disttime
+#Tool	k	sketchsize	regsize	numthreads	sketchtime	disttime
 Bindash-0.5	31	256	0.5	272	5972.188374973834	531.1009752564132
 Bindash-1	31	256	1	272	6006.767442855984	528.4247041791677
 Bindash-2	31	256	2	272	5999.681444786489	525.2855563126504

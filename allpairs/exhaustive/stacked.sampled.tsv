@@ -1,4 +1,4 @@
-#Tool	k	sketchsize	regsize	sketchtime	disttime
+#Tool	k	sketchsize	regsize	numthreads	sketchtime	disttime
 Bindash-0.5	31	256	0.5	96	539.5569506548345	6.483841586858034
 D2FSS-bin-0.5	31	256	0.5	96	264.98156863451004	8.962843529880047
 D2FSS-txt-0.5	31	256	0.5	96	280.3353021405637	15.633801639080048
