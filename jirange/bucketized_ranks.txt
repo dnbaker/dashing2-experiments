@@ -1,3 +1,6 @@
+# This was filtered for:
+# k <= 32
+# np.where(np.min(x, axis=1) >= 0)
 summed_sseranks = 
 [(0, (98, 'PMH4Exact')),
  (1, (99, 'PMH2Exact')),
