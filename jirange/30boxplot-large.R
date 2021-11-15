@@ -30,7 +30,7 @@ for(do_subset in c(F, T)) {
     }
 
     if(do_subset) {
-        incl_types_ji <- c('Dash1', 'Mash', 'BD1', 'BD8', 'FSS1', 'SS1')
+        incl_types_ji <- c('Dash1', 'Mash', 'BD1', 'BD8', 'FSS1', 'SS1', 'FSS8', 'SS8')
         incl_types_ani <- c('Dash1', 'Mash', 'BD1', 'BD8', 'FSS1', 'SS1', 'JItrue', 'WJItrue',
                             'PMH1-50000000', 'PMH1-500000',
                             'BMH1-50000000', 'BMH1-500000')
@@ -40,8 +40,8 @@ for(do_subset in c(F, T)) {
                                  'BMH8-50000000', 'BMH4-50000000', 'BMH2-50000000', 'BMH1-50000000', 'BMHN-50000000',
                                  'BMH8-500000', 'BMH4-500000', 'BMH2-500000', 'BMH1-500000', 'BMHN-500000')
     } else {
-        incl_types_ji <- c('Dash1', 'Mash', 'FSS1', 'SS1')
-        incl_types_ani <- c('Dash1', 'Mash', 'FSS1', 'SS1', 'JItrue', 'WJItrue',
+        incl_types_ji <- c('Dash1', 'Mash', 'FSS1', 'SS1', 'FSS8', 'SS8', 'SS2', 'FSS2')
+        incl_types_ani <- c('Dash1', 'Mash', 'FSS1', 'SS1', 'JItrue', 'WJItrue', 'SS8', 'FSS8',
                             'PMH1-50000000', 'PMH1-500000',
                             'BMH1-50000000', 'BMH1-500000')
         incl_types_ani_lots <- c('Dash1', 'Mash', 'FSS1', 'SS1', 'JItrue', 'WJItrue',
