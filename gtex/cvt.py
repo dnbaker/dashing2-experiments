@@ -36,7 +36,7 @@ elif os.path.isfile(aa.prefix + ".ids.u64"):
     indices = np.memmap(aa.prefix + ".ids.u64", np.uint64)
 else:
     raise RuntimeError("Need an indices file. None found for 8, 16, 32, or 64 bits.")
-mat = sp.csr_matrix(ctsv, indices, np.memmap(aa.prefix + ".indptr.u64", np.uint64))
+mat = sp.csr_matrix((ctsv, indices, np.memmap(aa.prefix + ".indptr.u64", np.uint64)))
 print("Made matrix, current maxmem={getmem()}. Now T and csr", file=sys.stderr, flush=True)
 mat = mat.T.tocsr()
 print("Made matrix transpose, current maxmem={getmem()}", file=sys.stderr, flush=True)
