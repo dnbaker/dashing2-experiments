@@ -1,5 +1,7 @@
 ##Options: Namespace(executable='dashing2', fnames='archfun.txt', k=[31], nrepeat=1, nthreads=[1], only_cssize=None, only_type=None, pmhbbitsigs=False, sketchsize=[1024, 2048, 4096])
 ##Results for archfun.txt
+## Warning: this was run with options such tht FSS is equivalent to OP.
+## These are being re-run.
 #Method	k	NumReg	RegisterSize	NumThreads	SketchTime	DistanceTime
 Mash	31	1024	8	1	510.7738826824352	7.555096974596381
 Bindash-8	31	1024	8	1	864.9410552075133	0.27245376631617546
