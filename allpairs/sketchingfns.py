@@ -51,7 +51,7 @@ def bch_sketch_dashing(pathf, k, threads, size):
 
 def bch_sketch_dashing2(pathf, k, threads, size, oneperm=False, executable="dashing2"):
     starttd2 = time()
-    pstr = " --oph " if oneperm else ""
+    pstr = " --oph " if oneperm else " --full-setsketch "
     errfile = getrstr()
     try:
         check_call(f"{executable} sketch -k {k} -S {size} -F {pathf} -p {threads} {pstr} 2>errfile.{errfile}.txt ", shell=True)
@@ -67,7 +67,7 @@ def bch_dist_dashing2(pathf, k, threads, size, oneperm=False, distdest=None, bin
     if regsize <= 0. or regsize not in [0.5, 1, 2, 4, 8]:
         raise ValueError("regsize must be > 0 and in [.5, 1, 2, 4, 8]")
     startt = time()
-    pstr = " --oph " if oneperm else ""
+    pstr = " --oph " if oneperm else " --full-setsketch "
     pstr += " --binary-output " if binary else ""
     errfile = getrstr()
     try:
