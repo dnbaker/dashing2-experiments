@@ -28,7 +28,6 @@ df$ani_badness <- factor(ifelse(df$jest < 0, 'J est = -1',
                               ifelse(df$se < 0.4, '.08<=SE<.4',
                                 ifelse(df$se < 0.8, '.4<=SE<.8',
                                     '.8<=SE<=1'))))))
-print('ani badness created')
 
 #r add_totbits
 flat8 <- c('BD8', 'SS8', 'FSS8', 'MH8', 'FMH8', 'Mash')
@@ -43,7 +42,6 @@ r16 <- df$type %in% c(flat2, 'PMH2Exact', 'PMH2-50000000', 'PMH2-500000', 'BMH2E
 r8  <- df$type %in% c(flat1, 'PMH1Exact', 'PMH1-50000000', 'PMH1-500000', 'BMH1Exact', 'BMH1-50000000', 'BMH1-500000')
 r4  <- df$type %in% c(flatn, 'PMHNExact', 'PMHN-50000000', 'PMHN-500000', 'BMHNExact', 'BMHN-50000000', 'BMHN-500000')
 df$flat <- ifelse(df$type %in% c(flat8, flat4, flat2, flat1, flatn, 'JItrue'), 1, 0)
-print('made flat')
 
 df$totbits[r64] <- df$totbits[r64] * 64
 df$totbits[r32] <- df$totbits[r32] * 32
