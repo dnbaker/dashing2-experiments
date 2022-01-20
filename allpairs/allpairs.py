@@ -66,26 +66,6 @@ def main():
             nt = cpu_count()
         for k in args.k:
             for ssz in sszes:
-                # Handle MASH
-                if passes("mash"):
-                    mdfile = f"MASHdest.k{k}.sz{ssz}.{rstr}"
-                    mdstfile = f"MASHdist.k{k}.sz{ssz}.{rstr}.phylip"
-                    msout_fn, tsketch = repeat_x(bch_sketch_mash, args.nrepeat, fn, k, threads=nt, destp=mdfile, size=ssz)
-                    msdistout_fn, tdist = repeat_x(bch_dist_mash, args.nrepeat, msout_fn, threads=nt, distdest=mdstfile)
-                    print(f"Mash\t{k}\t{ssz}\t8\t{nt}\t{tsketch}\t{tdist}", flush=True)
-                    set(map(fallible_rm, (msout_fn, msdistout_fn)))
-                # Handle BinDash
-                # This ternary skips bindash if not specified
-                bdregsizes = (8, 4, 2, 1, .5) if passes("bindash") else ()
-                for regsize in bdregsizes:
-                    nbits = int(regsize * 8)
-                    bdfile = f"BDASHdest.k{k}.sz{ssz}.{rstr}.{nbits}"
-                    bdstfile = f"BDASHdist.k{k}.sz{ssz}.{rstr}.{nbits}.out"
-                    bdsout_fn, tsketch = repeat_x(bch_sketch_bindash, args.nrepeat, fn, k, threads=nt, destp=bdfile, bbits=nbits, size=ssz)
-                    bddistout_fn, tdist = repeat_x(bch_dist_bindash, args.nrepeat, bdsout_fn, threads=nt, distdest=bdstfile)
-                    print(f"Bindash-{regsize}\t{k}\t{ssz}\t{regsize}\t{nt}\t{tsketch}\t{tdist}", flush=True)
-                    fallible_rm(bddistout_fn)
-                    set(map(fallible_rm, glob.iglob(f"{bdfile}*")))
                 # This ternary skips dashing if not specified
                 binvals = (1, 0) if passes("d1") else ()
                 for isbin in binvals:
@@ -116,6 +96,26 @@ def main():
                             d2distout_fn, tdist = repeat_x(bch_dist_dashing2, args.nrepeat, fn, k=k, threads=nt, size=ssz, oneperm=OP, regsize=regsize, binary=isbin, distdest=distdest, executable=args.executable)
                             print(f"{OP3}\t{k}\t{ssz}\t{regsize}\t{nt}\t{tsketch}\t{tdist}", flush=True)
                             fallible_rm(d2distout_fn)
+                # Handle MASH
+                if passes("mash"):
+                    mdfile = f"MASHdest.k{k}.sz{ssz}.{rstr}"
+                    mdstfile = f"MASHdist.k{k}.sz{ssz}.{rstr}.phylip"
+                    msout_fn, tsketch = repeat_x(bch_sketch_mash, args.nrepeat, fn, k, threads=nt, destp=mdfile, size=ssz)
+                    msdistout_fn, tdist = repeat_x(bch_dist_mash, args.nrepeat, msout_fn, threads=nt, distdest=mdstfile)
+                    print(f"Mash\t{k}\t{ssz}\t8\t{nt}\t{tsketch}\t{tdist}", flush=True)
+                    set(map(fallible_rm, (msout_fn, msdistout_fn)))
+                # Handle BinDash
+                # This ternary skips bindash if not specified
+                bdregsizes = (8, 4, 2, 1, .5) if passes("bindash") else ()
+                for regsize in bdregsizes:
+                    nbits = int(regsize * 8)
+                    bdfile = f"BDASHdest.k{k}.sz{ssz}.{rstr}.{nbits}"
+                    bdstfile = f"BDASHdist.k{k}.sz{ssz}.{rstr}.{nbits}.out"
+                    bdsout_fn, tsketch = repeat_x(bch_sketch_bindash, args.nrepeat, fn, k, threads=nt, destp=bdfile, bbits=nbits, size=ssz)
+                    bddistout_fn, tdist = repeat_x(bch_dist_bindash, args.nrepeat, bdsout_fn, threads=nt, distdest=bdstfile)
+                    print(f"Bindash-{regsize}\t{k}\t{ssz}\t{regsize}\t{nt}\t{tsketch}\t{tdist}", flush=True)
+                    fallible_rm(bddistout_fn)
+                    set(map(fallible_rm, glob.iglob(f"{bdfile}*")))
                 if passes("pmh"):
                     cssizes = (500000, 2500000) if args.only_cssize is None else tuple(args.only_cssize)
                     for isbin, bstr in zip((True, False), ("-bin", "-txt")):
