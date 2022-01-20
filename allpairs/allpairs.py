@@ -117,7 +117,7 @@ def main():
                     fallible_rm(bddistout_fn)
                     set(map(fallible_rm, glob.iglob(f"{bdfile}*")))
                 if passes("pmh"):
-                    cssizes = (500000, 2500000) if args.only_cssize is None else tuple(args.only_cssize)
+                    cssizes = (500000,) if args.only_cssize is None else tuple(args.only_cssize)
                     for isbin, bstr in zip((True, False), ("-bin", "-txt")):
                         for regsize in (8, 4, 2, 1, .5):
                             for cssize in cssizes:
