@@ -1,0 +1,1197 @@
+====================[ Clean | clean ]===========================================
+make --jobs=8 clean
+rm -f dashing2 dashing2-ld dashing2-f libBigWig.a src/bedsketch.o src/bwreduce.o src/bwsketch.o src/cmp_core.o src/cmp_main.o src/contain_main.o src/counter.o src/d2.o src/dedup_core.o src/emitnn.o src/emitrect.o src/enums.o src/fastxmerge.o src/fastxsketch.o src/fastxsketchbyseq.o src/filterset.o src/fqfeeder.o src/index_build.o src/lfsketch.o src/merge.o src/options.o src/printminmain.o src/refine.o src/sketch_core.o src/sketch_main.o src/wcompare.o src/wsketch.o  src/osfmt.o src/bedsketch.ldo src/bwreduce.ldo src/bwsketch.ldo src/cmp_core.ldo src/cmp_main.ldo src/contain_main.ldo src/counter.ldo src/d2.ldo src/dedup_core.ldo src/emitnn.ldo src/emitrect.ldo src/enums.ldo src/fastxmerge.ldo src/fastxsketch.ldo src/fastxsketchbyseq.ldo src/filterset.ldo src/fqfeeder.ldo src/index_build.ldo src/lfsketch.ldo src/merge.ldo src/options.ldo src/printminmain.ldo src/refine.ldo src/sketch_core.ldo src/sketch_main.ldo src/wcompare.ldo src/wsketch.ldo src/osfmt.o src/bedsketch.fo src/bwreduce.fo src/bwsketch.fo src/cmp_core.fo src/cmp_main.fo src/contain_main.fo src/counter.fo src/d2.fo src/dedup_core.fo src/emitnn.fo src/emitrect.fo src/enums.fo src/fastxmerge.fo src/fastxsketch.fo src/fastxsketchbyseq.fo src/filterset.fo src/fqfeeder.fo src/index_build.fo src/lfsketch.fo src/merge.fo src/options.fo src/printminmain.fo src/refine.fo src/sketch_core.fo src/sketch_main.fo src/wcompare.fo src/wsketch.fo src/osfmt.o readfx readfx-f readfx-ld readbw readbw readbw-f readbw-ld src/*.0 src/*.do src/*.fo src/*.gobj src/*.ldo src/*.0\
+	src/*.vo src/*.sano src/*.ld64o src/*.f64o src/*.64o
+
+Process finished with exit code 0
+
+Cleaning 'clean' finished
+
+====================[ Build | all ]=============================================
+make --jobs=8 all
+/usr/local/bin/clang++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++17 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/bedsketch.cpp -c -o src/bedsketch.o -DNOCURL -DDASHING2_VERSION=\"v2.1.11-1-g3b71\" -DFMT_HEADER_ONLY -DNDEBUG -flto -O3
+/usr/local/bin/clang++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++17 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/bwreduce.cpp -c -o src/bwreduce.o -DNOCURL -DDASHING2_VERSION=\"v2.1.11-1-g3b71\" -DFMT_HEADER_ONLY -DNDEBUG -flto -O3
+/usr/local/bin/clang++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++17 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/bwsketch.cpp -c -o src/bwsketch.o -DNOCURL -DDASHING2_VERSION=\"v2.1.11-1-g3b71\" -DFMT_HEADER_ONLY -DNDEBUG -flto -O3
+/usr/local/bin/clang++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++17 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/cmp_core.cpp -c -o src/cmp_core.o -DNOCURL -DDASHING2_VERSION=\"v2.1.11-1-g3b71\" -DFMT_HEADER_ONLY -DNDEBUG -flto -O3
+/usr/local/bin/clang++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++17 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/cmp_main.cpp -c -o src/cmp_main.o -DNOCURL -DDASHING2_VERSION=\"v2.1.11-1-g3b71\" -DFMT_HEADER_ONLY -DNDEBUG -flto -O3
+/usr/local/bin/clang++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++17 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/contain_main.cpp -c -o src/contain_main.o -DNOCURL -DDASHING2_VERSION=\"v2.1.11-1-g3b71\" -DFMT_HEADER_ONLY -DNDEBUG -flto -O3
+/usr/local/bin/clang++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++17 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/counter.cpp -c -o src/counter.o -DNOCURL -DDASHING2_VERSION=\"v2.1.11-1-g3b71\" -DFMT_HEADER_ONLY -DNDEBUG -flto -O3
+/usr/local/bin/clang++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++17 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/d2.cpp -c -o src/d2.o -DNOCURL -DDASHING2_VERSION=\"v2.1.11-1-g3b71\" -DFMT_HEADER_ONLY -DNDEBUG -flto -O3
+In file included from src/cmp_main.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+/usr/local/bin/clang++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++17 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/dedup_core.cpp -c -o src/dedup_core.o -DNOCURL -DDASHING2_VERSION=\"v2.1.11-1-g3b71\" -DFMT_HEADER_ONLY -DNDEBUG -flto -O3
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+In file included from src/d2.cpp:1:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:12:57: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+In file included from src/contain_main.cpp:1:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+In file included from src/cmp_core.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+In file included from src/bwsketch.cpp:1:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:12:57: warning#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+In file included from src/bwreduce.cpp:1:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+
+                                                             ^
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+bonsai/include/bonsai/logutil.h:12:57: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:12:57: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+In file included from src/bedsketch.cpp:1:
+In file included from src/bedsketch.h:4:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+bonsai/include/bonsai/logutil.h:12:57: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+In file included from src/cmp_main.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:5:
+In file included from bonsai/include/bonsai/rhtraits.h:3:
+bonsai/include/bonsai/alphabet.h:90:21: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType tlut{-1};
+                    ^~
+                    { }
+bonsai/include/bonsai/alphabet.h:94:120: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::emptylut' requested here
+    constexpr TAlphabet(bool padding=false): name("Bytes"), setstr(""), nc(NCHAR - 1 + padding), padding(padding), lut(emptylut(padding)) {
+                                                                                                                       ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:106:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<>' requested here
+static constexpr const Alphabet BYTES;
+                                ^
+bonsai/include/bonsai/alphabet.h:31:20: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType arr{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             }
+bonsai/include/bonsai/alphabet.h:87:163: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::make_lut' requested here
+    constexpr TAlphabet(const char *name, const char *s, bool padding=false, const char *aliases=0): name(name), setstr(s), nc(ncommas(s)), padding(padding), lut(make_lut(s, nc, padding, aliases)) {
+                                                                                                                                                                  ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:107:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<char const (&)[11], char const (&)[40], bool, char const (&)[6]>' requested here
+static constexpr const Alphabet AMINO20("Standard20", "A,C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y", false, "PU:KC");
+                                ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:12:57: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+bonsai/include/bonsai/logutil.h:12:57: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+In file included from src/cmp_core.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:5:
+In file included from bonsai/include/bonsai/rhtraits.h:3:
+bonsai/include/bonsai/alphabet.h:90:21: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType tlut{-1};
+                    ^~
+                    { }
+bonsai/include/bonsai/alphabet.h:94:120: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::emptylut' requested here
+    constexpr TAlphabet(bool padding=false): name("Bytes"), setstr(""), nc(NCHAR - 1 + padding), padding(padding), lut(emptylut(padding)) {
+                                                                                                                       ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:106:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<>' requested here
+static constexpr const Alphabet BYTES;
+                                ^
+bonsai/include/bonsai/alphabet.h:31:20: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType arr{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             }
+bonsai/include/bonsai/alphabet.h:87:163: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::make_lut' requested here
+    constexpr TAlphabet(const char *name, const char *s, bool padding=false, const char *aliases=0): name(name), setstr(s), nc(ncommas(s)), padding(padding), lut(make_lut(s, nc, padding, aliases)) {
+                                                                                                                                                                  ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:107:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<char const (&)[11], char const (&)[40], bool, char const (&)[6]>' requested here
+static constexpr const Alphabet AMINO20("Standard20", "A,C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y", false, "PU:KC");
+                                ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+In file included from src/contain_main.cpp:1:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:5:
+In file included from bonsai/include/bonsai/rhtraits.h:3:
+bonsai/include/bonsai/alphabet.h:90:21: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType tlut{-1};
+                    ^~
+                    { }
+bonsai/include/bonsai/alphabet.h:94:120: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::emptylut' requested here
+    constexpr TAlphabet(bool padding=false): name("Bytes"), setstr(""), nc(NCHAR - 1 + padding), padding(padding), lut(emptylut(padding)) {
+                                                                                                                       ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:106:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<>' requested here
+static constexpr const Alphabet BYTES;
+                                ^
+bonsai/include/bonsai/alphabet.h:31:20: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType arr{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             }
+bonsai/include/bonsai/alphabet.h:87:163: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::make_lut' requested here
+    constexpr TAlphabet(const char *name, const char *s, bool padding=false, const char *aliases=0): name(name), setstr(s), nc(ncommas(s)), padding(padding), lut(make_lut(s, nc, padding, aliases)) {
+                                                                                                                                                                  ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:107:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<char const (&)[11], char const (&)[40], bool, char const (&)[6]>' requested here
+static constexpr const Alphabet AMINO20("Standard20", "A,C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y", false, "PU:KC");
+                                ^
+In file included from src/d2.cpp:1:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:5:
+In file included from bonsai/include/bonsai/rhtraits.h:3:
+bonsai/include/bonsai/alphabet.h:90:21: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType tlut{-1};
+                    ^~
+                    { }
+bonsai/include/bonsai/alphabet.h:94:120: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::emptylut' requested here
+    constexpr TAlphabet(bool padding=false): name("Bytes"), setstr(""), nc(NCHAR - 1 + padding), padding(padding), lut(emptylut(padding)) {
+                                                                                                                       ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:106:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<>' requested here
+static constexpr const Alphabet BYTES;
+                                ^
+In file included from src/bwsketch.cpp:1:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:5:
+In file included from bonsai/include/bonsai/rhtraits.h:3:
+bonsai/include/bonsai/alphabet.h:90:21: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType tlut{-1};
+                    ^~
+                    { }
+bonsai/include/bonsai/alphabet.h:94:120: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::emptylut' requested here
+    constexpr TAlphabet(bool padding=false): name("Bytes"), setstr(""), nc(NCHAR - 1 + padding), padding(padding), lut(emptylut(padding)) {
+                                                                                                                       ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:106:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<>' requested here
+bonsai/include/bonsai/alphabet.hstatic constexpr const Alphabet BYTES;
+                                ^
+:31:20: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType arr{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             }
+bonsai/include/bonsai/alphabet.h:87:163: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::make_lut' requested here
+    constexpr TAlphabet(const char *name, const char *s, bool padding=false, const char *aliases=0): name(name), setstr(s), nc(ncommas(s)), padding(padding), lut(make_lut(s, nc, padding, aliases)) {
+                                                                                                                                                                  ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:107:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<char const (&)[11], char const (&)[40], bool, char const (&)[6]>' requested here
+static constexpr const Alphabet AMINO20("Standard20", "A,C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y", false, "PU:KC");
+                                ^
+bonsai/include/bonsai/alphabet.h:31:20: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType arr{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             }
+bonsai/include/bonsai/alphabet.h:87:163: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::make_lut' requested here
+    constexpr TAlphabet(const char *name, const char *s, bool padding=false, const char *aliases=0): name(name), setstr(s), nc(ncommas(s)), padding(padding), lut(make_lut(s, nc, padding, aliases)) {
+                                                                                                                                                                  ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:107:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<char const (&)[11], char const (&)[40], bool, char const (&)[6]>' requested here
+static constexpr const Alphabet AMINO20("Standard20", "A,C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y", false, "PU:KC");
+                                ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+In file included from src/cmp_main.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+In file included from src/bwreduce.cpp:1:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:5:
+In file included from bonsai/include/bonsai/rhtraits.h:3:
+bonsai/include/bonsai/alphabet.h:90:21: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType tlut{-1};
+                    ^~
+                    { }
+bonsai/include/bonsai/alphabet.h:94:120: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::emptylut' requested here
+    constexpr TAlphabet(bool padding=false): name("Bytes"), setstr(""), nc(NCHAR - 1 + padding), padding(padding), lut(emptylut(padding)) {
+                                                                                                                       ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:106:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<>' requested here
+static constexpr const Alphabet BYTES;
+                                ^
+bonsai/include/bonsai/alphabet.h:31:20: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType arr{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             }
+bonsai/include/bonsai/alphabet.h:87:163: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::make_lut' requested here
+    constexpr TAlphabet(const char *name, const char *s, bool padding=false, const char *aliases=0): name(name), setstr(s), nc(ncommas(s)), padding(padding), lut(make_lut(s, nc, padding, aliases)) {
+                                                                                                                                                                  ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:107:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<char const (&)[11], char const (&)[40], bool, char const (&)[6]>' requested here
+static constexpr const Alphabet AMINO20("Standard20", "A,C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y", false, "PU:KC");
+                                ^
+In file included from src/bedsketch.cpp:1:
+In file included from src/bedsketch.h:4:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:5:
+In file included from bonsai/include/bonsai/rhtraits.h:3:
+bonsai/include/bonsai/alphabet.h:90:21: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType tlut{-1};
+                    ^~
+                    { }
+bonsai/include/bonsai/alphabet.h:94:120: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::emptylut' requested here
+    constexpr TAlphabet(bool padding=false): name("Bytes"), setstr(""), nc(NCHAR - 1 + padding), padding(padding), lut(emptylut(padding)) {
+                                                                                                                       ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:106:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<>' requested here
+static constexpr const Alphabet BYTES;
+                                ^
+In file included from src/cmp_core.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/alphabet.h:31:20: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType arr{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             }
+bonsai/include/bonsai/alphabet.h:87:163: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::make_lut' requested here
+    constexpr TAlphabet(const char *name, const char *s, bool padding=false, const char *aliases=0): name(name), setstr(s), nc(ncommas(s)), padding(padding), lut(make_lut(s, nc, padding, aliases)) {
+                                                                                                                                                                  ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:107:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<char const (&)[11], char const (&)[40], bool, char const (&)[6]>' requested here
+static constexpr const Alphabet AMINO20("Standard20", "A,C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y", false, "PU:KC");
+                                ^
+In file included from src/contain_main.cpp:1:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+In file included from src/bwsketch.cpp:1:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:12:57: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+In file included from src/d2.cpp:1:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+In file included from src/bwreduce.cpp:1:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:12:57: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+In file included from src/bedsketch.cpp:1:
+In file included from src/bedsketch.h:4:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:12:57: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:12:57: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:12:57: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+In file included from src/cmp_main.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:12:
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:964:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned char, double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(NibbleSetS, 2.7182818284590452354L, 5e-4L, 14u, uint8_t, double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:967:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned short, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(ShortSetS, 1.0005, .06, 65534u, uint16_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+bonsai/include/bonsai/logutil.h:12:57: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:994:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned int, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(UintSetS, 1.0000000109723500835L, 19.77882586L, 0xFFFFFFFEuL, uint32_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+bonsai/include/bonsai/logutil.h:12:57: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+In file included from src/cmp_main.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:13:
+bonsai/hll/include/sketch/bmh.h:505:59: warning: 'always_inline' attribute ignored when parsing type [-Wignored-attributes]
+        auto func = [&](uint64_t &x) -> FT __attribute__((always_inline)) {return static_cast<std::common_type_t<FT, double>>(0x1p-64) * wy::wyhash64_stateless(&x);};
+                                                          ^~~~~~~~~~~~~
+In file included from src/cmp_core.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:12:
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:964:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned char, double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(NibbleSetS, 2.7182818284590452354L, 5e-4L, 14u, uint8_t, double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+In file included from src/contain_main.cpp:1:
+In file included from src/d2.h:12:
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:964:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned char, double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(NibbleSetS, 2.7182818284590452354L, 5e-4L, 14u, uint8_t, double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:967:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned short, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(ShortSetS, 1.0005, .06, 65534u, uint16_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:994:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned int, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(UintSetS, 1.0000000109723500835L, 19.77882586L, 0xFFFFFFFEuL, uint32_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+In file included from src/bwsketch.cpp:1:
+In file included from src/d2.h:12:
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:964:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned char, double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(NibbleSetS, 2.7182818284590452354L, 5e-4L, 14u, uint8_t, double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:967:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned short, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(ShortSetS, 1.0005, .06, 65534u, uint16_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:994:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned int, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(UintSetS, 1.0000000109723500835L, 19.77882586L, 0xFFFFFFFEuL, uint32_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+In file included from In file included from src/bedsketch.cpp:1:
+In file included from src/bedsketch.hsrc/cmp_core.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:13:
+bonsai/hll/include/sketch/bmh.h:505:59: warning: 'always_inline' attribute ignored when parsing type [-Wignored-attributes]
+:4:
+        auto func = [&](uint64_t &x) -> FT __attribute__((always_inline)) {return static_cast<std::common_type_t<FT, double>>(0x1p-64) * wy::wyhash64_stateless(&x);};
+                                                          ^~~~~~~~~~~~~
+In file included from src/d2.h:12:
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:964:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned char, double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(NibbleSetS, 2.7182818284590452354L, 5e-4L, 14u, uint8_t, double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:967:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned short, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(ShortSetS, 1.0005, .06, 65534u, uint16_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+In file included from src/contain_main.cpp:1:
+In file included from src/d2.h:13:
+bonsai/hll/include/sketch/bmh.h:505:59: warning: 'always_inline' attribute ignored when parsing type [-Wignored-attributes]
+        auto func = [&](uint64_t &x) -> FT __attribute__((always_inline)) {return static_cast<std::common_type_t<FT, double>>(0x1p-64) * wy::wyhash64_stateless(&x);};
+                                                          ^~~~~~~~~~~~~
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:967:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned short, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(ShortSetS, 1.0005, .06, 65534u, uint16_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:994:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned int, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(UintSetS, 1.0000000109723500835L, 19.77882586L, 0xFFFFFFFEuL, uint32_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+In file included from src/d2.cpp:1:
+In file included from src/d2.h:12:
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:964:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned char, double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(NibbleSetS, 2.7182818284590452354L, 5e-4L, 14u, uint8_t, double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:994:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned int, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(UintSetS, 1.0000000109723500835L, 19.77882586L, 0xFFFFFFFEuL, uint32_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:967:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned short, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(ShortSetS, 1.0005, .06, 65534u, uint16_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+In file included from src/bwsketch.cpp:1:
+In file included from src/d2.h:13:
+bonsai/hll/include/sketch/bmh.h:505:59: warning: 'always_inline' attribute ignored when parsing type [-Wignored-attributes]
+        auto func = [&](uint64_t &x) -> FT __attribute__((always_inline)) {return static_cast<std::common_type_t<FT, double>>(0x1p-64) * wy::wyhash64_stateless(&x);};
+                                                          ^~~~~~~~~~~~~
+In file included from src/bedsketch.cpp:1:
+In file included from src/bedsketch.h:4:
+In file included from src/d2.h:13:
+bonsai/hll/include/sketch/bmh.h:505:59: warning: 'always_inline' attribute ignored when parsing type [-Wignored-attributes]
+        auto func = [&](uint64_t &x) -> FT __attribute__((always_inline)) {return static_cast<std::common_type_t<FT, double>>(0x1p-64) * wy::wyhash64_stateless(&x);};
+                                                          ^~~~~~~~~~~~~
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:994:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned int, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(UintSetS, 1.0000000109723500835L, 19.77882586L, 0xFFFFFFFEuL, uint32_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+In file included from src/d2.cpp:1:
+In file included from src/d2.h:13:
+bonsai/hll/include/sketch/bmh.h:505:59: warning: 'always_inline' attribute ignored when parsing type [-Wignored-attributes]
+        auto func = [&](uint64_t &x) -> FT __attribute__((always_inline)) {return static_cast<std::common_type_t<FT, double>>(0x1p-64) * wy::wyhash64_stateless(&x);};
+                                                          ^~~~~~~~~~~~~
+In file included from src/bwreduce.cpp:1:
+In file included from src/d2.h:12:
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:964:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned char, double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(NibbleSetS, 2.7182818284590452354L, 5e-4L, 14u, uint8_t, double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:967:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned short, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(ShortSetS, 1.0005, .06, 65534u, uint16_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:994:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned int, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(UintSetS, 1.0000000109723500835L, 19.77882586L, 0xFFFFFFFEuL, uint32_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+In file included from src/cmp_main.cpp:1:
+In file included from src/cmp_main.h:4:
+In file included from src/fastxsketch.h:5:
+src/mmvec.h:198:76: error: reference to non-static member function must be called
+                    throw std::runtime_error("Failed to create file at "s +path);
+                                                                           ^~~~
+In file included from src/bwreduce.cpp:1:
+In file included from src/d2.h:13:
+bonsai/hll/include/sketch/bmh.h:505:59: warning: 'always_inline' attribute ignored when parsing type [-Wignored-attributes]
+        auto func = [&](uint64_t &x) -> FT __attribute__((always_inline)) {return static_cast<std::common_type_t<FT, double>>(0x1p-64) * wy::wyhash64_stateless(&x);};
+                                                          ^~~~~~~~~~~~~
+In file included from src/bedsketch.cpp:1:
+In file included from src/bedsketch.h:4:
+In file included from src/d2.h:12:
+./src/setsketch.h:1009:60: error: missing default argument on parameter 'args'
+    CountFilteredCSetSketch(uint32_t mincount=1, Args &&...args): CSetSketch<FT>(std::forward<Args>(args)...), mc_(mincount) {
+                                                           ^
+src/bedsketch.cpp:11:19: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredCSetSketch<double>::CountFilteredCSetSketch<const unsigned long &>' requested here
+    FullSetSketch ss(opts.count_threshold_, opts.sketchsize_);
+                  ^
+In file included from src/cmp_core.cpp:1:
+In file included from src/cmp_main.h:4:
+In file included from src/fastxsketch.h:5:
+src/mmvec.h:198:76: error: reference to non-static member function must be called
+                    throw std::runtime_error("Failed to create file at "s +path);
+                                                                           ^~~~
+bonsai/hll/include/sketch/bmh.h:111:78: error: in-class initializer for static data member is not a constant expression
+    static constexpr IT ft2it(FT val=std::numeric_limits<FT>::max()) {return ITFTU(val).i_;}
+                                                                             ^
+bonsai/hll/include/sketch/bmh.h:214:25: note: in instantiation of template class 'sketch::wmh::wd_t<double>' requested here
+    using IT = typename wd::IntType;
+                        ^
+bonsai/hll/include/sketch/bmh.h:417:28: note: in instantiation of template class 'sketch::wmh::bmh_t<double>' requested here
+struct BagMinHash2: public bmh_t<FT> {
+                           ^
+src/bwsketch.cpp:106:48: note: in instantiation of template class 'sketch::wmh::BagMinHash2<double>' requested here
+                else if(bmhs.size()) {bmhs[tid].reset();}
+                                               ^
+In file included from src/bedsketch.cpp:1:
+In file included from src/bedsketch.h:4:
+In file included from src/d2.h:13:
+bonsai/hll/include/sketch/bmh.h:111:78: error: in-class initializer for static data member is not a constant expression
+    static constexpr IT ft2it(FT val=std::numeric_limits<FT>::max()) {return ITFTU(val).i_;}
+                                                                             ^
+bonsai/hll/include/sketch/bmh.h:214:25: note: in instantiation of template class 'sketch::wmh::wd_t<double>' requested here
+    using IT = typename wd::IntType;
+                        ^
+bonsai/hll/include/sketch/bmh.h:417:28: note: in instantiation of template class 'sketch::wmh::bmh_t<double>' requested here
+struct BagMinHash2: public bmh_t<FT> {
+                           ^
+src/bedsketch.cpp:61:28: note: in instantiation of template class 'sketch::wmh::BagMinHash2<double>' requested here
+                BagMinHash bmh(opts.sketchsize_);
+                           ^
+src/bedsketch.cpp:87:17: error: no member named 'total_weight' in 'sketch::wmh::BagMinHash2<double>'
+                __FS();
+                ^~~~~~
+src/bedsketch.cpp:79:27: note: expanded from macro '__FS'
+src/bwsketch.cpp:136:55    ret.second = sketcher.total_weight();\
+                 ~~~~~~~~ ^:
+ error: no member named 'to_sigs' in 'sketch::wmh::BagMinHash2<double>'
+                              bmhs.size() ? bmhs[tid].to_sigs(): pmhs[tid].to_sigs();
+                                            ~~~~~~~~~ ^
+src/bwsketch.cpp:137:128: error: no member named 'total_weight' in 'sketch::wmh::BagMinHash2<double>'
+                const auto winc = (fss.size() ? fss[tid].getcard(): opss.size() ? opss[tid].getcard(): bmhs.size() ? bmhs[tid].total_weight(): pmhs.size() ? pmhs[tid].total_weight(): RegT(-1));
+                                                                                                                     ~~~~~~~~~ ^
+src/bwsketch.cpp:153:49: warning: moving a temporary object prevents copy elision [-Wpessimizing-move]
+        ret.global_.reset(new std::vector<RegT>(std::move(reduce(retmap))));
+                                                ^
+src/bwsketch.cpp:153:49: note: remove std::move call here
+        ret.global_.reset(new std::vector<RegT>(std::move(reduce(retmap))));
+                                                ^~~~~~~~~~              ~
+In file included from src/bwsketch.cpp:1:
+In file included from src/d2.h:12:
+./src/setsketch.h:1009:60: error: missing default argument on parameter 'args'
+    CountFilteredCSetSketch(uint32_t mincount=1, Args &&...args): CSetSketch<FT>(std::forward<Args>(args)...), mc_(mincount) {
+                                                           ^
+src/bwsketch.cpp:167:31: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredCSetSketch<double>::CountFilteredCSetSketch<const unsigned long &>' requested here
+                fss.reset(new FullSetSketch(opts.count_threshold_, opts.sketchsize_));
+                              ^
+src/bwsketch.cpp:193:79: error: no member named 'total_weight' in 'sketch::wmh::BagMinHash2<double>'
+        ret.card_ = (fss ? fss->getcard(): opss ? opss->getcard(): bmh ? bmh->total_weight(): pmh ? pmh->total_weight(): std::numeric_limits<RegT>::infinity());
+                                                                         ~~~  ^
+src/bwsketch.cpp:197:60: error: no member named 'to_sigs' in 'sketch::wmh::BagMinHash2<double>'
+        ret.global_.reset(new std::vector<RegT>(bmh ? bmh->to_sigs(): pmh ? pmh->to_sigs(): opss ? opss->to_sigs(): fss ? fss->to_sigs(): std::vector<RegT>()));
+                                                      ~~~  ^
+src/cmp_core.cpp:192:82: warning: field 'up' is uninitialized when used here [-Wuninitialized]
+    CompressedRet(CompressedRet &&o): super(static_cast<super>(o)), up(std::move(up)), nbytes(o.nbytes), ismapped(o.ismapped) {
+                                                                                 ^
+In file included from src/bedsketch.cpp:1:
+In file included from src/bedsketch.h:4:
+In file included from src/d2.h:13:
+bonsai/hll/include/sketch/bmh.h:421:75: error: type 'sketch::wmh::BagMinHash2<double>::S' (aka 'bmh_t<double>') is not a direct or virtual base of 'sketch::wmh::BagMinHash2<double>'
+    BagMinHash2(size_t m, bool track_ids=false, bool track_counts=false): S(m, track_ids, track_counts) {}
+                                                                          ^
+src/bedsketch.cpp:86:28: note: in instantiation of member function 'sketch::wmh::BagMinHash2<double>::BagMinHash2' requested here
+                BagMinHash sketcher(opts.sketchsize_);
+                           ^
+In file included from src/bedsketch.cpp:1:
+In file included from src/bedsketch.h:4:
+In file included from src/d2.h:13:
+bonsai/hll/include/sketch/bmh.h:424:15: error: no member named 'update_2' in 'sketch::wmh::BagMinHash2<double>'
+        this->update_2(id, w);
+        ~~~~  ^
+bonsai/hll/include/sketch/bmh.h:426:53: note: in instantiation of function template specialization 'sketch::wmh::BagMinHash2<double>::add<unsigned long>' requested here
+    template<typename IT> void update(IT id, FT w) {add(id, w);}
+                                                    ^
+src/bedsketch.cpp:87:17: note: in instantiation of function template specialization 'sketch::wmh::BagMinHash2<double>::update<unsigned long>' requested here
+                __FS();
+                ^
+src/bedsketch.cpp:77:46: note: expanded from macro '__FS'
+    for(size_t i = 0; i < csz; ++i) sketcher.update(i, ctr.count_sketch_[i]);\
+                                             ^
+In file included from src/bedsketch.cpp:1:
+In file included from src/bedsketch.h:4:
+In file included from src/d2.h:13:
+bonsai/hll/include/sketch/bmh.h:419:30: error: no member named 'hvals_' in 'sketch::wmh::BagMinHash2<double>'
+    FT *data() {return this->hvals_.data();}
+                       ~~~~  ^
+src/bedsketch.cpp:87:17: note: in instantiation of member function 'sketch::wmh::BagMinHash2<double>::data' requested here
+                __FS();
+                ^
+src/bedsketch.cpp:78:23: note: expanded from macro '__FS'
+    auto p = sketcher.data();\
+                      ^
+15 warnings and 18 errors generated.
+make: *** [Makefile:98: src/bedsketch.o] Error 1
+make: *** Waiting for unfinished jobs....
+15 warnings and 12 errors generated.
+make: *** [Makefile:98: src/bwreduce.o] Error 1
+In file included from src/bwsketch.cpp:1:
+In file included from src/d2.h:13:
+bonsai/hll/include/sketch/bmh.h:424:15: error: no member named 'update_2' in 'sketch::wmh::BagMinHash2<double>'
+        this->update_2(id, w);
+        ~~~~  ^
+bonsai/hll/include/sketch/bmh.h:426:53: note: in instantiation of function template specialization 'sketch::wmh::BagMinHash2<double>::add<unsigned long>' requested here
+    template<typename IT> void update(IT id, FT w) {add(id, w);}
+                                                    ^
+src/bwsketch.cpp:125:25: note: in instantiation of function template specialization 'sketch::wmh::BagMinHash2<double>::update<unsigned long>' requested here
+                        DO_FOR_SKETCH(bmhs[tid]);
+                        ^
+src/bwsketch.cpp:114:120: note: expanded from macro 'DO_FOR_SKETCH'
+                        for(auto istart = ptr->intervals->start[j], iend = ptr->intervals->end[j];istart < iend;(item).update(chrom_hash ^ istart++, vptr[j]));\
+                                                                                                                       ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+16 warnings and 20 errors generated.
+make: *** [Makefile:98: src/bwsketch.o] Error 1
+In file included from src/dedup_core.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+In file included from src/d2.cpp:1:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:12:
+bonsai/include/bonsai/qmap.h:84:20: warning: implicit conversion from 'bns::u128' (aka 'unsigned __int128') to 'unsigned long' changes value from 340282366920938463463374607431768211455 to 18446744073709551615 [-Wconstant-conversion]
+            return u128(-1);
+            ~~~~~~ ^~~~~~~~
+bonsai/include/bonsai/encoder.h:626:22: note: in instantiation of member function 'bns::QueueMap<unsigned long, unsigned long, std::less<void> >::next_value' requested here
+        return qmap_.next_value(nk, kscore);
+                     ^
+bonsai/include/bonsai/encoder.h:215:23: note: in instantiation of member function 'bns::Encoder<bns::score::Lex, unsigned long>::next_canonicalized_minimizer' requested here
+            if((min = next_canonicalized_minimizer()) != ENCODE_OVERFLOW)
+                      ^
+bonsai/include/bonsai/encoder.h:449:68: note: in instantiation of function template specialization 'bns::Encoder<bns::score::Lex, unsigned long>::for_each_canon_windowed<(lambda at src/d2.cpp:82:26)>' requested here
+        else                 while(kseq_read(ks) >= 0) assign(ks), for_each_canon_windowed<Functor>(func);
+                                                                   ^
+bonsai/include/bonsai/encoder.h:469:9: note: in instantiation of function template specialization 'bns::Encoder<bns::score::Lex, unsigned long>::for_each_canon<(lambda at src/d2.cpp:82:26)>' requested here
+        for_each_canon<Functor>(func, ks);
+        ^
+bonsai/include/bonsai/encoder.h:525:27: note: in instantiation of function template specialization 'bns::Encoder<bns::score::Lex, unsigned long>::for_each_canon<(lambda at src/d2.cpp:82:26)>' requested here
+        if(canonicalize_) for_each_canon<Functor>(func, fp, ks);
+                          ^
+src/d2.cpp:91:22: note: in instantiation of function template specialization 'bns::Encoder<bns::score::Lex, unsigned long>::for_each<(lambda at src/d2.cpp:82:26)>' requested here
+                enc_.for_each(lfunc, sp);
+                     ^
+bonsai/include/bonsai/logutil.h:12:57: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:51: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                  ^
+15 warnings and 13 errors generated.
+make: *** [Makefile:98: src/cmp_main.o] Error 1
+16 warnings and 12 errors generated.
+make: *** [Makefile:98: src/d2.o] Error 1
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+In file included from src/dedup_core.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:5:
+In file included from bonsai/include/bonsai/rhtraits.h:3:
+bonsai/include/bonsai/alphabet.h:90:21: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType tlut{-1};
+                    ^~
+                    { }
+bonsai/include/bonsai/alphabet.h:94:120: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::emptylut' requested here
+    constexpr TAlphabet(bool padding=false): name("Bytes"), setstr(""), nc(NCHAR - 1 + padding), padding(padding), lut(emptylut(padding)) {
+                                                                                                                       ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:106:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<>' requested here
+static constexpr const Alphabet BYTES;
+                                ^
+bonsai/include/bonsai/alphabet.h:31:20: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+        LUType arr{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             }
+bonsai/include/bonsai/alphabet.h:87:163: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::make_lut' requested here
+    constexpr TAlphabet(const char *name, const char *s, bool padding=false, const char *aliases=0): name(name), setstr(s), nc(ncommas(s)), padding(padding), lut(make_lut(s, nc, padding, aliases)) {
+                                                                                                                                                                  ^
+bonsai/include/bonsai/alphabet.h:98:67: note: in instantiation of member function 'bns::alph::TAlphabet<signed char, 256>::TAlphabet' requested here
+    template<typename...Args> constexpr Alphabet(Args &&...args): TAlphabet(std::forward<Args>(args)...) {}
+                                                                  ^
+bonsai/include/bonsai/alphabet.h:107:33: note: in instantiation of function template specialization 'bns::alph::Alphabet::Alphabet<char const (&)[11], char const (&)[40], bool, char const (&)[6]>' requested here
+static constexpr const Alphabet AMINO20("Standard20", "A,C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y", false, "PU:KC");
+                                ^
+In file included from src/dedup_core.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:30:
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+16 warnings and 13 errors generated.
+make: *** [Makefile:98: src/cmp_core.o] Error 1
+bonsai/include/bonsai/logutil.h:12:57: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_ , ##__VA_ARGS__)
+                                                        ^
+bonsai/include/bonsai/logutil.h:13:62: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__ , ##__VA_ARGS__)
+                                                             ^
+In file included from src/contain_main.cpp:1:
+In file included from src/d2.h:10:
+In file included from bonsai/include/bonsai/encoder.h:12:
+bonsai/include/bonsai/qmap.h:84:20: warning: implicit conversion from 'bns::u128' (aka 'unsigned __int128') to 'unsigned long' changes value from 340282366920938463463374607431768211455 to 18446744073709551615 [-Wconstant-conversion]
+            return u128(-1);
+            ~~~~~~ ^~~~~~~~
+bonsai/include/bonsai/encoder.h:626:22: note: in instantiation of member function 'bns::QueueMap<unsigned long, unsigned long, std::less<void> >::next_value' requested here
+        return qmap_.next_value(nk, kscore);
+                     ^
+bonsai/include/bonsai/encoder.h:215:23: note: in instantiation of member function 'bns::Encoder<bns::score::Lex, unsigned long>::next_canonicalized_minimizer' requested here
+            if((min = next_canonicalized_minimizer()) != ENCODE_OVERFLOW)
+                      ^
+bonsai/include/bonsai/encoder.h:449:68: note: in instantiation of function template specialization 'bns::Encoder<bns::score::Lex, unsigned long>::for_each_canon_windowed<(lambda at src/contain_main.cpp:40:21)>' requested here
+        else                 while(kseq_read(ks) >= 0) assign(ks), for_each_canon_windowed<Functor>(func);
+                                                                   ^
+bonsai/include/bonsai/encoder.h:469:9: note: in instantiation of function template specialization 'bns::Encoder<bns::score::Lex, unsigned long>::for_each_canon<(lambda at src/contain_main.cpp:40:21)>' requested here
+        for_each_canon<Functor>(func, ks);
+        ^
+bonsai/include/bonsai/encoder.h:525:27: note: in instantiation of function template specialization 'bns::Encoder<bns::score::Lex, unsigned long>::for_each_canon<(lambda at src/contain_main.cpp:40:21)>' requested here
+        if(canonicalize_) for_each_canon<Functor>(func, fp, ks);
+                          ^
+src/contain_main.cpp:52:17: note: in instantiation of function template specialization 'bns::Encoder<bns::score::Lex, unsigned long>::for_each<(lambda at src/contain_main.cpp:40:21)>' requested here
+            mye.for_each(func, path);
+                ^
+In file included from src/dedup_core.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:12:
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:964:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned char, double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(NibbleSetS, 2.7182818284590452354L, 5e-4L, 14u, uint8_t, double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:967:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned short, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(ShortSetS, 1.0005, .06, 65534u, uint16_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:994:1: note: in instantiation of function template specialization 'sketch::setsketch::CountFilteredSetSketch<unsigned int, long double>::CountFilteredSetSketch<unsigned long &, double &, double &, const unsigned long &>' requested here
+CFDeclare(UintSetS, 1.0000000109723500835L, 19.77882586L, 0xFFFFFFFEuL, uint32_t, long double);
+^
+./src/setsketch.h:959:91: note: expanded from macro 'CFDeclare'
+    CF##desttype(uint32_t mincount, size_t nreg, double b=DEFAULT_B, double a=DEFAULT_A): CountFilteredSetSketch<RT, FT>(mincount, nreg, b, a, QV) {}\
+                                                                                          ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+    CountFilteredSetSketch(int32_t mincount=1, Args &&...args): Super(std::forward<Args>(args)...), mc_(mincount) {
+                                                         ^
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+./src/setsketch.h:896:58: error: missing default argument on parameter 'args'
+In file included from src/dedup_core.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:13:
+bonsai/hll/include/sketch/bmh.h:505:59: warning: 'always_inline' attribute ignored when parsing type [-Wignored-attributes]
+        auto func = [&](uint64_t &x) -> FT __attribute__((always_inline)) {return static_cast<std::common_type_t<FT, double>>(0x1p-64) * wy::wyhash64_stateless(&x);};
+                                                          ^~~~~~~~~~~~~
+16 warnings and 12 errors generated.
+make: *** [Makefile:98: src/contain_main.o] Error 1
+In file included from src/dedup_core.cpp:1:
+In file included from src/cmp_main.h:4:
+In file included from src/fastxsketch.h:5:
+src/mmvec.h:198:76: error: reference to non-static member function must be called
+                    throw std::runtime_error("Failed to create file at "s +path);
+                                                                           ^~~~
+src/dedup_core.cpp:130:25: error: reference to local binding 'hits' declared in enclosing function 'dashing2::update_res_mt'
+        const auto id = hits[i];
+                        ^
+src/dedup_core.cpp:109:12: note: 'hits' declared here
+    auto &[hits, counts, nper] = query_res;
+           ^
+15 warnings and 14 errors generated.
+make: *** [Makefile:98: src/dedup_core.o] Error 1
+
+Process finished with exit code 2
