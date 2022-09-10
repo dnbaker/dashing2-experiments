@@ -8,8 +8,11 @@ if [[ ! -f uniprot_sprot.fasta ]] ; then
 fi
 
 # 568002 for 2022_03
-echo "Uniprot:"
+echo "Uniprot sequences:"
 grep -c '^>' uniprot_sprot.fasta
+
+echo "Uniprot characters:"
+grep -v '^>' uniprot_sprot.fasta | tr -d '[:space:] ' | wc -c
 
 
 if [[ ! -f uniref50.fasta ]] ; then
@@ -18,5 +21,8 @@ if [[ ! -f uniref50.fasta ]] ; then
 fi
 
 # 53625855 for 2022_03
-echo "Uniref 50:"
+echo "Uniref 50 sequences:"
 grep -c '^>' uniref50.fasta
+
+echo "Uniref 50 characters:"
+grep -v '^>' uniref50.fasta | tr -d '[:space:] ' | wc -c
