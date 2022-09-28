@@ -32,16 +32,32 @@ indices = maketi(nelem)
 
 buckets = [[] for i in range(nb + 2)]
 
+seen = set()
 mat_num_registers = len(mat)
 nbfull = 0
 fillnum = ap.fillnum
 for ci, cv in enumerate(map(id2bkt, mat)):
     myb = buckets[cv]
-    if len(myb) >= fillnum: continue
-    myb.append(indices[ci])
+    if len(myb) >= fillnum:
+        continue
+    x, y = indices[ci]
+    if x in seen or y in seen:
+        continue
+    seen.add(x)
+    seen.add(y)
+    myb.append(indices[ci])  # maybe check it's not redundant?
+    print("  appended: " + str(indices[ci]) + " to bucket " + str(cv), file=stderr)
     if len(myb) == fillnum:
         nbfull += 1
         print(f"{nbfull}/{len(buckets)}", file=stderr)
+        if nbfull > len(buckets) - 10:
+            remaining = []
+            for i, bucket in enumerate(buckets):
+                if len(bucket) < fillnum:
+                    remaining.append(str(i))
+                else:
+                    assert len(bucket) == fillnum
+            print("  remaining buckets: " + ' '.join(remaining), file=stderr)
         if nbfull == len(buckets):
             print(f"Finished all, breaking after {ci}/{mat_num_registers} {ci * 100./mat_num_registers}", file=stderr)
             break
