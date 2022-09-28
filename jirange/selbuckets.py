@@ -8,7 +8,8 @@ ap = argparse.ArgumentParser()
 ap.add_argument("distmat", help="Path to a binary output of pairwise Jaccard similarities, in float32")
 ap.add_argument("--nbuckets", "-n", type=int, help="Number of Jaccard buckets. Default: 100.", default=100)
 ap.add_argument("--fillnum", "-F", type=int, help="Number of pairs to put in each bucket.  Default: 10.", default=10)
-ap.add_argument("--ignore0", "-i", type=bool, help="Whether to ignore 0th bucket.  Default: True", default=True)
+ap.add_argument("--ignore0", "-i", action='store_true',
+                help="Whether to ignore 0th bucket.  Default: False", default=False)
 ap = ap.parse_args()
 
 nb = ap.nbuckets
