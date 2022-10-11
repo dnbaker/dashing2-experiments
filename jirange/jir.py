@@ -246,7 +246,11 @@ def getall(dry, l, r, k=17, size_in_bits=1024, executable="dashing2", faex="fast
     return ret
 
 
-def packed(dry, x):
+def packed(x):
+    return packed_dry(False, x)
+
+
+def packed_dry(dry, x):
     try:
         l, r, k, size_in_bits, executable = x
     except Exception as _:
@@ -308,7 +312,7 @@ if __name__ == "__main__":
                 for i, st in enumerate(subtups):
                     startt = time()
                     print("Started subgroup %d/%d" % (i, len(subtups)), file=sys.stderr, flush=True)
-                    res = np.stack(list(p.map(lambda x: packed(False, x), st)))
+                    res = np.stack(list(p.map(packed, st)))
                     rawmat.append(res)
                     for (left, r, k, size, _), mr in zip(st, res.reshape(-1, 60)):
                         print(f"{left}\t{r}\t{k}\t{size}\t" + "\t".join(map(str, mr)), file=ofp, flush=True)
@@ -317,7 +321,7 @@ if __name__ == "__main__":
             np.vstack(rawmat).tofile(f"fullmat.{args.name}.f32.{hv}.{k}.{fs}")
         else:
             for st in subtups:
-                print(list(map(lambda x: packed(True, x), st)))
+                print(list(map(lambda x: packed_dry(True, x), st)))
     else:
         print("Running tests, not running experiment", file=sys.stderr)
         parse_bf(sys.argv[1] if sys.argv[1:] else "selected_buckets_100.txt")
