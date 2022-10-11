@@ -6,6 +6,9 @@ from subprocess import PIPE, check_call
 from time import time
 
 
+include_nibbles = False
+
+
 def check_output(x):
     from subprocess import Popen, PIPE
     t = 0
@@ -198,7 +201,7 @@ def bagminhash_jaccard(dry, p1, p2, size_in_bits, *, k, nb=8, cssize=-1):
     if dry:
         return cstr
     else:
-        return check_output(cstr).decode().strip('\n').split('\n')[-2].split("\t")[1]
+        return float(check_output(cstr).decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
 def probminhash_jaccard(dry, p1, p2, size_in_bits, *, k, nb=8, cssize=-1):
@@ -208,12 +211,15 @@ def probminhash_jaccard(dry, p1, p2, size_in_bits, *, k, nb=8, cssize=-1):
     if dry:
         return cstr
     else:
-        return check_output(cstr).decode().strip('\n').split('\n')[-2].split("\t")[1]
+        return float(check_output(cstr).decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
 header = "#G1\tG2\tK\tsketchsize\tANI\tWJI\tJI\tMash\tDash1\tBD8\tBD4\tBD2\tBD1\tBDN\tSS8\tSS4\tSS2\tSS1\tSSN\tFSS8\tFSS4\tFSS2\tFSS1\tFSSN\tMH8\tMH4\tMH2\tMH1\tMHN\tFMH8\tFMH4\tFMH2\tFMH1\tFMHN"
-PMNBs = [8, 4, 2, 1, .5]
-BMNBs = [8, 4, 2, 1, .5]
+PMNBs = [8, 4, 2, 1]
+BMNBs = [8, 4, 2, 1]
+if include_nibbles:
+    PMNBs.append(.5)
+    BMNBs.append(.5)
 CSSZ = [-1, 50000000, 500000]
 PMHSettings = [(b, cs) for b in PMNBs for cs in CSSZ]
 BMHSettings = [(b, cs) for b in BMNBs for cs in CSSZ]
@@ -228,7 +234,9 @@ def getall(dry, l, r, k=17, size_in_bits=1024, executable="dashing2", faex="fast
         for values of k, size, and executable, return
         all similarity comparisons using Mash, Dashing, Dashing2, and fastANI
     """
-    bbnbs = (8, 4, 2, 1, .5)
+    bbnbs = (8, 4, 2, 1)
+    if include_nibbles:
+        bbnbs.append(.5)
     ret = np.array([getani(dry, l, r, ex=faex),
                     exact_wjaccard(dry, l, r, k=k),
                     exact_jaccard(dry, l, r, k=k),
@@ -242,8 +250,10 @@ def getall(dry, l, r, k=17, size_in_bits=1024, executable="dashing2", faex="fast
                     [probminhash_jaccard(dry, l, r, size_in_bits=size_in_bits, k=k, nb=b, cssize=csz) for b, csz in PMHSettings] #+
                     #[bagminhash_jaccard(dry, l, r, size=size_in_bits, k=k, nb=b, cssize=csz) for b, csz in BMHSettings], np.float32
                    )
+    print(ret)
     if not dry and ret[2] > 1.:
-        print(f"Distance {l} {r}, k = {k}, size = {size}... For some reason, Jaccard was > 1...What's going on?", ret[2], file=sys.stderr)
+        print(f"Distance {l} {r}, k = {k}, size = {size}... For some reason, Jaccard was > 1...What's going on?",
+              ret[2], file=sys.stderr)
     return ret
 
 
