@@ -14,7 +14,8 @@ def check_output(x):
         out, err = process.communicate()
         if process.returncode:
             t += 1
-            print("Failed call time #%d '%s', error = %s" % (t, x, err.decode()), file=sys.stderr)
+            print("Failed call time #%d '%s', returncode = %d, error = %s" % (t, x, process.returncode, err.decode()),
+                  file=sys.stderr)
             if t == 10:
                 raise RuntimeError("Failed 10 times to run command " + x)
         else:
