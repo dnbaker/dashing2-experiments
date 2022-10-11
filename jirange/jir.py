@@ -7,6 +7,8 @@ from time import time
 
 
 include_nibbles = False
+include_bmh = False
+include_d2minhash = False
 
 
 def check_output(x):
@@ -67,7 +69,6 @@ def getani(dry, left, r, ex="fastANI"):
     """For genomes left and r, which must exist as files, estimate ANI using
        fastANI returns a numpy array with [ANI, num, denom] as values.
     """
-    # return [ANI, num, denom]
     cmd = f"{ex} --minFraction 0. -q {left} -r {r} -o /dev/stdout"
     if dry:
         return cmd
@@ -126,10 +127,10 @@ def fsarg2str(x):
 
 
 def setsketch_jaccard(dry, p1, p2, size_in_bits, *, k, nb=8, fss=False, executable="dashing2"):
-    '''k is the k to use, and nb is the number of bytes to use in the setsketch-based set similarity estimation
+    """k is the k to use, and nb is the number of bytes to use in the setsketch-based set similarity estimation
        nb is 8 by default, which is Dashing 2's typical size, though dashing-f and dashing-ld use 4 bytes and 16 bytes
        to store float32 and long double hash registers, respectively.
-    '''
+    """
     # NOTE: nb is expressed in bytes, not bits
     nb_in_bits = nb*8
     cmd = f"{executable} sketch --phylip -k{k} {fsarg2str(fss)} -S{size_in_bits // nb_in_bits} --fastcmp {nb} --cache --cmpout /dev/stdout {p1} {p2}"
@@ -140,9 +141,9 @@ def setsketch_jaccard(dry, p1, p2, size_in_bits, *, k, nb=8, fss=False, executab
 
 
 def bbminhash_jaccard(dry, p1, p2, size, *, k, nb=32, fss=False, executable="dashing2"):
-    '''k is the k to use, and nb is the number of bytes to use in the setsketch-based set similarity estimation
+    """k is the k to use, and nb is the number of bytes to use in the setsketch-based set similarity estimation
        nb is 8 by default, which is Dashing 2's typical size
-    '''
+    """
     assert (nb & (nb - 1)) == 0 and 4 <= nb <= 64, "nb, number of bits for bbit minhash, should be 4, 8, 16, 32, or 64"
     fcstr = f"--fastcmp {nb / 8}"
     cmd = f"{executable} sketch --phylip -k{k} {fsarg2str(fss)} --bbit-sigs -S{size} {fcstr} --cache --cmpout /dev/stdout {p1} {p2}"
@@ -214,7 +215,24 @@ def probminhash_jaccard(dry, p1, p2, size_in_bits, *, k, nb=8, cssize=-1):
         return float(check_output(cstr).decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
-header = "#G1\tG2\tK\tsketchsize\tANI\tWJI\tJI\tMash\tDash1\tBD8\tBD4\tBD2\tBD1\tBDN\tSS8\tSS4\tSS2\tSS1\tSSN\tFSS8\tFSS4\tFSS2\tFSS1\tFSSN\tMH8\tMH4\tMH2\tMH1\tMHN\tFMH8\tFMH4\tFMH2\tFMH1\tFMHN"
+columns = ['G1', 'G2', 'K', 'sketchsize', 'ANI', 'WJI', 'JI', 'Mash', 'Dash1']
+columns += ['BD8', 'BD4', 'BD2', 'BD1']
+if include_nibbles:
+    columns += ['BDN']
+columns += ['SS8', 'SS4', 'SS2', 'SS1']
+if include_nibbles:
+    columns += ['SSN']
+columns += ['FSS8', 'FSS4', 'FSS2', 'FSS1']
+if include_nibbles:
+    columns += ['FSSN']
+if include_d2minhash:
+    columns += ['MH8', 'MH4', 'MH2', 'MH1']
+    if include_nibbles:
+        columns += ['MHN']
+    columns += ['FMH8', 'FMH4', 'FMH2', 'FMH1']
+    if include_nibbles:
+        columns += ['FMHN']
+
 PMNBs = [8, 4, 2, 1]
 BMNBs = [8, 4, 2, 1]
 if include_nibbles:
@@ -224,9 +242,16 @@ CSSZ = [-1, 50000000, 500000]
 PMHSettings = [(b, cs) for b in PMNBs for cs in CSSZ]
 BMHSettings = [(b, cs) for b in BMNBs for cs in CSSZ]
 for (b, cs) in PMHSettings:
-    header = header + "\tPMH%s%s" % (b if b >= 1 else "N", "-%d" % cs if cs > 0 else "Exact")
-for (b, cs) in BMHSettings:
-    header = header + "\tBMH%s%s" % (b if b >= 1 else "N", "-%d" % cs if cs > 0 else "Exact")
+    columns.append("PMH%s%s" % (b if b >= 1 else "N", "-%d" % cs if cs > 0 else "Exact"))
+if include_bmh:
+    for (b, cs) in BMHSettings:
+        columns.append("BMH%s%s" % (b if b >= 1 else "N", "-%d" % cs if cs > 0 else "Exact"))
+header = "#" + '\t'.join(columns)
+ncols = len(columns)
+
+bbnbs = [8, 4, 2, 1]
+if include_nibbles:
+    bbnbs.append(.5)
 
 
 def getall(dry, l, r, k=17, size_in_bits=1024, executable="dashing2", faex="fastANI"):
@@ -234,22 +259,32 @@ def getall(dry, l, r, k=17, size_in_bits=1024, executable="dashing2", faex="fast
         for values of k, size, and executable, return
         all similarity comparisons using Mash, Dashing, Dashing2, and fastANI
     """
-    bbnbs = (8, 4, 2, 1)
-    if include_nibbles:
-        bbnbs.append(.5)
-    ret = np.array([getani(dry, l, r, ex=faex),
-                    exact_wjaccard(dry, l, r, k=k),
-                    exact_jaccard(dry, l, r, k=k),
-                    getmashji(dry, l, r, k=k, size_in_bits=size_in_bits),
-                    getdashingji(dry, l, r, k=k, l2s=int(np.log2(size_in_bits//8)))] +
-                    [bindash_jaccard(dry, l, r, k=k, size_in_bits=size_in_bits, nb=nb) for nb in bbnbs] +
-                    [setsketch_jaccard(dry, l, r, size_in_bits=size_in_bits, k=k, nb=nb, fss=False, executable=executable) for nb in bbnbs] +
-                    [setsketch_jaccard(dry, l, r, size_in_bits=size_in_bits, k=k, nb=nb, fss=True, executable=executable) for nb in bbnbs] +
-                    #[bbminhash_jaccard(dry, l, r, size=size, k=k, nb=int(nb * 8), fss=False, executable=executable) for nb in bbnbs] +
-                    #[bbminhash_jaccard(dry, l, r, size=size, k=k, nb=int(nb * 8), fss=True, executable=executable) for nb in bbnbs] +
-                    [probminhash_jaccard(dry, l, r, size_in_bits=size_in_bits, k=k, nb=b, cssize=csz) for b, csz in PMHSettings] #+
-                    #[bagminhash_jaccard(dry, l, r, size=size_in_bits, k=k, nb=b, cssize=csz) for b, csz in BMHSettings], np.float32
-                   )
+    results = []
+    if 'ANI' in columns:
+        results += [getani(dry, l, r, ex=faex)]
+    if 'WJI' in columns:
+        results += [exact_wjaccard(dry, l, r, k=k)]
+    if 'JI' in columns:
+        results += [exact_jaccard(dry, l, r, k=k)]
+    if 'Mash' in columns:
+        results += [getmashji(dry, l, r, k=k, size_in_bits=size_in_bits)]
+    if 'Dash1' in columns:
+        results += [getdashingji(dry, l, r, k=k, l2s=int(np.log2(size_in_bits//8)))]
+    if 'BD1' in columns:
+        results += [bindash_jaccard(dry, l, r, k=k, size_in_bits=size_in_bits, nb=nb) for nb in bbnbs]
+    if 'SS1' in columns:
+        results += [setsketch_jaccard(dry, l, r, size_in_bits=size_in_bits, k=k, nb=nb, fss=False, executable=executable) for nb in bbnbs]
+    if 'FSS1' in columns:
+        results += [setsketch_jaccard(dry, l, r, size_in_bits=size_in_bits, k=k, nb=nb, fss=True, executable=executable) for nb in bbnbs]
+    if 'MH1' in columns:
+        results += [bbminhash_jaccard(dry, l, r, size=size, k=k, nb=int(nb * 8), fss=False, executable=executable) for nb in bbnbs]
+    if 'FMH1' in columns:
+        results += [bbminhash_jaccard(dry, l, r, size=size, k=k, nb=int(nb * 8), fss=True, executable=executable) for nb in bbnbs]
+    if 'PMH1Exact' in columns:
+        results += [probminhash_jaccard(dry, l, r, size_in_bits=size_in_bits, k=k, nb=b, cssize=csz) for b, csz in PMHSettings]
+    if 'BMH1Exact' in columns:
+        results += [bagminhash_jaccard(dry, l, r, size_in_bits=size_in_bits, k=k, nb=b, cssize=csz) for b, csz in BMHSettings]
+    ret = np.array(results, np.float32)
     print(ret)
     if not dry and ret[2] > 1.:
         print(f"Distance {l} {r}, k = {k}, size = {size}... For some reason, Jaccard was > 1...What's going on?",
@@ -325,7 +360,7 @@ if __name__ == "__main__":
                     print("Started subgroup %d/%d" % (i, len(subtups)), file=sys.stderr, flush=True)
                     res = np.stack(list(p.map(packed, st)))
                     rawmat.append(res)
-                    for (left, r, k, size, _), mr in zip(st, res.reshape(-1, 60)):
+                    for (left, r, k, size, _), mr in zip(st, res.reshape(-1, ncols)):
                         print(f"{left}\t{r}\t{k}\t{size}\t" + "\t".join(map(str, mr)), file=ofp, flush=True)
             if ofp is not sys.stdout:
                 ofp.close()
