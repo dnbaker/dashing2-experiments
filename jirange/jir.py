@@ -358,10 +358,10 @@ if __name__ == "__main__":
                 for i, st in enumerate(subtups):
                     startt = time()
                     print("Started subgroup %d/%d" % (i, len(subtups)), file=sys.stderr, flush=True)
-                    res = np.stack(list(p.map(packed, st)))
-                    rawmat.append(res)
-                    for (left, r, k, size, _), mr in zip(st, res.reshape(-1, ncols)):
+                    result_list = list(p.map(packed, st))
+                    for (left, r, k, size, _), mr in zip(st, result_list):
                         print(f"{left}\t{r}\t{k}\t{size}\t" + "\t".join(map(str, mr)), file=ofp, flush=True)
+                    rawmat.append(np.stack(result_list))
             if ofp is not sys.stdout:
                 ofp.close()
             np.vstack(rawmat).tofile(f"fullmat.{args.name}.f32.{hv}.{k}.{fs}")
