@@ -6,9 +6,12 @@ from subprocess import PIPE, check_call
 from time import time
 
 
+use_paper_columns = True
 include_nibbles = False
 include_bmh = False
 include_d2minhash = False
+include_sourmash = False
+include_soumash_abund = False
 
 
 def check_output(x):
@@ -84,6 +87,18 @@ def getmashji(dry, left, r, *, k, size_in_bits):
         return -1.  # Mash doesn't support long kmers
     s_arg = size_in_bits//(32 if k <= 16 else 64)
     cmd = f"mash dist -s {s_arg} -k {k} {left} {r}"
+    if dry:
+        return cmd
+    out = check_output(cmd).decode().strip().split("\n")[-1].split()[-1]
+    num, denom = map(float, out.split("/"))
+    if not denom:
+        return 0.
+    return num / denom
+
+
+def getsourmashji(dry, left, r, *, k, size_in_bits):
+    s_arg = size_in_bits//64
+    cmd = f"sourmash sketch dna -p k={k},noabund,num={s_arg} {left} {r}"
     if dry:
         return cmd
     out = check_output(cmd).decode().strip().split("\n")[-1].split()[-1]
@@ -216,36 +231,47 @@ def probminhash_jaccard(dry, p1, p2, size_in_bits, *, k, nb=8, cssize=-1):
 
 
 columns = ['G1', 'G2', 'K', 'sketchsize', 'ANI', 'WJI', 'JI', 'Mash', 'Dash1']
-columns += ['BD8', 'BD4', 'BD2', 'BD1']
-if include_nibbles:
-    columns += ['BDN']
-columns += ['SS8', 'SS4', 'SS2', 'SS1']
-if include_nibbles:
-    columns += ['SSN']
-columns += ['FSS8', 'FSS4', 'FSS2', 'FSS1']
-if include_nibbles:
-    columns += ['FSSN']
-if include_d2minhash:
-    columns += ['MH8', 'MH4', 'MH2', 'MH1']
+columns = ['G1', 'G2', 'K', 'sketchsize', 'ANI', 'WJI', 'JI', 'Mash', 'Dash1']
+if use_paper_columns:
+    columns += ['BD1', 'FSS1', 'FSS8', 'SS1', 'SS8', 'PMH1-50000000', 'SM']
+else:
+    columns += ['BD8', 'BD4', 'BD2', 'BD1']
     if include_nibbles:
-        columns += ['MHN']
-    columns += ['FMH8', 'FMH4', 'FMH2', 'FMH1']
+        columns += ['BDN']
+    columns += ['SS8', 'SS4', 'SS2', 'SS1']
     if include_nibbles:
-        columns += ['FMHN']
+        columns += ['SSN']
+    columns += ['FSS8', 'FSS4', 'FSS2', 'FSS1']
+    if include_nibbles:
+        columns += ['FSSN']
+    if include_d2minhash:
+        columns += ['MH8', 'MH4', 'MH2', 'MH1']
+        if include_nibbles:
+            columns += ['MHN']
+        columns += ['FMH8', 'FMH4', 'FMH2', 'FMH1']
+        if include_nibbles:
+            columns += ['FMHN']
 
-PMNBs = [8, 4, 2, 1]
-BMNBs = [8, 4, 2, 1]
-if include_nibbles:
-    PMNBs.append(.5)
-    BMNBs.append(.5)
-CSSZ = [-1, 50000000, 500000]
-PMHSettings = [(b, cs) for b in PMNBs for cs in CSSZ]
-BMHSettings = [(b, cs) for b in BMNBs for cs in CSSZ]
-for (b, cs) in PMHSettings:
-    columns.append("PMH%s%s" % (b if b >= 1 else "N", "-%d" % cs if cs > 0 else "Exact"))
-if include_bmh:
-    for (b, cs) in BMHSettings:
-        columns.append("BMH%s%s" % (b if b >= 1 else "N", "-%d" % cs if cs > 0 else "Exact"))
+    if include_sourmash:
+        columns += ['SM']
+    if include_soumash_abund:
+        columns += ['SMA']
+
+    # In the paper we only look at examples where the CountMinSketch has 5M 64-bit counts
+    PMNBs = [8, 4, 2, 1]
+    BMNBs = [8, 4, 2, 1]
+    if include_nibbles:
+        PMNBs.append(.5)
+        BMNBs.append(.5)
+    CSSZ = [-1, 50000000, 500000]
+    PMHSettings = [(b, cs) for b in PMNBs for cs in CSSZ]
+    BMHSettings = [(b, cs) for b in BMNBs for cs in CSSZ]
+    for (b, cs) in PMHSettings:
+        columns.append("PMH%s%s" % (b if b >= 1 else "N", "-%d" % cs if cs > 0 else "Exact"))
+    if include_bmh:
+        for (b, cs) in BMHSettings:
+            columns.append("BMH%s%s" % (b if b >= 1 else "N", "-%d" % cs if cs > 0 else "Exact"))
+
 header = "#" + '\t'.join(columns)
 ncols = len(columns)
 
@@ -270,6 +296,8 @@ def getall(dry, l, r, k=17, size_in_bits=1024, executable="dashing2", faex="fast
         results += [getmashji(dry, l, r, k=k, size_in_bits=size_in_bits)]
     if 'Dash1' in columns:
         results += [getdashingji(dry, l, r, k=k, l2s=int(np.log2(size_in_bits//8)))]
+    if 'SM' in columns:
+        results += [getsourmashji(dry, l, r, k=k, size_in_bits=size_in_bits)]
     if 'BD1' in columns:
         results += [bindash_jaccard(dry, l, r, k=k, size_in_bits=size_in_bits, nb=nb) for nb in bbnbs]
     if 'SS1' in columns:
