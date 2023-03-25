@@ -104,7 +104,6 @@ def getsourmashji(dry, left, r, *, k, size_in_bits):
         if dry:
             return cmd
         out = check_output(cmd).decode().strip().split("\n")[-1].split()[-1]
-        dr.cleanup()
     return float(out)
 
 
