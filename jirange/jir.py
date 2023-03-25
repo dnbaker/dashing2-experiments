@@ -2,6 +2,7 @@ import numpy as np
 import sys
 import argparse
 import os
+import tempfile
 from subprocess import PIPE, check_call
 from time import time
 
@@ -98,14 +99,13 @@ def getmashji(dry, left, r, *, k, size_in_bits):
 
 def getsourmashji(dry, left, r, *, k, size_in_bits):
     s_arg = size_in_bits//64
-    cmd = f"sourmash sketch dna -p k={k},noabund,num={s_arg} {left} {r}"
-    if dry:
-        return cmd
-    out = check_output(cmd).decode().strip().split("\n")[-1].split()[-1]
-    num, denom = map(float, out.split("/"))
-    if not denom:
-        return 0.
-    return num / denom
+    with tempfile.TemporaryDirectory() as dr:
+        cmd = f"sourmash sketch dna -p k={k},noabund,num={s_arg} {left} {r} -o {dr}/tmp.sig ; sourmash compare {dr}/tmp.sig"
+        if dry:
+            return cmd
+        out = check_output(cmd).decode().strip().split("\n")[-1].split()[-1]
+        dr.cleanup()
+    return float(out)
 
 
 def getdashingji(dry, left, r, *, k, l2s=10):
