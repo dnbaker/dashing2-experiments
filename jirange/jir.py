@@ -229,14 +229,21 @@ def probminhash_jaccard(dry, p1, p2, size_in_bits, *, k, nb=8, cssize=-1):
         return float(check_output(cstr).decode().strip('\n').split('\n')[-2].split("\t")[1])
 
 
+# order: ANI, WJI, JI, Mash, Dash1, SM, BD, SS, FSS, MH, FMH, PMH, BMH
 columns = ['G1', 'G2', 'K', 'sketchsize', 'ANI', 'WJI', 'JI', 'Mash', 'Dash1']
 if use_paper_columns:
-    columns += ['BD1', 'BD8', 'FSS1', 'FSS8', 'SS1', 'SS8', 'PMH1-50000000', 'PMH8-50000000', 'PMH1-Exact', 'PMH8-Exact', 'SM']
+    columns += ['SM', 'BD1', 'BD8', 'SS1', 'SS8', 'FSS1', 'FSS8']
     bbnbs = [8, 1]
-    PMHSettings = [(1, 50000000), (8, 50000000), (1, -1), (8, -1)]
+    PMNBs = [8, 1]
+    CSSZ = [-1, 50000000]
+    PMHSettings = [(b, cs) for b in PMNBs for cs in CSSZ]
     for (b, cs) in PMHSettings:
         columns.append("PMH%s%s" % (b if b >= 1 else "N", "-%d" % cs if cs > 0 else "Exact"))
 else:
+    if include_sourmash:
+        columns += ['SM']
+    if include_soumash_abund:
+        columns += ['SMA']
     columns += ['BD8', 'BD4', 'BD2', 'BD1']
     if include_nibbles:
         columns += ['BDN']
@@ -253,11 +260,6 @@ else:
         columns += ['FMH8', 'FMH4', 'FMH2', 'FMH1']
         if include_nibbles:
             columns += ['FMHN']
-
-    if include_sourmash:
-        columns += ['SM']
-    if include_soumash_abund:
-        columns += ['SMA']
 
     # In the paper we only look at examples where the CountMinSketch has 5M 64-bit counts
     PMNBs = [8, 4, 2, 1]
