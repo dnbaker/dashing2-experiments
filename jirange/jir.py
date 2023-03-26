@@ -230,9 +230,9 @@ def probminhash_jaccard(dry, p1, p2, size_in_bits, *, k, nb=8, cssize=-1):
 
 
 columns = ['G1', 'G2', 'K', 'sketchsize', 'ANI', 'WJI', 'JI', 'Mash', 'Dash1']
-columns = ['G1', 'G2', 'K', 'sketchsize', 'ANI', 'WJI', 'JI', 'Mash', 'Dash1']
 if use_paper_columns:
-    columns += ['BD1', 'FSS1', 'FSS8', 'SS1', 'SS8', 'PMH1-50000000', 'SM']
+    columns += ['BD1', 'BD8', 'FSS1', 'FSS8', 'SS1', 'SS8', 'PMH1-50000000', 'SM']
+    bbnbs = [8, 1]
 else:
     columns += ['BD8', 'BD4', 'BD2', 'BD1']
     if include_nibbles:
@@ -270,13 +270,12 @@ else:
     if include_bmh:
         for (b, cs) in BMHSettings:
             columns.append("BMH%s%s" % (b if b >= 1 else "N", "-%d" % cs if cs > 0 else "Exact"))
+    bbnbs = [8, 4, 2, 1]
+    if include_nibbles:
+        bbnbs.append(.5)
 
 header = "#" + '\t'.join(columns)
 ncols = len(columns)
-
-bbnbs = [8, 4, 2, 1]
-if include_nibbles:
-    bbnbs.append(.5)
 
 
 def getall(dry, l, r, k=17, size_in_bits=1024, executable="dashing2", faex="fastANI"):
