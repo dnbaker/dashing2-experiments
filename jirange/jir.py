@@ -231,8 +231,11 @@ def probminhash_jaccard(dry, p1, p2, size_in_bits, *, k, nb=8, cssize=-1):
 
 columns = ['G1', 'G2', 'K', 'sketchsize', 'ANI', 'WJI', 'JI', 'Mash', 'Dash1']
 if use_paper_columns:
-    columns += ['BD1', 'BD8', 'FSS1', 'FSS8', 'SS1', 'SS8', 'PMH1-50000000', 'SM']
+    columns += ['BD1', 'BD8', 'FSS1', 'FSS8', 'SS1', 'SS8', 'PMH1-50000000', 'PMH8-50000000', 'PMH1-Exact', 'PMH8-Exact', 'SM']
     bbnbs = [8, 1]
+    PMHSettings = [(1, 50000000), (8, 50000000), (1, -1), (8, -1)]
+    for (b, cs) in PMHSettings:
+        columns.append("PMH%s%s" % (b if b >= 1 else "N", "-%d" % cs if cs > 0 else "Exact"))
 else:
     columns += ['BD8', 'BD4', 'BD2', 'BD1']
     if include_nibbles:
