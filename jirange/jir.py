@@ -232,7 +232,7 @@ def probminhash_jaccard(dry, p1, p2, size_in_bits, *, k, nb=8, cssize=-1):
 # order: ANI, WJI, JI, Mash, Dash1, SM, BD, SS, FSS, MH, FMH, PMH, BMH
 columns = ['G1', 'G2', 'K', 'sketchsize', 'ANI', 'WJI', 'JI', 'Mash', 'Dash1']
 if use_paper_columns:
-    columns += ['SM', 'BD1', 'BD8', 'SS1', 'SS8', 'FSS1', 'FSS8']
+    columns += ['SM', 'BD8', 'BD1', 'SS8', 'SS1', 'FSS8', 'FSS1']
     bbnbs = [8, 1]
     PMNBs = [8, 1]
     CSSZ = [-1, 50000000]
