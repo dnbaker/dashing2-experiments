@@ -8,8 +8,6 @@ ap.add_argument("lhs")
 ap.add_argument("rhs")
 ap.add_argument("size", type=int)
 ap.add_argument("k", type=int)
+ap.add_argument("--executable", default="dashing2")
 ap = ap.parse_args()
-lhs, rhs = ap.lhs, ap.rhs
-size = ap.size
-k = ap.k
-print(f"{lhs}\t{rhs}\t" + "\t".join(map(str, getall(lhs, rhs, k=k, size=size))))
+print(f"{ap.lhs}\t{ap.rhs}\t" + "\t".join(map(str, getall(ap.lhs, ap.rhs, k=ap.k, size=ap.size, executable=ap.executable))))

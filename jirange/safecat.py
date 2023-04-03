@@ -2,14 +2,20 @@
 import sys
 import os
 
+
 def extractfromrn(x):
     x = x.strip()
-    from itertools import chain
+    if not x:
+        return None
     toks = x.strip().split('.')
     # assert toks[-1] == "row"
     sketchsize, k = toks[-4:-2]
     with open(x) as ifp:
-        l = next(ifp).strip().split()
+        try:
+            l = next(ifp).strip().split()
+        except StopIteration:
+            return None
+    from itertools import chain
     return "\t".join(chain(l[:2], (k, sketchsize), l[2:]))
 
 
@@ -29,5 +35,8 @@ if __name__ == '__main__':
             if (i & 1023) == 0:
                 print("Skipped %d/%d lines ahead" % (i, ap.linenum), file=sys.stderr)
             _ = next(ifp) # Skip that many lines
-        for line in map(extractfromrn, ifp):
-            print(line, file=ofp)
+        def print_if(item):
+            item = extractfromrn(item)
+            if item:
+                print(item, file=ofp)
+        set(map(print_if, ifp))

@@ -61,10 +61,10 @@ df <- df[df$jest >= 0.0,]
 
 print('Invalid high JI')
 print('===============')
-print('Histogram of how often each sketch type has high JI:')
-table(df$type[df$jest > 1.0])
-print('Histogram of values of high JIs:')
-table(df$jest[df$jest > 1.0])
+#print('Histogram of how often each sketch type has high JI:')
+#table(df$type[df$jest > 1.0])
+#print('Histogram of values of high JIs:')
+#table(df$jest[df$jest > 1.0])
 df <- df[df$jest <= 1.0,]
 
 stopifnot(all(0 <= df$jest))

@@ -101,7 +101,7 @@ def exact_jaccard(p1, p2, *, k):
 
 def fsarg2str(x):
     if x:
-        return ""
+        return " --full-setsketch "
     else:
         return " --oneperm "
 
