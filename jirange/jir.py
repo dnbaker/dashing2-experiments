@@ -188,7 +188,7 @@ def bindash_jaccard(dry, p1, p2, size_in_bits, *, k, nb=8, executable="bindash")
             if not all(map(os.path.isfile, (cp, cp + ".dat", cp + ".txt"))):
                 check_call(cmd, shell=True, stderr=PIPE)
     try:
-        cmd = f"{executable} dist {cp1} {cp2}"
+        cmd = f"{executable} dist --mthres=1e9 {cp1} {cp2}"
         if dry:
             dry_ret.append(cmd)
         else:
