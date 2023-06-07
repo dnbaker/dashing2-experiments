@@ -1,7 +1,7 @@
 FROM fedora:32
 
 RUN sudo dnf upgrade --refresh -y \
- && sudo dnf install gcc-c++ cmake procps-ng which python3-pip wget xz git zlib-devel unzip findutils -y
+ && sudo dnf install gcc-c++ cmake procps-ng which python3-pip wget xz git zlib-devel unzip findutils time parallel -y
 
 RUN pip3 install --upgrade pip
 
