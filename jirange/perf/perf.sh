@@ -20,7 +20,9 @@ fi
 # Mash sketching
 #
 if [[ ! -f mash_sketch.time ]] ; then
-  /usr/bin/time -v mash sketch -p ${NJOBS}  -k ${K} -o all.msh *.fna.gz 2>&2 | tee mash_sketch.time
+  /usr/bin/time -v \
+    mash sketch -p ${NJOBS} -k ${K} -o all.msh *.fna.gz 2>&1 | \
+    tee mash_sketch.time
 fi
 
 #
