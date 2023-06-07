@@ -1,6 +1,12 @@
 #!/bin/bash
 
+#
+# Don't forget to 'singularity run docker://benlangmead/dashing2-experiments'
+#
+
 set -ex
+
+# All sketches will be 8K, i.e. 1000 8-byte estimators
 
 NJOBS=16
 K=21
@@ -12,7 +18,7 @@ SIZE=1024
 if [[ ! -f sourmash_sketch.time ]] ; then
   python -c "for i in range(1010): print('%04d' % (i+1))" | \
     /usr/bin/time -v parallel --jobs ${NJOBS} \
-      sourmash sketch dna -p k=${K},noabund,num=1000 {}_1.fna.gz {}_2.fna.gz -o {}_k${K}.sig 2>&1 | \
+      sourmash sketch dna -p k=${K},noabund,num=${SIZE} {}_1.fna.gz {}_2.fna.gz -o {}_k${K}.sig 2>&1 | \
       tee sourmash_sketch.time
 fi
 
@@ -21,7 +27,7 @@ fi
 #
 if [[ ! -f mash_sketch.time ]] ; then
   /usr/bin/time -v \
-    mash sketch -p ${NJOBS} -k ${K} -o all.msh *.fna.gz 2>&1 | \
+    mash sketch -s ${SIZE} -p ${NJOBS} -k ${K} -o all.msh *.fna.gz 2>&1 | \
     tee mash_sketch.time
 fi
 
@@ -60,7 +66,7 @@ fi
 #
 if [[ ! -f sourmash_cmp.time ]] ; then
   /usr/bin/time -v \
-    sourmash compare *.sig -o sm.np -p ${NJOBS} 2>&2 | \
+    sourmash compare *.sig -o sm.np -p ${NJOBS} 2>&1 | \
     tee sourmash_cmp.time
 fi
 
