@@ -13,6 +13,17 @@ K=21
 SIZE=1024
 
 #
+# BinDash sketching
+#
+if [[ ! -f bindash_sketch.time ]] ; then
+  # --bbits={bb}
+  /usr/bin/time -v bindash sketch --nthreads=${NJOBS} --kmerlen=${K} \
+    --minhashtype=2 --sketchsize64=128 --outfname=all.bindash *.fna.gz 2>&1 |
+    tee bindash_sketch.time
+fi
+
+
+#
 # Sourmash sketching
 #
 if [[ ! -f sourmash_sketch.time ]] ; then
@@ -59,6 +70,15 @@ if [[ ! -f d2w_sketch.time ]] ; then
   /usr/bin/time -v \
     dashing2 sketch --cache --prob --countsketch-size 5000000 -S${SIZE} -p${NJOBS} -F fastas.txt 2>&1 | \
     tee d2w_sketch.time
+fi
+
+#
+# BinDash all-pairs Jaccarc
+#
+if [[ ! -f bindash_cmp.time ]] ; then
+  /usr/bin/time -v \
+    bindash dist --nthreads=${NJOBS} --mthres=1e9 all.bindash 2>&1 | \
+    tee bindash_cmp.time
 fi
 
 #
