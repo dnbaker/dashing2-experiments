@@ -6,7 +6,7 @@ RUN sudo dnf upgrade --refresh -y \
 RUN pip3 install --upgrade pip
 
 # Get Dashing 2
-RUN wget -O /tmp/dashing2_s128.xz -q https://github.com/dnbaker/dashing2-binaries/raw/main/linux/v2.1.14/dashing2_s128.xz
+RUN wget -O /tmp/dashing2_s128.xz -q https://github.com/dnbaker/dashing2-binaries/raw/main/linux/v2.1.16/dashing2_s128.xz
 RUN xz -d /tmp/dashing2_s128.xz
 RUN sudo mv /tmp/dashing2_s128 /bin/dashing2 && sudo chmod a+x /bin/dashing2
 RUN dashing2 --version || true
