@@ -1,3 +1,0 @@
-0	Means 1 in Recount Notation
-1	Means 2 in Recount notation
-2Means unspecified in metadata
