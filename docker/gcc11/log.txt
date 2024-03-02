@@ -1,0 +1,177 @@
+g++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++20 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/bedsketch.cpp -c -o src/bedsketch.o -DNOCURL -DDASHING2_VERSION=\"v2.1.19\" -DFMT_HEADER_ONLY -DNDEBUG -O3
+In file included from src/d2.h:13,
+                 from src/bedsketch.h:4,
+                 from src/bedsketch.cpp:1:
+./src/setsketch.h: In function 'std::pair<long double, long double> sketch::setsketch::detail::optimal_parameters(long double, long double, long double)':
+./src/setsketch.h:88:123: note: parameter passing for argument of type 'std::pair<long double, long double>' when C++17 is enabled changed to match C++14 in GCC 10.1
+   88 | static INLINE std::pair<long double, long double> optimal_parameters(long double maxreg, long double minreg, long double q) {
+      |                                                                                                                           ^
+g++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++20 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/bwreduce.cpp -c -o src/bwreduce.o -DNOCURL -DDASHING2_VERSION=\"v2.1.19\" -DFMT_HEADER_ONLY -DNDEBUG -O3
+In file included from src/d2.h:13,
+                 from src/bwreduce.cpp:1:
+./src/setsketch.h: In function 'std::pair<long double, long double> sketch::setsketch::detail::optimal_parameters(long double, long double, long double)':
+./src/setsketch.h:88:123: note: parameter passing for argument of type 'std::pair<long double, long double>' when C++17 is enabled changed to match C++14 in GCC 10.1
+   88 | static INLINE std::pair<long double, long double> optimal_parameters(long double maxreg, long double minreg, long double q) {
+      |                                                                                                                           ^
+g++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++20 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/bwsketch.cpp -c -o src/bwsketch.o -DNOCURL -DDASHING2_VERSION=\"v2.1.19\" -DFMT_HEADER_ONLY -DNDEBUG -O3
+In file included from src/d2.h:13,
+                 from src/bwsketch.cpp:1:
+./src/setsketch.h: In function 'std::pair<long double, long double> sketch::setsketch::detail::optimal_parameters(long double, long double, long double)':
+./src/setsketch.h:88:123: note: parameter passing for argument of type 'std::pair<long double, long double>' when C++17 is enabled changed to match C++14 in GCC 10.1
+   88 | static INLINE std::pair<long double, long double> optimal_parameters(long double maxreg, long double minreg, long double q) {
+      |                                                                                                                           ^
+g++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++20 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/cmp_core.cpp -c -o src/cmp_core.o -DNOCURL -DDASHING2_VERSION=\"v2.1.19\" -DFMT_HEADER_ONLY -DNDEBUG -O3
+In file included from src/d2.h:13,
+                 from src/cmp_main.h:3,
+                 from src/cmp_core.cpp:1:
+./src/setsketch.h: In function 'std::pair<long double, long double> sketch::setsketch::detail::optimal_parameters(long double, long double, long double)':
+./src/setsketch.h:88:123: note: parameter passing for argument of type 'std::pair<long double, long double>' when C++17 is enabled changed to match C++14 in GCC 10.1
+   88 | static INLINE std::pair<long double, long double> optimal_parameters(long double maxreg, long double minreg, long double q) {
+      |                                                                                                                           ^
+In file included from /usr/local/include/c++/11.4.0/ext/alloc_traits.h:34,
+                 from /usr/local/include/c++/11.4.0/bits/basic_string.h:40,
+                 from /usr/local/include/c++/11.4.0/string:55,
+                 from /usr/local/include/c++/11.4.0/bits/locale_classes.h:40,
+                 from /usr/local/include/c++/11.4.0/bits/ios_base.h:41,
+                 from /usr/local/include/c++/11.4.0/streambuf:41,
+                 from /usr/local/include/c++/11.4.0/bits/streambuf_iterator.h:35,
+                 from /usr/local/include/c++/11.4.0/iterator:66,
+                 from /usr/local/include/c++/11.4.0/bits/ranges_algobase.h:36,
+                 from /usr/local/include/c++/11.4.0/bits/ranges_algo.h:35,
+                 from /usr/local/include/c++/11.4.0/algorithm:64,
+                 from bonsai/hll/include/sketch/hash.h:3,
+                 from src/enums.h:6,
+                 from src/d2.h:7,
+                 from src/cmp_main.h:3,
+                 from src/cmp_core.cpp:1:
+/usr/local/include/c++/11.4.0/bits/alloc_traits.h: In substitution of 'template<class _Alloc, class _Up> using __alloc_rebind = typename std::__allocator_traits_base::__rebind<_Alloc, _Up>::type [with _Alloc = levenshteinSSE::AlignmentAllocator<unsigned int, 1>; _Up = unsigned int]':
+/usr/local/include/c++/11.4.0/bits/alloc_traits.h:213:8:   required by substitution of 'template<class _Alloc> template<class _Tp> using rebind_alloc = std::__alloc_rebind<_Alloc, _Tp> [with _Tp = unsigned int; _Alloc = levenshteinSSE::AlignmentAllocator<unsigned int, 1>]'
+/usr/local/include/c++/11.4.0/ext/alloc_traits.h:120:65:   required from 'struct __gnu_cxx::__alloc_traits<levenshteinSSE::AlignmentAllocator<unsigned int, 1>, unsigned int>::rebind<unsigned int>'
+/usr/local/include/c++/11.4.0/bits/stl_vector.h:87:21:   required from 'struct std::_Vector_base<unsigned int, levenshteinSSE::AlignmentAllocator<unsigned int, 1> >'
+/usr/local/include/c++/11.4.0/bits/stl_vector.h:389:11:   required from 'class std::vector<unsigned int, levenshteinSSE::AlignmentAllocator<unsigned int, 1> >'
+src/levenshtein-sse.hpp:766:25:   required from 'T levenshteinSSE::levenshteinDiagonal(Iterator1, Iterator1, Iterator2, Iterator2) [with T = unsigned int; Iterator1 = const char*; Iterator2 = const char*]'
+src/levenshtein-sse.hpp:872:46:   required from 'std::size_t levenshteinSSE::levenshtein(Iterator1, Iterator1, Iterator2, Iterator2, std::random_access_iterator_tag, std::random_access_iterator_tag) [with Iterator1 = const char*; Iterator2 = const char*; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:956:21:   required from 'std::size_t levenshteinSSE::levenshtein(Iterator1, Iterator1, Iterator2, Iterator2) [with Iterator1 = const char*; Iterator2 = const char*; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:939:21:   required from 'static std::size_t levenshteinSSE::LevenshteinContainer<true>::calc(const Container1&, const Container2&) [with Container1 = std::__cxx11::basic_string<char>; Container2 = std::__cxx11::basic_string<char>; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:964:48:   required from 'std::size_t levenshteinSSE::levenshtein(const Container1&, const Container2&) [with Container1 = std::__cxx11::basic_string<char>; Container2 = std::__cxx11::basic_string<char>; std::size_t = long unsigned int]'
+src/cmp_core.cpp:439:43:   required from here
+/usr/local/include/c++/11.4.0/bits/alloc_traits.h:79:11: error: no type named 'type' in 'struct std::__allocator_traits_base::__rebind<levenshteinSSE::AlignmentAllocator<unsigned int, 1>, unsigned int, void>'
+   79 |     using __alloc_rebind
+      |           ^~~~~~~~~~~~~~
+In file included from /usr/local/include/c++/11.4.0/vector:67,
+                 from /usr/local/include/c++/11.4.0/functional:62,
+                 from /usr/local/include/c++/11.4.0/pstl/glue_algorithm_defs.h:13,
+                 from /usr/local/include/c++/11.4.0/algorithm:74,
+                 from bonsai/hll/include/sketch/hash.h:3,
+                 from src/enums.h:6,
+                 from src/d2.h:7,
+                 from src/cmp_main.h:3,
+                 from src/cmp_core.cpp:1:
+/usr/local/include/c++/11.4.0/bits/stl_vector.h: In instantiation of 'class std::vector<unsigned int, levenshteinSSE::AlignmentAllocator<unsigned int, 1> >':
+src/levenshtein-sse.hpp:766:25:   required from 'T levenshteinSSE::levenshteinDiagonal(Iterator1, Iterator1, Iterator2, Iterator2) [with T = unsigned int; Iterator1 = const char*; Iterator2 = const char*]'
+src/levenshtein-sse.hpp:872:46:   required from 'std::size_t levenshteinSSE::levenshtein(Iterator1, Iterator1, Iterator2, Iterator2, std::random_access_iterator_tag, std::random_access_iterator_tag) [with Iterator1 = const char*; Iterator2 = const char*; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:956:21:   required from 'std::size_t levenshteinSSE::levenshtein(Iterator1, Iterator1, Iterator2, Iterator2) [with Iterator1 = const char*; Iterator2 = const char*; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:939:21:   required from 'static std::size_t levenshteinSSE::LevenshteinContainer<true>::calc(const Container1&, const Container2&) [with Container1 = std::__cxx11::basic_string<char>; Container2 = std::__cxx11::basic_string<char>; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:964:48:   required from 'std::size_t levenshteinSSE::levenshtein(const Container1&, const Container2&) [with Container1 = std::__cxx11::basic_string<char>; Container2 = std::__cxx11::basic_string<char>; std::size_t = long unsigned int]'
+src/cmp_core.cpp:439:43:   required from here
+/usr/local/include/c++/11.4.0/bits/stl_vector.h:474:20: error: '_M_allocate' has not been declared in 'std::vector<unsigned int, levenshteinSSE::AlignmentAllocator<unsigned int, 1> >::_Base'
+  474 |       using _Base::_M_allocate;
+      |                    ^~~~~~~~~~~
+/usr/local/include/c++/11.4.0/bits/stl_vector.h:475:20: error: '_M_deallocate' has not been declared in 'std::vector<unsigned int, levenshteinSSE::AlignmentAllocator<unsigned int, 1> >::_Base'
+  475 |       using _Base::_M_deallocate;
+      |                    ^~~~~~~~~~~~~
+/usr/local/include/c++/11.4.0/bits/stl_vector.h:477:20: error: '_M_get_Tp_allocator' has not been declared in 'std::vector<unsigned int, levenshteinSSE::AlignmentAllocator<unsigned int, 1> >::_Base'
+  477 |       using _Base::_M_get_Tp_allocator;
+      |                    ^~~~~~~~~~~~~~~~~~~
+In file included from src/cmp_core.cpp:9:
+src/levenshtein-sse.hpp: In instantiation of 'T levenshteinSSE::levenshteinDiagonal(Iterator1, Iterator1, Iterator2, Iterator2) [with T = unsigned int; Iterator1 = const char*; Iterator2 = const char*]':
+src/levenshtein-sse.hpp:872:46:   required from 'std::size_t levenshteinSSE::levenshtein(Iterator1, Iterator1, Iterator2, Iterator2, std::random_access_iterator_tag, std::random_access_iterator_tag) [with Iterator1 = const char*; Iterator2 = const char*; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:956:21:   required from 'std::size_t levenshteinSSE::levenshtein(Iterator1, Iterator1, Iterator2, Iterator2) [with Iterator1 = const char*; Iterator2 = const char*; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:939:21:   required from 'static std::size_t levenshteinSSE::LevenshteinContainer<true>::calc(const Container1&, const Container2&) [with Container1 = std::__cxx11::basic_string<char>; Container2 = std::__cxx11::basic_string<char>; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:964:48:   required from 'std::size_t levenshteinSSE::levenshtein(const Container1&, const Container2&) [with Container1 = std::__cxx11::basic_string<char>; Container2 = std::__cxx11::basic_string<char>; std::size_t = long unsigned int]'
+src/cmp_core.cpp:439:43:   required from here
+src/levenshtein-sse.hpp:791:9: error: no match for 'operator[]' (operand types are 'std::vector<unsigned int, levenshteinSSE::AlignmentAllocator<unsigned int, 1> >' and 'int')
+  791 |     diag[0] = k;
+      |     ~~~~^
+src/levenshtein-sse.hpp:794:11: error: no match for 'operator[]' (operand types are 'std::vector<unsigned int, levenshteinSSE::AlignmentAllocator<unsigned int, 1> >' and 'std::size_t' {aka 'long unsigned int'})
+  794 |       diag[k] = k;
+      |       ~~~~^
+src/levenshtein-sse.hpp:799:18: error: no match for 'operator[]' (operand types are 'std::vector<unsigned int, levenshteinSSE::AlignmentAllocator<unsigned int, 1> >' and 'std::size_t' {aka 'long unsigned int'})
+  799 |       return diag[startRow];
+      |              ~~~~^
+In file included from /usr/local/include/c++/11.4.0/ext/alloc_traits.h:34,
+                 from /usr/local/include/c++/11.4.0/bits/basic_string.h:40,
+                 from /usr/local/include/c++/11.4.0/string:55,
+                 from /usr/local/include/c++/11.4.0/bits/locale_classes.h:40,
+                 from /usr/local/include/c++/11.4.0/bits/ios_base.h:41,
+                 from /usr/local/include/c++/11.4.0/streambuf:41,
+                 from /usr/local/include/c++/11.4.0/bits/streambuf_iterator.h:35,
+                 from /usr/local/include/c++/11.4.0/iterator:66,
+                 from /usr/local/include/c++/11.4.0/bits/ranges_algobase.h:36,
+                 from /usr/local/include/c++/11.4.0/bits/ranges_algo.h:35,
+                 from /usr/local/include/c++/11.4.0/algorithm:64,
+                 from bonsai/hll/include/sketch/hash.h:3,
+                 from src/enums.h:6,
+                 from src/d2.h:7,
+                 from src/cmp_main.h:3,
+                 from src/cmp_core.cpp:1:
+/usr/local/include/c++/11.4.0/bits/alloc_traits.h: In substitution of 'template<class _Alloc, class _Up> using __alloc_rebind = typename std::__allocator_traits_base::__rebind<_Alloc, _Up>::type [with _Alloc = levenshteinSSE::AlignmentAllocator<long unsigned int, 1>; _Up = long unsigned int]':
+/usr/local/include/c++/11.4.0/bits/alloc_traits.h:213:8:   required by substitution of 'template<class _Alloc> template<class _Tp> using rebind_alloc = std::__alloc_rebind<_Alloc, _Tp> [with _Tp = long unsigned int; _Alloc = levenshteinSSE::AlignmentAllocator<long unsigned int, 1>]'
+/usr/local/include/c++/11.4.0/ext/alloc_traits.h:120:65:   required from 'struct __gnu_cxx::__alloc_traits<levenshteinSSE::AlignmentAllocator<long unsigned int, 1>, long unsigned int>::rebind<long unsigned int>'
+/usr/local/include/c++/11.4.0/bits/stl_vector.h:87:21:   required from 'struct std::_Vector_base<long unsigned int, levenshteinSSE::AlignmentAllocator<long unsigned int, 1> >'
+/usr/local/include/c++/11.4.0/bits/stl_vector.h:389:11:   required from 'class std::vector<long unsigned int, levenshteinSSE::AlignmentAllocator<long unsigned int, 1> >'
+src/levenshtein-sse.hpp:766:25:   required from 'T levenshteinSSE::levenshteinDiagonal(Iterator1, Iterator1, Iterator2, Iterator2) [with T = long unsigned int; Iterator1 = const char*; Iterator2 = const char*]'
+src/levenshtein-sse.hpp:874:42:   required from 'std::size_t levenshteinSSE::levenshtein(Iterator1, Iterator1, Iterator2, Iterator2, std::random_access_iterator_tag, std::random_access_iterator_tag) [with Iterator1 = const char*; Iterator2 = const char*; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:956:21:   required from 'std::size_t levenshteinSSE::levenshtein(Iterator1, Iterator1, Iterator2, Iterator2) [with Iterator1 = const char*; Iterator2 = const char*; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:939:21:   required from 'static std::size_t levenshteinSSE::LevenshteinContainer<true>::calc(const Container1&, const Container2&) [with Container1 = std::__cxx11::basic_string<char>; Container2 = std::__cxx11::basic_string<char>; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:964:48:   required from 'std::size_t levenshteinSSE::levenshtein(const Container1&, const Container2&) [with Container1 = std::__cxx11::basic_string<char>; Container2 = std::__cxx11::basic_string<char>; std::size_t = long unsigned int]'
+src/cmp_core.cpp:439:43:   required from here
+/usr/local/include/c++/11.4.0/bits/alloc_traits.h:79:11: error: no type named 'type' in 'struct std::__allocator_traits_base::__rebind<levenshteinSSE::AlignmentAllocator<long unsigned int, 1>, long unsigned int, void>'
+   79 |     using __alloc_rebind
+      |           ^~~~~~~~~~~~~~
+In file included from /usr/local/include/c++/11.4.0/vector:67,
+                 from /usr/local/include/c++/11.4.0/functional:62,
+                 from /usr/local/include/c++/11.4.0/pstl/glue_algorithm_defs.h:13,
+                 from /usr/local/include/c++/11.4.0/algorithm:74,
+                 from bonsai/hll/include/sketch/hash.h:3,
+                 from src/enums.h:6,
+                 from src/d2.h:7,
+                 from src/cmp_main.h:3,
+                 from src/cmp_core.cpp:1:
+/usr/local/include/c++/11.4.0/bits/stl_vector.h: In instantiation of 'class std::vector<long unsigned int, levenshteinSSE::AlignmentAllocator<long unsigned int, 1> >':
+src/levenshtein-sse.hpp:766:25:   required from 'T levenshteinSSE::levenshteinDiagonal(Iterator1, Iterator1, Iterator2, Iterator2) [with T = long unsigned int; Iterator1 = const char*; Iterator2 = const char*]'
+src/levenshtein-sse.hpp:874:42:   required from 'std::size_t levenshteinSSE::levenshtein(Iterator1, Iterator1, Iterator2, Iterator2, std::random_access_iterator_tag, std::random_access_iterator_tag) [with Iterator1 = const char*; Iterator2 = const char*; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:956:21:   required from 'std::size_t levenshteinSSE::levenshtein(Iterator1, Iterator1, Iterator2, Iterator2) [with Iterator1 = const char*; Iterator2 = const char*; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:939:21:   required from 'static std::size_t levenshteinSSE::LevenshteinContainer<true>::calc(const Container1&, const Container2&) [with Container1 = std::__cxx11::basic_string<char>; Container2 = std::__cxx11::basic_string<char>; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:964:48:   required from 'std::size_t levenshteinSSE::levenshtein(const Container1&, const Container2&) [with Container1 = std::__cxx11::basic_string<char>; Container2 = std::__cxx11::basic_string<char>; std::size_t = long unsigned int]'
+src/cmp_core.cpp:439:43:   required from here
+/usr/local/include/c++/11.4.0/bits/stl_vector.h:474:20: error: '_M_allocate' has not been declared in 'std::vector<long unsigned int, levenshteinSSE::AlignmentAllocator<long unsigned int, 1> >::_Base'
+  474 |       using _Base::_M_allocate;
+      |                    ^~~~~~~~~~~
+/usr/local/include/c++/11.4.0/bits/stl_vector.h:475:20: error: '_M_deallocate' has not been declared in 'std::vector<long unsigned int, levenshteinSSE::AlignmentAllocator<long unsigned int, 1> >::_Base'
+  475 |       using _Base::_M_deallocate;
+      |                    ^~~~~~~~~~~~~
+/usr/local/include/c++/11.4.0/bits/stl_vector.h:477:20: error: '_M_get_Tp_allocator' has not been declared in 'std::vector<long unsigned int, levenshteinSSE::AlignmentAllocator<long unsigned int, 1> >::_Base'
+  477 |       using _Base::_M_get_Tp_allocator;
+      |                    ^~~~~~~~~~~~~~~~~~~
+In file included from src/cmp_core.cpp:9:
+src/levenshtein-sse.hpp: In instantiation of 'T levenshteinSSE::levenshteinDiagonal(Iterator1, Iterator1, Iterator2, Iterator2) [with T = long unsigned int; Iterator1 = const char*; Iterator2 = const char*]':
+src/levenshtein-sse.hpp:874:42:   required from 'std::size_t levenshteinSSE::levenshtein(Iterator1, Iterator1, Iterator2, Iterator2, std::random_access_iterator_tag, std::random_access_iterator_tag) [with Iterator1 = const char*; Iterator2 = const char*; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:956:21:   required from 'std::size_t levenshteinSSE::levenshtein(Iterator1, Iterator1, Iterator2, Iterator2) [with Iterator1 = const char*; Iterator2 = const char*; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:939:21:   required from 'static std::size_t levenshteinSSE::LevenshteinContainer<true>::calc(const Container1&, const Container2&) [with Container1 = std::__cxx11::basic_string<char>; Container2 = std::__cxx11::basic_string<char>; std::size_t = long unsigned int]'
+src/levenshtein-sse.hpp:964:48:   required from 'std::size_t levenshteinSSE::levenshtein(const Container1&, const Container2&) [with Container1 = std::__cxx11::basic_string<char>; Container2 = std::__cxx11::basic_string<char>; std::size_t = long unsigned int]'
+src/cmp_core.cpp:439:43:   required from here
+src/levenshtein-sse.hpp:791:9: error: no match for 'operator[]' (operand types are 'std::vector<long unsigned int, levenshteinSSE::AlignmentAllocator<long unsigned int, 1> >' and 'int')
+  791 |     diag[0] = k;
+      |     ~~~~^
+src/levenshtein-sse.hpp:794:11: error: no match for 'operator[]' (operand types are 'std::vector<long unsigned int, levenshteinSSE::AlignmentAllocator<long unsigned int, 1> >' and 'std::size_t' {aka 'long unsigned int'})
+  794 |       diag[k] = k;
+      |       ~~~~^
+src/levenshtein-sse.hpp:799:18: error: no match for 'operator[]' (operand types are 'std::vector<long unsigned int, levenshteinSSE::AlignmentAllocator<long unsigned int, 1> >' and 'std::size_t' {aka 'long unsigned int'})
+  799 |       return diag[startRow];
+      |              ~~~~^
+src/cmp_core.cpp: In function 'dashing2::LSHDistType dashing2::compare(const dashing2::Dashing2DistOptions&, const dashing2::SketchingResult&, std::size_t, std::size_t)':
+src/cmp_core.cpp:540:109: note: parameter passing for argument of type 'std::pair<double, double>' when C++17 is enabled changed to match C++14 in GCC 10.1
+  540 |             const auto [isz_size, union_size] = weighted_compare(lhk, rhk, lhn, rhn, lhc, rhc, opts.use128());
+      |                                                                                                             ^
+make: *** [Makefile:118: src/cmp_core.o] Error 1
