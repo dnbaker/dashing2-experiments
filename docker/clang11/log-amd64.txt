@@ -1,0 +1,167 @@
+g++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++20 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/bedsketch.cpp -c -o src/bedsketch.o -DNOCURL -DDASHING2_VERSION=\"v2.1.19\" -DFMT_HEADER_ONLY -DNDEBUG -O3
+In file included from src/bedsketch.cpp:1:
+In file included from src/bedsketch.h:4:
+In file included from src/d2.h:11:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:36:
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:10:50: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                 ^
+bonsai/include/bonsai/logutil.h:11:56: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                       ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:10:50: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                 ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:56: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                       ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+12 warnings generated.
+g++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++20 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/bwreduce.cpp -c -o src/bwreduce.o -DNOCURL -DDASHING2_VERSION=\"v2.1.19\" -DFMT_HEADER_ONLY -DNDEBUG -O3
+In file included from src/bwreduce.cpp:1:
+In file included from src/d2.h:11:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:36:
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:10:50: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                 ^
+bonsai/include/bonsai/logutil.h:11:56: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                       ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:10:50: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                 ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:56: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                       ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+12 warnings generated.
+g++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++20 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/bwsketch.cpp -c -o src/bwsketch.o -DNOCURL -DDASHING2_VERSION=\"v2.1.19\" -DFMT_HEADER_ONLY -DNDEBUG -O3
+In file included from src/bwsketch.cpp:1:
+In file included from src/d2.h:11:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:36:
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:10:50: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                 ^
+bonsai/include/bonsai/logutil.h:11:56: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                       ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:10:50: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                 ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:56: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                       ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+12 warnings generated.
+g++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++20 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/cmp_core.cpp -c -o src/cmp_core.o -DNOCURL -DDASHING2_VERSION=\"v2.1.19\" -DFMT_HEADER_ONLY -DNDEBUG -O3
+In file included from src/cmp_core.cpp:1:
+In file included from src/cmp_main.h:3:
+In file included from src/d2.h:11:
+In file included from bonsai/include/bonsai/encoder.h:10:
+In file included from bonsai/include/bonsai/entropy.h:3:
+In file included from bonsai/include/bonsai/kmerutil.h:7:
+In file included from bonsai/include/bonsai/util.h:36:
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:10:50: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                 ^
+bonsai/include/bonsai/logutil.h:11:56: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                       ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:10:50: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_INFO(...) log_info(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                 ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+bonsai/include/bonsai/logutil.h:11:56: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_WARNING(...) log_warning(_FUNCTION_MACRO_, ##__VA_ARGS__)
+                                                       ^
+bonsai/include/bonsai/logutil.h:12:61: warning: token pasting of ',' and __VA_ARGS__ is a GNU extension [-Wgnu-zero-variadic-macro-arguments]
+#define LOG_EXIT(...) log_error(_FUNCTION_MACRO_, __LINE__, ##__VA_ARGS__)
+                                                            ^
+In file included from src/cmp_core.cpp:1:
+In file included from src/cmp_main.h:4:
+In file included from src/fastxsketch.h:6:
+src/tmpseqs.h:133:20: warning: returning address of local temporary object [-Wreturn-stack-address]
+            return container[idx];
+                   ^~~~~~~~~~~~~~
+src/tmpseqs.h:167:20: warning: returning address of local temporary object [-Wreturn-stack-address]
+            return container[idx];
+                   ^~~~~~~~~~~~~~
+In file included from src/cmp_core.cpp:4:
+In file included from src/index_build.h:3:
+./src/ssi.h:182:26: error: object of type 'std::optional<std::lock_guard<std::mutex>>' cannot be assigned because its copy assignment operator is implicitly deleted
+                    lock = std::optional<std::lock_guard<std::mutex>>((*mptr)[j]);
+                         ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/optional:661:7: note: copy assignment operator of 'optional<std::lock_guard<std::mutex>>' is implicitly deleted because base class '_Enable_copy_move<is_copy_constructible_v<std::lock_guard<std::mutex>>, __and_v<is_copy_constructible<std::lock_guard<std::mutex>>, is_copy_assignable<std::lock_guard<std::mutex>>>, is_move_constructible_v<std::lock_guard<std::mutex>>, __and_v<is_move_constructible<std::lock_guard<std::mutex>>, is_move_assignable<std::lock_guard<std::mutex>>>, optional<std::lock_guard<std::mutex>>>' has a deleted copy assignment operator
+      private _Enable_copy_move<
+      ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/enable_special_members.h:304:5: note: 'operator=' has been explicitly marked deleted here
+    operator=(_Enable_copy_move const&) noexcept                    = delete;
+    ^
+14 warnings and 1 error generated.
+make: *** [Makefile:118: src/cmp_core.o] Error 1
