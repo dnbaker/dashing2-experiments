@@ -1,0 +1,12 @@
+g++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++20 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/bedsketch.cpp -c -o src/bedsketch.o -DNOCURL -DDASHING2_VERSION=\"v2.1.19\" -DFMT_HEADER_ONLY -DNDEBUG -O3
+Assembler messages:
+Error: unknown architectural extension `flagm+pauth'
+Error: unrecognized option -march=armv8-a+crypto+crc+lse+rcpc+rdma+dotprod+fp16fml+sb+ssbs+flagm+pauth
+In file included from src/d2.h:13,
+                 from src/bedsketch.h:4,
+                 from src/bedsketch.cpp:1:
+./src/setsketch.h: In function 'std::pair<long double, long double> sketch::setsketch::detail::optimal_parameters(long double, long double, long double)':
+./src/setsketch.h:88:123: note: parameter passing for argument of type 'std::pair<long double, long double>' when C++17 is enabled changed to match C++14 in GCC 10.1
+   88 | static INLINE std::pair<long double, long double> optimal_parameters(long double maxreg, long double minreg, long double q) {
+      |                                                                                                                           ^
+make: *** [Makefile:118: src/bedsketch.o] Error 2
