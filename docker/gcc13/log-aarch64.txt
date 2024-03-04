@@ -1,0 +1,16 @@
+g++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++20 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/bedsketch.cpp -c -o src/bedsketch.o -DNOCURL -DDASHING2_VERSION=\"v2.1.19\" -DFMT_HEADER_ONLY -DNDEBUG -O3
+In file included from src/d2.h:13,
+                 from src/bedsketch.h:4,
+                 from src/bedsketch.cpp:1:
+./src/setsketch.h: In function 'std::pair<long double, long double> sketch::setsketch::detail::optimal_parameters(long double, long double, long double)':
+./src/setsketch.h:88:123: note: parameter passing for argument of type 'std::pair<long double, long double>' when C++17 is enabled changed to match C++14 in GCC 10.1
+   88 | static INLINE std::pair<long double, long double> optimal_parameters(long double maxreg, long double minreg, long double q) {
+      |                                                                                                                           ^
+{standard input}: Assembler messages:
+{standard input}:109: Error: selected processor does not support `eor3 v3.16b,v3.16b,v16.16b,v23.16b'
+{standard input}:111: Error: selected processor does not support `eor3 v2.16b,v2.16b,v24.16b,v22.16b'
+{standard input}:113: Error: selected processor does not support `eor3 v1.16b,v1.16b,v18.16b,v21.16b'
+{standard input}:115: Error: selected processor does not support `eor3 v0.16b,v0.16b,v17.16b,v20.16b'
+{standard input}:4899: Error: selected processor does not support `eor3 v0.16b,v1.16b,v2.16b,v0.16b'
+{standard input}:4929: Error: selected processor does not support `eor3 v0.16b,v1.16b,v2.16b,v0.16b'
+make: *** [Makefile:118: src/bedsketch.o] Error 1
