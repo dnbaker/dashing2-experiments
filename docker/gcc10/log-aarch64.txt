@@ -1,3 +1,25 @@
+g++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++20 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/bedsketch.cpp -c -o src/bedsketch.o -DNOCURL -DDASHING2_VERSION=\"v2.1.19\" -DFMT_HEADER_ONLY -DNDEBUG -O3
+In file included from src/d2.h:13,
+                 from src/bedsketch.h:4,
+                 from src/bedsketch.cpp:1:
+./src/setsketch.h: In function 'std::pair<long double, long double> sketch::setsketch::detail::optimal_parameters(long double, long double, long double)':
+./src/setsketch.h:88:123: note: parameter passing for argument of type 'std::pair<long double, long double>' when C++17 is enabled changed to match C++14 in GCC 10.1
+   88 | static INLINE std::pair<long double, long double> optimal_parameters(long double maxreg, long double minreg, long double q) {
+      |                                                                                                                           ^
+g++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++20 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/bwreduce.cpp -c -o src/bwreduce.o -DNOCURL -DDASHING2_VERSION=\"v2.1.19\" -DFMT_HEADER_ONLY -DNDEBUG -O3
+In file included from src/d2.h:13,
+                 from src/bwreduce.cpp:1:
+./src/setsketch.h: In function 'std::pair<long double, long double> sketch::setsketch::detail::optimal_parameters(long double, long double, long double)':
+./src/setsketch.h:88:123: note: parameter passing for argument of type 'std::pair<long double, long double>' when C++17 is enabled changed to match C++14 in GCC 10.1
+   88 | static INLINE std::pair<long double, long double> optimal_parameters(long double maxreg, long double minreg, long double q) {
+      |                                                                                                                           ^
+g++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++20 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/bwsketch.cpp -c -o src/bwsketch.o -DNOCURL -DDASHING2_VERSION=\"v2.1.19\" -DFMT_HEADER_ONLY -DNDEBUG -O3
+In file included from src/d2.h:13,
+                 from src/bwsketch.cpp:1:
+./src/setsketch.h: In function 'std::pair<long double, long double> sketch::setsketch::detail::optimal_parameters(long double, long double, long double)':
+./src/setsketch.h:88:123: note: parameter passing for argument of type 'std::pair<long double, long double>' when C++17 is enabled changed to match C++14 in GCC 10.1
+   88 | static INLINE std::pair<long double, long double> optimal_parameters(long double maxreg, long double minreg, long double q) {
+      |                                                                                                                           ^
 g++ -IlibBigWig -Ibonsai/include -Ibonsai -Ibonsai/hll -Ibonsai/hll/include -Ibonsai -I. -Isrc -Ifmt/include -O3 -march=native -fopenmp -pipe -DD2_CACHE_SIZE=4194304 -std=c++20 -Wall -Wextra -Wno-unused-function -Wno-char-subscripts -pedantic -Wno-array-bounds   src/cmp_core.cpp -c -o src/cmp_core.o -DNOCURL -DDASHING2_VERSION=\"v2.1.19\" -DFMT_HEADER_ONLY -DNDEBUG -O3
 In file included from src/d2.h:13,
                  from src/cmp_main.h:3,
