@@ -12,4 +12,5 @@ git clone --recursive https://github.com/dnbaker/dashing2 -- "${CLONE_DR}"
 popd
 
 cp Dockerfile "${DR}"/
+cp .gitignore "${DR}"/
 cp -r .devcontainer "${DR}"/

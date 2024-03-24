@@ -1,0 +1,8 @@
+*.o
+*.64o
+libBigWig.a
+Dockerfile
+dashing2
+dashing2-64
+dashing2-tmp
+devcontainer.json
